@@ -1,0 +1,8 @@
+### Método GET para descargar archivos
+
+##Este método GET permite la descarga de archivos pasando como query params pathFile con la ruta del archivo y filename con el nombre, de no exister retorna una respuesta 404
+
+###
+
+GET http://localhost:1080/download?pathFile=C:\\Users\\Franc\\OneDrive\\Documentos\\workspace\\bg\\bg-excel\\project\\files\\test.xlsx&filename=test.xlsx
+

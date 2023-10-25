@@ -1,0 +1,8 @@
+
+.beyond/
+node_modules/
+logs
+.idea
+.vscode
+.hintrc
+files

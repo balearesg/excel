@@ -1,0 +1,10 @@
+{
+  "name": "generate-excel",
+  "ts": {
+    "path": "ts",
+    "files": [
+      "*"
+    ]
+  },
+  "platforms": "node"
+}
