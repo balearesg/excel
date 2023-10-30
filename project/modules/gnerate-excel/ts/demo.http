@@ -57,5 +57,26 @@ Content-Type: application/json
          ]
       }
    ],
-   "filename": "test.xlsx"
+   "filename": "test.xlsx",
+   "options": {
+    // Opciones de escritura del archivo (opcional)
+   }
+}
+
+### En caso de éxito:
+
+{
+  "status": true,
+  "data": {
+    "filepath": "ruta/del/archivo_generado.xlsx",
+    "filename": "nombre del archivo descargado",
+    "pathname": "directorio del archivo guardado"
+  }
+}
+
+### En caso de error:
+
+{
+  "status": false,
+  "error": "Mensaje de error"
 }
