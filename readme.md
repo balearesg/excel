@@ -75,7 +75,7 @@ Para utilizar esta API en su proyecto, siga los siguientes pasos:
 
 1. Clone este repositorio en su sistema local.
 
-2. Instale las dependencias ejecutando el siguiente comando en el directorio del proyecto:
+2. Instale las dependencias ejecutando el siguiente comando en el directorio `/project`:
 
     ```
     npm install
