@@ -32,7 +32,10 @@ Content-Type: application/json
     "sheetData": [
         /* Datos de las hojas de trabajo */
     ],
-    "filename": "nombre_del_archivo.xlsx"
+    "filename": "nombre_del_archivo.xlsx",
+    "options": {
+        // Opciones de escritura del archivo (opcional)
+    }
 }
 ```
 
@@ -62,7 +65,7 @@ Comportamiento:
 
 Ejemplo de solicitud GET:
 
-```json
+```
 GET /download?pathFile=/ruta/al/archivo.xlsx&filename=archivo_descargado.xlsx
 ```
 
