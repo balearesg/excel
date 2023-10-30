@@ -1,0 +1,46 @@
+@mixin properties() {
+	--on-primary: var(--primary-100);
+	--primary-container: var(--primary-90);
+	--on-primary-container: var(--primary-10);
+
+	--on-secondary: var(--secondary-100);
+	--secondary-container: var(--secondary-90);
+	--on-secondary-container: var(--secondary-10);
+
+	--on-tertiary: var(--tertiary-100);
+	--tertiary-container: var(--tertiary-90);
+	--on-tertiary-container: var(--tertiary-10);
+
+	--surface: var(--neutral-98);
+	--on-surface: var(--neutral-10);
+	--outline: var(--neutral-40);
+	--surface-variant: var(--neutral-90);
+	--on-surface-variant: var(--neutral-80);
+	--surface-container: var(--neutral-90);
+
+	--background: var(--neutral-99);
+	--on-background-variant: var(--surface-variant);
+	--on-background: (--neutral-20);
+
+
+	--on-error: var(--error-100);
+	--on-error-container: var(--error-40);
+	--on-error-border: var(--error-70);
+
+	--on-warning: var(--warning-100);
+	--warning-container: var(--warning-40);
+	--warning-border: var(--warning-70);
+
+	--on-success: var(--success-100);
+	--success-container: var(--success-40);
+	--success-border: var(--success-70);
+
+	--on-info: var(--info-100);
+	--info-container: var(--info-40);
+	--info-border: var(--info-70);
+	
+	--bg-gradient: linear-gradient(115deg, #f7f7f7, #456789)
+
+	--variant-background-container: linear-gradient(180deg, var(--tertiary) 14%, var(--secondary) 92%);
+	--box-shadow: 0px 2px 8px #58585833;
+}

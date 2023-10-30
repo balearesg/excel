@@ -9,3 +9,15 @@ export interface IReturnHandler {
     error?: string | undefined;
 
 }
+
+export type TSheetData = {
+    sheetName: string;
+    data: object[];
+    columnsHeader: object[];
+}
+export interface IParamsExcel {
+    pathname: string;
+    options: object;
+    filename: string;
+    sheetData: Array<TSheetData>;
+}

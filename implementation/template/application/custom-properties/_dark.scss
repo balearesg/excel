@@ -1,0 +1,52 @@
+@mixin properties() {
+	
+	--on-primary: var(--primary-20);
+	--primary-container: var(--primary-30);
+	--on-primary-container: var(--primary-10);
+
+	--on-secondary: var(--secondary-20);
+	--secondary-container: var(--secondary-30);
+	--on-secondary-container: var(--secondary-98);
+	
+	--on-tertiary: var(--tertiary-20);
+	--tertiary-container: var(--tertiary-30);
+	--on-tertiary-container: var(--tertiary-90);
+
+	--background: var(--neutral-4);
+	--on-background: var(--neutral-100);
+	--on-background-variant: var(--neutral-variant-95);
+
+	--on-surface: var(--neutral-98);
+
+	--surface: var(--neutral-6);
+	--surface-dim: var(--neutral-6);
+	--surface-bright: var(--neutral-25);
+	--surface-container-lowest: var(--neutral-4);
+	--surface-container-low: var(--neutral-10);
+	--surface-container: var(--neutral-12);
+	--surface-container-high: var(--neutral-20);
+	--surface-container-highest: var(--neutral-22);
+	--surface-variant: var(--neutral-variant-30);
+
+	--outline: var(--neutral-60); // bordes
+
+	--on-error: var(--error-90);
+	--on-error-border: var(--error-70);
+	--on-error-container: var(--error-98);
+
+	--on-warning: var(--warning-70);
+	--warning-border: var(--warning-30);
+	--warning-container: var(--warning-40);
+
+	--on-success: var(--success-70);
+	--success-container: var(--success-40);
+	--success-border: var(--success-40);
+
+	--on-info: var(--info-70);
+	--info-container: var(--info-30);
+	--info-border: var(--info-40);
+	--bg-gradient:linear-gradient(115deg, #1c3343, #2c5f80)
+	--box-shadow: 0px 3px 8px #00000066;
+
+	--variant-background-container: linear-gradient(180deg, #013248 0%, var(--tertiary) 100%)
+}

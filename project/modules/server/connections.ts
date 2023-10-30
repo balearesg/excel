@@ -1,3 +1,4 @@
+import { Server as ServerHttp } from 'http';
 export class Connections {
     #server: any;
     #connections: Set<any> = new Set();
@@ -5,7 +6,7 @@ export class Connections {
     #onConnection = (conn: any) => this.#connections.add(conn);
     #onDisconnect = (conn: any) => this.#connections.delete(conn);
 
-    constructor(server) {
+    constructor(server: ServerHttp) {
         this.#server = server;
         this.#server.on('connection', this.#onConnection);
         this.#server.on('disconnect', this.#onDisconnect);

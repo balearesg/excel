@@ -1,9 +1,10 @@
-import { Request, Response, Application } from "express";
+import { Request, Response, Application, Router } from "express";
 import { ExcelHandler } from "./excel-handler";
+import { IReturnHandler } from "./excel-handler/types";
 
 export /*bundle*/
   class Controller {
-  #router;
+  #router: Router;
 
   constructor(router: any, app: Application) {
     this.#router = router;
@@ -11,22 +12,23 @@ export /*bundle*/
     app.use(this.#router);
   }
 
-  generateExcel = async (req: Request, res: Response) => {
+  generateExcel = async (
+    req: Request,
+    res: Response
+  ): Promise<Response<IReturnHandler, Record<string, IReturnHandler>>> => {
     try {
-      const excelHandler = new ExcelHandler();
-      const params: any = req.body;
+      const excelHandler: ExcelHandler = new ExcelHandler();
+      const params = req.body;
 
-      if (!params?.sheetData)
-        throw "invalid sheetData, this is required";
+      if (!params?.sheetData) throw "invalid sheetData, this is required";
 
-      if (!params?.filename)
-        throw "invalid filename, this is required";
+      if (!params?.filename) throw "invalid filename, this is required";
 
       const sheetData = params.sheetData;
 
       const filename = params.filename;
-      const pathname = '/files';
-      const options = params.options ?? {}
+      const pathname = "/files";
+      const options = params.options ?? {};
       const specs = {
         sheetData,
         options,
@@ -35,15 +37,21 @@ export /*bundle*/
       };
 
       // Crea el archivo Excel
-      const result = await excelHandler.createExcel(specs);
+      const result: IReturnHandler = await excelHandler.createExcel(
+        specs
+      );
 
       if (!result.status) throw new Error(result.error);
 
-      return res.status(200).send({ status: true, data: { ...result.data } });
-
+      return res
+        .status(200)
+        .send({ status: true, data: { ...result.data } });
     } catch (error) {
       console.error("error", error);
-      res.status(500).send({ status: false, error: `An error occurred: ${error}` });
+      return res.status(500).send({
+        status: false,
+        error: `An error occurred: ${error}`,
+      });
     }
   };
 }

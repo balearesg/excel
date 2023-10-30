@@ -1,3 +1,5 @@
 [
-  "/project/package.json"
+  "/implementation/package.json",
+  "/project/package.json",
+  "../../public/pragmate-ui/project/package.json"
 ]

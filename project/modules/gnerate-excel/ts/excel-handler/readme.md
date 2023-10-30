@@ -22,8 +22,6 @@ La clase `ExcelHandler` es una utilidad para generar archivos Excel en aplicacio
         -   `columnsHeader`: Un arreglo de objetos que especifica los encabezados de columnas para esa hoja de trabajo.
         -   `data`: Un arreglo que contiene los datos que se agregarán a la hoja de trabajo.
 
-    -   `otherDataSets`: Un arreglo opcional de objetos que permite agregar conjuntos de datos adicionales en hojas de trabajo separadas. Cada objeto dentro de este arreglo debe contener información similar a la de `sheetData`.
-
 El método `createExcel` utiliza estos parámetros para generar un archivo Excel con hojas de trabajo, encabezados y datos personalizados. Luego, guarda el archivo en la ubicación especificada en `pathname`. En caso de éxito, devuelve un objeto con una propiedad `status` que indica si la operación fue exitosa (`true`) y, en caso de error, incluye una propiedad `error` que proporciona detalles sobre el error.
 
 La clase es útil para crear informes, exportar datos y automatizar la generación de archivos Excel en aplicaciones Node.js.

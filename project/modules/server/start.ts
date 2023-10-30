@@ -1,17 +1,13 @@
 import { Server } from "./server";
 
 new (class {
-    #server;
+    #server: Server | undefined;
 
     constructor() {
         this.start();
     }
 
     start() {
-
-        this.#server = new Server(this);
-
-
+        this.#server = new Server();
     }
 })();
-

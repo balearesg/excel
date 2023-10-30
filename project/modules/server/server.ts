@@ -1,56 +1,60 @@
-import * as express from 'express';
-import { Connections } from './connections';
-import config from '@bg/excel/config';
-
+import * as express from "express";
+import { Server as ServerHttp } from "http";
+import { Router, Express, Response, Request, NextFunction } from "express";
+import { Connections } from "./connections";
+import config from "@bg/excel/config";
 export class Server {
-    #instance;
-    #connections;
-    #app;
-    #port = 1080;
-    #router;
-    #modules = config.params.modules;
-    #controllers = new Map();
-    #initializer;
+    #instance: ServerHttp | undefined;
+    #connections: Connections | undefined;
+    #app: Express | undefined;
+    #port: number = 1080;
+    #router: Router | undefined;
+    #modules: string[] = config.params.modules;
+    #controllers: Map<string, any> = new Map();
 
-    constructor(initializer) {
+    constructor() {
         this.start();
-        this.#initializer = initializer;
     }
 
     #base() { }
 
     #setHeader() {
-        this.#app.use((req, res, next) => {
-            res.header('Access-Control-Allow-Origin', '*');
-            res.header(
-                'Access-Control-Allow-Headers',
-                'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method'
-            );
-            res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-            res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-            next();
-        });
+        if (!this.#app) return;
+        this.#app.use(
+            (req: Request, res: Response, next: NextFunction): void => {
+                res.header("Access-Control-Allow-Origin", "*");
+                res.header(
+                    "Access-Control-Allow-Headers",
+                    "Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method"
+                );
+                res.header(
+                    "Access-Control-Allow-Methods",
+                    "GET, POST, OPTIONS, PUT, DELETE"
+                );
+                res.header("Allow", "GET, POST, OPTIONS, PUT, DELETE");
+                next();
+            }
+        );
     }
 
-    onChange = () => {
-        this.restart();
-    };
-
-    start = async () => {
+    start = async (): Promise<void> => {
         try {
             this.#app = express();
             this.#app.use(express.json());
-            this.#app.use(express.static('files'));
+            this.#app.use(express.static("files"));
 
             this.#setHeader();
             this.#router = express.Router();
-            const promises = this.#modules.map(item => globalThis.bimport(`@bg/excel/${item}`));
+            const promises = this.#modules.map((item) =>
+                (<any>globalThis).bimport(`@bg/excel/${item}`)
+            );
             const controllers = await Promise.all(promises);
 
             controllers.forEach(({ Controller, hmr }) => {
-                if (!Controller) throw new Error('the module is not correctly configured');
+                if (!Controller)
+                    throw new Error("the module is not correctly configured");
                 let controller = new Controller(this.#router, this.#app);
-                hmr.on('change', this.onChange);
+                hmr.on("change", this.restart);
                 this.#controllers.set(controller.id, { controller, hmr });
             });
 
@@ -58,14 +62,17 @@ export class Server {
 
             this.#connections = new Connections(this.#instance);
         } catch (exc) {
-            console.error('Error', exc);
+            console.error("Error", exc);
         }
     };
 
-    restart() {
+    restart(): void {
+        if (!this.#connections || !this.#instance) return;
         this.#connections.destroy();
         this.#instance.close(() => {
-            this.#controllers.forEach(({ hmr }) => hmr.off('change', this.onChange));
+            this.#controllers.forEach(({ hmr }) =>
+                hmr.off("change", this.restart)
+            );
             this.start();
         });
     }
