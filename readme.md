@@ -91,6 +91,16 @@ Ejemplo de solicitud GET:
 GET /download?pathFile=/ruta/al/archivo.xlsx&filename=archivo_descargado.xlsx
 ```
 
+## Características Futuras
+
+Estamos trabajando en la implementación de características adicionales para esta API. Próximamente, se agregarán las siguientes funcionalidades:
+
+### Carga y Lectura de Archivos Excel
+
+Añadiremos la capacidad de cargar archivos Excel, leer su contenido y devolver los datos contenidos en ellos. Esto permitirá a los usuarios realizar operaciones avanzadas con archivos Excel, como análisis de datos y procesamiento de hojas de cálculo.
+
+Manténgase atento a las actualizaciones de este repositorio para obtener información sobre las nuevas características y mejoras que se están desarrollando.
+
 ## Contribuciones
 
 Las contribuciones, problemas y solicitudes de características son bienvenidos. Siéntase libre de consultar la [página de issues](https://github.com/balearesg/bg-excel/issues) o abrir nuevas.
