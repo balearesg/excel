@@ -1,4 +1,8 @@
-# API Node.js con Express para Creación y Descarga de Archivos Excel
+# @bg/excel
+
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
 Este repositorio contiene una API Node.js desarrollada con Express que tiene dos endpoints principales: `/generate/excel` y `/download`. El objetivo de esta API es permitir a los usuarios generar archivos Excel a partir de datos proporcionados y descargar esos archivos.
 
