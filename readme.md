@@ -6,6 +6,28 @@
 
 Este repositorio alberga una API Node.js desarrollada con Express que ofrece dos endpoints principales: `/generate/excel` y `/download`. El propósito de esta API es permitir a los usuarios generar archivos Excel a partir de los datos proporcionados y descargar esos archivos.
 
+## Instalación
+
+Para utilizar esta API en su proyecto, siga los siguientes pasos:
+
+1. Clone este repositorio en su sistema local.
+
+2. Instale las dependencias ejecutando el siguiente comando en el directorio `/project`:
+
+    ```
+    npm install
+    ```
+
+3. Inicie el servidor ejecutando el siguiente comando:
+
+    ```
+    beyond run --inspector 4000
+    ```
+
+Luego, vaya al [workspace de beyond](https://workspace.beyondjs.com/?port=4000) y ejecute la distribución de Node.
+
+Ahora, puede acceder a los endpoints `/generate/excel` y `/download` para generar archivos Excel y descargarlos, respectivamente.
+
 ## Endpoints
 
 ### `/generate/excel`
@@ -45,12 +67,12 @@ Content-Type: application/json
 
 El método `download` es una función diseñada para gestionar la descarga de archivos y la eliminación posterior del archivo descargado. Esta función está diseñada para ser utilizada en un servidor Node.js con Express.
 
-## Parámetros
+#### Parámetros
 
 -   `pathFile` (String): La ubicación del archivo a descargar.
 -   `filename` (String): El nombre del archivo que se mostrará al descargar.
 
-## Uso
+#### Uso
 
 El método `download` se utiliza para descargar un archivo y eliminarlo después de la descarga.
 
@@ -68,28 +90,6 @@ Ejemplo de solicitud GET:
 ```
 GET /download?pathFile=/ruta/al/archivo.xlsx&filename=archivo_descargado.xlsx
 ```
-
-## Instalación
-
-Para utilizar esta API en su proyecto, siga los siguientes pasos:
-
-1. Clone este repositorio en su sistema local.
-
-2. Instale las dependencias ejecutando el siguiente comando en el directorio `/project`:
-
-    ```
-    npm install
-    ```
-
-3. Inicie el servidor ejecutando el siguiente comando:
-
-    ```
-    beyond run --inspector 4000
-    ```
-
-Luego, vaya al [workspace de beyond](workspace.beyondjs.com/?port=4000) y ejecute la distribución de Node.
-
-Ahora, puede acceder a los endpoints `/generate/excel` y `/download` para generar archivos Excel y descargarlos, respectivamente.
 
 ## Contribuciones
 

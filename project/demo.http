@@ -1,0 +1,91 @@
+### Método POST para Generar un Archivo Excel
+
+##Este método POST permite generar un archivo Excel basado en los datos proporcionados en el cuerpo de la solicitud. Utiliza la clase `ExcelHandler` para crear archivos Excel con hojas de trabajo personalizables, encabezados y datos.
+
+#### Datos de Solicitud
+
+##El cuerpo de la solicitud debe contener un objeto JSON con la siguiente estructura:
+POST http://localhost:1080/generate/excel
+Content-Type: application/json
+
+{
+   "sheetData":[
+      {
+         "sheetName":"Hoja1",
+         "columnsHeader":[
+            {
+               "header":"Nombre",
+               "key":"name"
+            },
+            {
+               "header":"Edad",
+               "key":"age"
+            }
+         ],
+         "data":[
+            {
+               "name":"Juan",
+               "age":25
+            },
+            {
+               "name":"María",
+               "age":30
+            }
+         ]
+      },
+      {
+         "sheetName":"Hoja2",
+         "columnsHeader":[
+            {
+               "header":"Producto",
+               "key":"product"
+            },
+            {
+               "header":"Precio",
+               "key":"price"
+            }
+         ],
+         "data":[
+            {
+               "product":"Producto A",
+               "price":10
+            },
+            {
+               "product":"Producto B",
+               "price":15
+            }
+         ]
+      }
+   ],
+   "filename": "test.xlsx",
+   "options": {
+    // Opciones de escritura del archivo (opcional)
+   }
+}
+
+### En caso de éxito:
+
+{
+  "status": true,
+  "data": {
+    "filepath": "ruta/del/archivo_generado.xlsx",
+    "filename": "nombre del archivo descargado",
+    "pathname": "directorio del archivo guardado"
+  }
+}
+
+### En caso de error:
+
+{
+  "status": false,
+  "error": "Mensaje de error"
+}
+
+### Método GET para descargar archivos
+
+##Este método GET permite la descarga de archivos pasando como query params pathFile con la ruta del archivo y filename con el nombre, de no exister retorna una respuesta 404
+
+###
+
+GET http://localhost:1080/download?pathFile=C:\\Users\\Franc\\OneDrive\\Documentos\\workspace\\bg\\bg-excel\\project\\files\\test.xlsx&filename=test.xlsx
+
