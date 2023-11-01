@@ -4,5 +4,5 @@
 
 ###
 
-GET http://localhost:1080/download?pathFile=C:\\Users\\Franc\\OneDrive\\Documentos\\workspace\\bg\\bg-excel\\project\\files\\test.xlsx&filename=test.xlsx
+GET http://localhost:1080/download?pathFile=C:\\Users\\Franc\\OneDrive\\Documentos\\workspace\\bg\\bg-excel\\api\\node_modules\\@bg\\excel\\files\\test.xlsx&filename=test.xlsx
 

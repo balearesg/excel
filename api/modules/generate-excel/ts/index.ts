@@ -1,7 +1,6 @@
 import { Request, Response, Application, Router } from "express";
 import { ExcelHandler } from "@bg/excel/handler";
-import { IReturnHandler } from "./excel-handler/types";
-
+import { IReturnHandler } from "./types";
 export /*bundle*/
   class Controller {
   #router: Router | undefined;

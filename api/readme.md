@@ -1,10 +1,10 @@
-# [@bg/excel](https://github.com/balearesg/bg-excel) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+# [@excel/api](./api) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
-Este repositorio alberga una API Node.js desarrollada con Express que ofrece dos endpoints principales: `/generate/excel` y `/download`. El propósito de esta API es permitir a los usuarios generar archivos Excel a partir de los datos proporcionados y descargar esos archivos.
+Este proyecto alberga una API Node.js desarrollada con Express que ofrece dos endpoints principales: `/generate/excel` y `/download`. El propósito de este proyecto es permitir a los usuarios generar archivos Excel a partir de los datos proporcionados y descargar esos archivos mediante el paquete **@bg/excel**.
 
 ## Instalación
 
@@ -12,19 +12,19 @@ Para utilizar esta API en su proyecto, siga los siguientes pasos:
 
 1. Clone este repositorio en su sistema local.
 
-2. Instale las dependencias ejecutando el siguiente comando en el directorio `/project`:
+2. Instale las dependencias ejecutando el siguiente comando en el directorio `/api` y `project`:
 
     ```
     npm install
     ```
 
-3. Inicie el servidor ejecutando el siguiente comando:
+3. Inicie el servidor ejecutando el siguiente comando en la raíz:
 
     ```
     beyond run --inspector 4000
     ```
 
-Luego, vaya al [workspace de beyond](https://workspace.beyondjs.com/?port=4000) y ejecute la distribución de Node.
+Luego, vaya al [workspace de beyond](https://workspace.beyondjs.com/?port=4000) seleccione api y ejecute la distribución de Node.
 
 Ahora, puede acceder a los endpoints `/generate/excel` y `/download` para generar archivos Excel y descargarlos, respectivamente.
 
@@ -38,7 +38,7 @@ La función `generateExcel` es una manejadora de solicitudes POST en una aplicac
 
 -   La función extrae los parámetros necesarios del cuerpo de la solicitud, como los datos de las hojas de trabajo y el nombre del archivo.
 -   Realiza una validación para asegurarse de que los parámetros requeridos (`sheetData` y `filename`) estén presentes.
--   Utiliza la clase `ExcelHandler` para crear el archivo Excel con los datos y encabezados proporcionados.
+-   Utiliza la clase `ExcelHandler` de `@bg/excel` para crear el archivo Excel con los datos y encabezados proporcionados.
 -   Responde con un mensaje de éxito y la ubicación del archivo Excel generado si la operación se realiza con éxito.
 -   En caso de errores, captura las excepciones y responde con un mensaje de error junto con los detalles del error.
 
@@ -90,19 +90,3 @@ Ejemplo de solicitud GET:
 ```
 GET /download?pathFile=/ruta/al/archivo.xlsx&filename=archivo_descargado.xlsx
 ```
-
-## Características Futuras
-
-Estamos trabajando en la implementación de características adicionales para esta API. Próximamente, se agregarán las siguientes funcionalidades:
-
-### Carga y Lectura de Archivos Excel
-
-Añadiremos la capacidad de cargar archivos Excel, leer su contenido y devolver los datos contenidos en ellos. Esto permitirá a los usuarios realizar operaciones avanzadas con archivos Excel, como análisis de datos y procesamiento de hojas de cálculo.
-
-## Contribuciones
-
-Las contribuciones, problemas y solicitudes de características son bienvenidos. Siéntase libre de consultar la [página de issues](https://github.com/balearesg/bg-excel/issues) o abrir nuevas.
-
-## Licencia
-
-Este proyecto está bajo licencia MIT. Consulte el archivo [LICENSE](./LICENSE) para obtener más información.
