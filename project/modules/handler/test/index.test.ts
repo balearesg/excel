@@ -112,4 +112,167 @@ describe('ExcelHandler', () => {
         expect(result.status).toBe(false);
         expect(result.error).toMatch('ENOENT');
     });
+
+    it('debería crear un archivo Excel con validaciones de columnas exitosamente', async () => {
+        const params = {
+            pathname: 'test/',
+            filename: 'test.xlsx',
+            sheetData: [
+                {
+                    sheetName: 'Hoja1',
+                    columnsHeader: [
+                        { header: 'Nombre', key: 'name' },
+                        { header: 'Edad', key: 'age' },
+                    ],
+                    data: [
+                        { name: 'Juan', age: 25 },
+                        { name: 'María', age: '30' },
+                    ],
+                },
+            ],
+            cellsValidations: {
+                columnValidations: [
+                    {
+                        sheetName: 'Hoja1',
+                        columnKey: 'name',
+                        dataType: 'string',
+                        regexPattern: '/^[A-Za-z]+$/',
+                    },
+                    {
+                        sheetName: 'Hoja1',
+                        columnKey: 'age',
+                        dataType: 'number',
+                    },
+                ],
+            },
+        };
+        const result = await excelHandler.createExcel(params);
+        expect(result.status).toBe(true);
+    });
+
+    it('debería manejar un error al crear un archivo Excel con validaciones de columnas', async () => {
+        const params = {
+            pathname: 'test/',
+            filename: 'test.xlsx',
+            sheetData: [
+                {
+                    sheetName: 'Hoja1',
+                    columnsHeader: [
+                        { header: 'Nombre', key: 'name' },
+                        { header: 'Edad', key: 'age' },
+                    ],
+                    data: [
+                        { name: 'Juan', age: 25 },
+                        { name: 'María', age: '30' },
+                    ],
+                },
+            ],
+            cellsValidations: {
+                columnValidations: [
+                    {
+                        sheetName: 'Hoja1',
+                        columnKey: 'name',
+                        dataType: 'string',
+                        regexPattern: '/^[A-Za-z]+$/',
+                    },
+                    {
+                        sheetName: 'Hoja1',
+                        columnKey: 'age',
+                        dataType: 'boolean', // Tipo de dato incorrecto
+                    },
+                ],
+            },
+        };
+        const result = await excelHandler.createExcel(params);
+        expect(result.status).toBe(false);
+        expect(result.error).toBeDefined();
+    });
+
+    it('debería crear un archivo Excel con validaciones de rango exitosamente', async () => {
+        const params = {
+            pathname: 'test/',
+            filename: 'test.xlsx',
+            sheetData: [
+                {
+                    sheetName: 'Hoja1',
+                    columnsHeader: [
+                        { header: 'Nombre', key: 'name' },
+                        { header: 'Edad', key: 'age' },
+                    ],
+                    data: [
+                        { name: 'Juan', age: 25 },
+                        { name: 'María', age: 30 },
+                    ],
+                },
+            ],
+            cellsValidations: {
+                cellRangeValidations: [
+                    {
+                        sheetName: 'Hoja1',
+                        startRow: 2,
+                        endRow: 2,
+                        startCol: 1,
+                        endCol: 1,
+                        dataType: 'number',
+                        regexPattern: '/^[A-Za-z]+$/',
+                    },
+                    {
+                        sheetName: 'Hoja1',
+                        startRow: 2,
+                        endRow: 2,
+                        startCol: 2,
+                        endCol: 2,
+                        dataType: 'number',
+                    },
+                ],
+            },
+        };
+        const result = await excelHandler.createExcel(params);
+        expect(result.status).toBe(true);
+    });
+
+    it('debería manejar un error al crear un archivo Excel con validaciones de rango', async () => {
+        const params = {
+            pathname: 'test/',
+            filename: 'test.xlsx',
+            sheetData: [
+                {
+                    sheetName: 'Hoja1',
+                    columnsHeader: [
+                        { header: 'Nombre', key: 'name' },
+                        { header: 'Edad', key: 'age' },
+                    ],
+                    data: [
+                        { name: 'Juan', age: 25 },
+                        { name: 'María', age: 30 },
+                    ],
+                },
+            ],
+            cellsValidations: {
+                cellRangeValidations: [
+                    {
+                        sheetName: 'Hoja1',
+                        startRow: 2,
+                        endRow: 2,
+                        startCol: 1,
+                        endCol: 1,
+                        dataType: 'number',
+                        regexPattern: '/^[A-Za-z]+$/',
+                    },
+                    {
+                        sheetName: 'Hoja1',
+                        startRow: 2,
+                        endRow: 2,
+                        startCol: 2,
+                        endCol: 2,
+                        dataType: 'boolean', // Tipo de dato incorrecto
+                    },
+                ],
+            },
+        };
+        const result = await excelHandler.createExcel(params);
+        expect(result.status).toBe(false);
+        expect(result.error).toBeDefined();
+    });
+
 });
