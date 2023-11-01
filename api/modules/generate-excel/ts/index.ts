@@ -1,12 +1,12 @@
 import { Request, Response, Application, Router } from "express";
-import { ExcelHandler } from "./excel-handler";
+import { ExcelHandler } from "@bg/excel/handler";
 import { IReturnHandler } from "./excel-handler/types";
 
 export /*bundle*/
   class Controller {
-  #router: Router;
+  #router: Router | undefined;
 
-  constructor(router: any, app: Application) {
+  constructor(router: Router, app: Application) {
     this.#router = router;
     this.#router.post("/generate/excel", this.generateExcel);
     app.use(this.#router);

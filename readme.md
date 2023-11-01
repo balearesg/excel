@@ -1,103 +1,125 @@
-# [@bg/excel](https://github.com/balearesg/bg-excel) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+# [bg-excel](https://github.com/balearesg/bg-excel) &middot; [![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-blue.svg)](./LICENSE)
 
-![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
-![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-Este repositorio alberga una API Node.js desarrollada con Express que ofrece dos endpoints principales: `/generate/excel` y `/download`. El propósito de esta API es permitir a los usuarios generar archivos Excel a partir de los datos proporcionados y descargar esos archivos.
+**bg-excel** es una herramienta que permite la generación de archivos Excel personalizados en aplicaciones Node.js. Esta utilidad proporciona una clase llamada `ExcelHandler` que facilita la creación de archivos Excel con hojas de trabajo personalizables, encabezados y datos.
 
 ## Instalación
 
-Para utilizar esta API en su proyecto, siga los siguientes pasos:
+Para utilizar este paquete en su proyecto, siga los siguientes pasos:
 
 1. Clone este repositorio en su sistema local.
 
 2. Instale las dependencias ejecutando el siguiente comando en el directorio `/project`:
 
-    ```
+    ```bash
     npm install
     ```
 
-3. Inicie el servidor ejecutando el siguiente comando:
+## Clase `ExcelHandler`
 
-    ```
-    beyond run --inspector 4000
-    ```
+La clase `ExcelHandler` es una utilidad para generar archivos Excel en aplicaciones Node.js. Permite crear archivos Excel con hojas de trabajo personalizables, encabezados y datos. Sus principales componentes son:
 
-Luego, vaya al [workspace de beyond](https://workspace.beyondjs.com/?port=4000) y ejecute la distribución de Node.
+-   `_columnsHeader`: Almacena información sobre los encabezados de las columnas que se utilizarán en las hojas de trabajo.
 
-Ahora, puede acceder a los endpoints `/generate/excel` y `/download` para generar archivos Excel y descargarlos, respectivamente.
+-   `_workbook`: Representa el libro de trabajo de Excel y almacena hojas de trabajo, datos y configuraciones.
 
-## Endpoints
+-   `createExcel`: El método `createExcel` es el núcleo de la clase `ExcelHandler` y se encarga de crear un archivo Excel en función de los parámetros proporcionados. Recibe un solo parámetro, un objeto `params`, que contiene la información necesaria para generar el archivo Excel. Aquí se desglosan los componentes de `params`:
 
-### `/generate/excel`
+    -   `params`: Un objeto que contiene los siguientes campos:
 
-#### Función `generateExcel` (Método POST)
+        -   `pathname`: Una cadena que representa la ruta donde se guardará el archivo Excel.
+        -   `options`: Un objeto opcional que contiene opciones de escritura del archivo Excel, como formato, autor, etc.
+        -   `filename`: Una cadena que especifica el nombre del archivo Excel que se creará.
+        -   `sheetData`: Un arreglo de objetos que representan los datos y encabezados de cada hoja de trabajo en el archivo Excel. Cada objeto dentro de este arreglo debe contener:
+            -   `sheetName`: Una cadena que es el nombre de la hoja de trabajo.
+            -   `columnsHeader`: Un arreglo de objetos que especifica los encabezados de columnas para esa hoja de trabajo.
+            -   `data`: Un arreglo que contiene los datos que se agregarán a la hoja de trabajo.
 
-La función `generateExcel` es una manejadora de solicitudes POST en una aplicación Node.js que utiliza Express. Su objetivo es crear archivos Excel basados en los datos proporcionados en el cuerpo de la solicitud y responder con la ubicación del archivo generado en caso de éxito. A continuación, se describe brevemente su implementación:
+    Ejemplo de objeto params:
 
--   La función extrae los parámetros necesarios del cuerpo de la solicitud, como los datos de las hojas de trabajo y el nombre del archivo.
--   Realiza una validación para asegurarse de que los parámetros requeridos (`sheetData` y `filename`) estén presentes.
--   Utiliza la clase `ExcelHandler` para crear el archivo Excel con los datos y encabezados proporcionados.
--   Responde con un mensaje de éxito y la ubicación del archivo Excel generado si la operación se realiza con éxito.
--   En caso de errores, captura las excepciones y responde con un mensaje de error junto con los detalles del error.
-
-Ejemplo de solicitud POST:
-
-```
-POST http://localhost:1080/generate/excel
-Content-Type: application/json
-```
-
-```json
-{
-    "sheetData": [
-        /* Datos de las hojas de trabajo */
-    ],
-    "filename": "nombre_del_archivo.xlsx",
-    "options": {
-        // Opciones de escritura del archivo (opcional)
+    ```json
+    {
+        "sheetData": [
+            {
+                "sheetName": "Hoja1",
+                "columnsHeader": [
+                    {
+                        "header": "Nombre",
+                        "key": "name"
+                    },
+                    {
+                        "header": "Edad",
+                        "key": "age"
+                    }
+                ],
+                "data": [
+                    {
+                        "name": "Juan",
+                        "age": 25
+                    },
+                    {
+                        "name": "María",
+                        "age": 30
+                    }
+                ]
+            },
+            {
+                "sheetName": "Hoja2",
+                "columnsHeader": [
+                    {
+                        "header": "Producto",
+                        "key": "product"
+                    },
+                    {
+                        "header": "Precio",
+                        "key": "price"
+                    }
+                ],
+                "data": [
+                    {
+                        "product": "Producto A",
+                        "price": 10
+                    },
+                    {
+                        "product": "Producto B",
+                        "price": 15
+                    }
+                ]
+            }
+        ],
+        "filename": "test.xlsx",
+        "options": {
+            // Opciones de escritura del archivo (opcional)
+        }
     }
-}
-```
+    ```
 
-### `/download`
+    Respuesta en caso de éxito:
 
-#### Método `download` (Método GET)
+    ```json
+    {
+        "status": true,
+        "data": {
+            "filepath": "ruta/del/archivo_generado.xlsx",
+            "filename": "nombre del archivo descargado",
+            "pathname": "directorio del archivo guardado"
+        }
+    }
+    ```
 
-El método `download` es una función diseñada para gestionar la descarga de archivos y la eliminación posterior del archivo descargado. Esta función está diseñada para ser utilizada en un servidor Node.js con Express.
+    Respuesta en caso de error:
 
-#### Parámetros
+    ```json
+    {
+        "status": false,
+        "error": "Mensaje de error"
+    }
+    ```
 
--   `pathFile` (String): La ubicación del archivo a descargar.
--   `filename` (String): El nombre del archivo que se mostrará al descargar.
+El método `createExcel` utiliza estos parámetros para generar un archivo Excel con hojas de trabajo, encabezados y datos personalizados. Luego, guarda el archivo en la ubicación especificada en `pathname`. En caso de éxito, devuelve un objeto con una propiedad `status` que indica si la operación fue exitosa (`true`) y, en caso de error, incluye una propiedad `error` que proporciona detalles sobre el error.
 
-#### Uso
-
-El método `download` se utiliza para descargar un archivo y eliminarlo después de la descarga.
-
-Comportamiento:
-
-1. Verifica la existencia del archivo especificado en los parámetros.
-2. Si el archivo no existe, responde con un estado HTTP 404 ("No encontrado").
-3. Si el archivo existe, inicia la descarga del archivo especificado.
-4. Después de la descarga exitosa, intenta eliminar el archivo.
-5. Si la eliminación tiene éxito, el archivo se elimina del sistema de archivos.
-6. Si se produce algún error durante la descarga o eliminación, se envía una respuesta de estado HTTP 500 con un mensaje de error.
-
-Ejemplo de solicitud GET:
-
-```
-GET /download?pathFile=/ruta/al/archivo.xlsx&filename=archivo_descargado.xlsx
-```
-
-## Características Futuras
-
-Estamos trabajando en la implementación de características adicionales para esta API. Próximamente, se agregarán las siguientes funcionalidades:
-
-### Carga y Lectura de Archivos Excel
-
-Añadiremos la capacidad de cargar archivos Excel, leer su contenido y devolver los datos contenidos en ellos. Esto permitirá a los usuarios realizar operaciones avanzadas con archivos Excel, como análisis de datos y procesamiento de hojas de cálculo.
+La clase es útil para crear informes, exportar datos y automatizar la generación de archivos Excel en aplicaciones Node.js.
 
 ## Contribuciones
 

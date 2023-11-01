@@ -2,7 +2,8 @@ import * as express from "express";
 import { Server as ServerHttp } from "http";
 import { Router, Express, Response, Request, NextFunction } from "express";
 import { Connections } from "./connections";
-import config from "@bg/excel/config";
+import config from "@excel/api/config";
+
 export class Server {
     #instance: ServerHttp | undefined;
     #connections: Connections | undefined;
@@ -46,7 +47,7 @@ export class Server {
             this.#setHeader();
             this.#router = express.Router();
             const promises = this.#modules.map((item) =>
-                (<any>globalThis).bimport(`@bg/excel/${item}`)
+                (<any>globalThis).bimport(`@excel/api/${item}`)
             );
             const controllers = await Promise.all(promises);
 
@@ -61,6 +62,9 @@ export class Server {
             this.#instance = this.#app.listen(this.#port, this.#base);
 
             this.#connections = new Connections(this.#instance);
+
+            console.log("start api excel");
+
         } catch (exc) {
             console.error("Error", exc);
         }
