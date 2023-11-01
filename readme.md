@@ -167,6 +167,28 @@ La clase `ExcelHandler` es una utilidad para generar archivos Excel en aplicacio
     }
     ```
 
+    o
+
+    ```json
+    {
+        "status": false,
+        "error": [
+            {
+                "status": false,
+                "error": "Invalid data in column 'age' at row 2: should be a number"
+            },
+            {
+                "status": false,
+                "error": "Invalid data in column 'isEmployed' at row 3: should be a boolean"
+            },
+            {
+                "status": false,
+                "error": "Invalid data in row 2, column 1: should be a number"
+            }
+        ]
+    }
+    ```
+
 El método `createExcel` utiliza estos parámetros para generar un archivo Excel con hojas de trabajo, encabezados y datos personalizados. Luego, guarda el archivo en la ubicación especificada en `pathname`. En caso de éxito, devuelve un objeto con una propiedad `status` que indica si la operación fue exitosa (`true`) y, en caso de error, incluye una propiedad `error` que proporciona detalles sobre el error.
 
 La clase es útil para crear informes, exportar datos y automatizar la generación de archivos Excel en aplicaciones Node.js.

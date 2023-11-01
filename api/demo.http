@@ -11,6 +11,65 @@ Content-Type: application/json
 {
    "sheetData":[
       {
+         "sheetName":"Hoja1",
+         "columnsHeader":[
+            {
+               "header":"Nombre",
+               "key":"name"
+            },
+            {
+               "header":"Edad",
+               "key":"age"
+            }
+         ],
+         "data":[
+            {
+               "name":"Juan",
+               "age":25
+            },
+            {
+               "name":"María",
+               "age":30
+            }
+         ]
+      },
+      {
+         "sheetName":"Hoja2",
+         "columnsHeader":[
+            {
+               "header":"Producto",
+               "key":"product"
+            },
+            {
+               "header":"Precio",
+               "key":"price"
+            }
+         ],
+         "data":[
+            {
+               "product":"Producto A",
+               "price":10
+            },
+            {
+               "product":"Producto B",
+               "price":15
+            }
+         ]
+      }
+   ],
+   "filename": "test.xlsx",
+   "options": {
+    // Opciones de escritura del archivo (opcional)
+   }
+}
+
+### en este caso vemos como se validan las columnas o celdas a traves del parametro cellsValidations:
+POST http://localhost:1080/generate/excel
+Content-Type: application/json
+
+{
+   "sheetData":[
+      {
          "sheetName": "Sheet1",
          "columnsHeader": [
             { "header": "Name", "key": "name" },
@@ -29,7 +88,7 @@ Content-Type: application/json
    "options": {
     // Opciones de escritura del archivo (opcional)
    },
-   "cellsValidations": {
+     "cellsValidations": {
       "columnValidations": [
          {
             "sheetName": "Sheet1",
@@ -99,7 +158,25 @@ Content-Type: application/json
 
 {
   "status": false,
-  "error": "Mensaje de error"
+  "error": "Mensaje de error" 
+}
+o 
+{
+  "status": false,
+  "error": [
+    {
+      "status": false,
+      "error": "Invalid data in column 'age' at row 2: should be a number"
+    },
+    {
+      "status": false,
+      "error": "Invalid data in column 'isEmployed' at row 3: should be a boolean"
+    },
+    {
+      "status": false,
+      "error": "Invalid data in row 2, column 1: should be a number"
+    }
+  ]
 }
 
 ### Método GET para descargar archivos
