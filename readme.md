@@ -1,8 +1,8 @@
-# [bg-excel](https://github.com/balearesg/bg-excel) &middot; [![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-blue.svg)](./LICENSE)
+# [@bg/excel](https://github.com/balearesg/bg-excel) &middot; [![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-blue.svg)](./LICENSE)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-**bg-excel** es una herramienta que permite la generación de archivos Excel personalizados en aplicaciones Node.js. Esta utilidad proporciona una clase llamada `ExcelHandler` que facilita la creación de archivos Excel con hojas de trabajo personalizables, encabezados y datos.
+**@bg/excel** es una herramienta que permite la generación de archivos Excel personalizados en aplicaciones Node.js. Esta utilidad proporciona una clase llamada `ExcelHandler` que facilita la creación de archivos Excel con hojas de trabajo personalizables, encabezados y datos.
 
 ## Instalación
 
