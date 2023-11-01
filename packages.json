@@ -1,6 +1,6 @@
 [
+  "/project/package.json",
   "/implementation/package.json",
   "/api/package.json",
-  "../../public/pragmate-ui/project/package.json",
-  "/project/package.json"
+  "../../public/pragmate-ui/project/package.json"
 ]

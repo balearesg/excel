@@ -33,13 +33,18 @@ export /*bundle*/
         options,
         pathname,
         filename,
+        cellsValidations: params.cellsValidations,
       };
 
       // Crea el archivo Excel
       const result: IReturnHandler = await excelHandler.createExcel(
         specs
       );
-
+      if (!result.status && Array.isArray(result.error))
+        return res.status(500).send({
+          status: false,
+          error: result.error,
+        });
       if (!result.status) throw new Error(result.error);
 
       return res

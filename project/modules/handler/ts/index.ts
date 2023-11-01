@@ -1,7 +1,8 @@
 import * as Excel from "exceljs";
 import * as path from "path";
 import * as fs from "fs";
-import { IParamsExcel, IReturnHandler } from "./types";
+import { IParamsExcel, IReturnHandler } from "./interfaces";
+import { validateCells } from "./validate-cells";
 
 export class /*bundle*/ ExcelHandler {
 
@@ -34,7 +35,7 @@ export class /*bundle*/ ExcelHandler {
 
         if (typeof params !== "object") throw `invalid params, this is not object is ${typeof params}`;
 
-        const { pathname, options, filename, sheetData } = params;
+        const { pathname, options, filename, sheetData, cellsValidations } = params;
 
         if (!pathname) throw "invalid pathname, this is required";
 
@@ -97,6 +98,13 @@ export class /*bundle*/ ExcelHandler {
                     worksheet.addRow(item);
                 });
                 worksheet.addRow([]);
+
+                // Antes de guardar el archivo Excel, realizamos las validaciones
+                const validationErrors = validateCells({ cellsValidations, sheetData, workbook: this.#workbook });
+                if (!!validationErrors.length) {
+                    return { status: false, error: validationErrors };
+                }
+
             }
             const pathFile: string = path.join(outputPath, filename);
             await this.#workbook.xlsx.writeFile(pathFile, options);

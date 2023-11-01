@@ -35,6 +35,33 @@ La clase `ExcelHandler` es una utilidad para generar archivos Excel en aplicacio
             -   `sheetName`: Una cadena que es el nombre de la hoja de trabajo.
             -   `columnsHeader`: Un arreglo de objetos que especifica los encabezados de columnas para esa hoja de trabajo.
             -   `data`: Un arreglo que contiene los datos que se agregarán a la hoja de trabajo.
+        -   `cellsValidations` (Opcional): Un objeto que especifica las validaciones que se aplicarán a las celdas. Puede contener dos propiedades:
+
+            -   `columnValidations`: Un arreglo de objetos que describe las validaciones de tipo de datos para columnas específicas en una hoja de trabajo.
+
+                -   `sheetName`: Una cadena que representa el nombre de la hoja de trabajo a la que se aplicarán las validaciones.
+
+                -   `columnKey`: Una cadena que indica la clave de la columna que se debe validar. Corresponde a la propiedad key en columnsHeader.
+
+                -   `dataType`: Una cadena que especifica el tipo de dato que se espera en la columna. Puede ser "string", "number", "boolean" o "date".
+
+                -   `regexPattern` (opcional): Una expresión regular representada como una cadena que se utilizará para validar los valores en la columna. Esta propiedad es opcional.
+
+            -   `cellRangeValidations`: Un arreglo de objetos que describe las validaciones de tipo de datos para rangos específicos de celdas en una hoja de trabajo.
+
+                -   `sheetName`: Una cadena que representa el nombre de la hoja de trabajo a la que se aplicarán las validaciones.
+
+                -   `startRow`: Un número que indica el número de fila de inicio para el rango de celdas a validar.
+
+                -   `endRow`: Un número que indica el número de fila de fin para el rango de celdas a validar.
+
+                -   `startCol`: Un número que indica el número de columna de inicio para el rango de celdas a validar.
+
+                -   `endCol`: Un número que indica el número de columna de fin para el rango de celdas a validar.
+
+                -   `dataType`: Una cadena que especifica el tipo de dato que se espera en el rango de celdas. Puede ser "string", "number", "boolean" o "date".
+
+                -   `regexPattern` (opcional): Una expresión regular representada como una cadena que se utilizará para validar los valores en el rango de celdas. Esta propiedad es opcional.
 
     Ejemplo de objeto params:
 
@@ -91,6 +118,29 @@ La clase `ExcelHandler` es una utilidad para generar archivos Excel en aplicacio
         "filename": "test.xlsx",
         "options": {
             // Opciones de escritura del archivo (opcional)
+        },
+        "cellsValidations": {
+            "columnValidations": [
+                {
+                    "sheetName": "Hoja1",
+                    "columnKey": "nombre",
+                    "dataType": "string",
+                    "regexPattern": "/^[A-Za-z]+$/"
+                }
+                // Otras validaciones de columna...
+            ],
+            "cellRangeValidations": [
+                {
+                    "sheetName": "Hoja2",
+                    "startRow": 2,
+                    "endRow": 2,
+                    "startCol": 1,
+                    "endCol": 1,
+                    "dataType": "number",
+                    "regexPattern": "/^[A-Za-z]+$/"
+                }
+                // Otras validaciones de rango...
+            ]
         }
     }
     ```

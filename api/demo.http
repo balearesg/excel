@@ -11,55 +11,76 @@ Content-Type: application/json
 {
    "sheetData":[
       {
-         "sheetName":"Hoja1",
-         "columnsHeader":[
-            {
-               "header":"Nombre",
-               "key":"name"
-            },
-            {
-               "header":"Edad",
-               "key":"age"
-            }
+         "sheetName": "Sheet1",
+         "columnsHeader": [
+            { "header": "Name", "key": "name" },
+            { "header": "City", "key": "city" },
+            { "header": "Age", "key": "age" },
+            { "header": "Is Employed", "key": "isEmployed" }
          ],
-         "data":[
-            {
-               "name":"Juan",
-               "age":25
-            },
-            {
-               "name":"María",
-               "age":30
-            }
-         ]
-      },
-      {
-         "sheetName":"Hoja2",
-         "columnsHeader":[
-            {
-               "header":"Producto",
-               "key":"product"
-            },
-            {
-               "header":"Precio",
-               "key":"price"
-            }
-         ],
-         "data":[
-            {
-               "product":"Producto A",
-               "price":10
-            },
-            {
-               "product":"Producto B",
-               "price":15
-            }
+         "data": [
+            { "name": "John", "city": "NewYork", "age": 30, "isEmployed": true },
+            { "name": "Alice", "city": "Los Angeles", "age": "invalid", "isEmployed": false },
+            { "name": "Bob", "city": "Chicago", "age": 25, "isEmployed": "invalid" }
          ]
       }
    ],
-   "filename": "test.xlsx",
+   "filename": "test2.xlsx",
    "options": {
     // Opciones de escritura del archivo (opcional)
+   },
+   "cellsValidations": {
+      "columnValidations": [
+         {
+            "sheetName": "Sheet1",
+            "columnKey": "name",
+            "dataType": "string",
+            "regexPattern": "^[A-Za-z ]+$"
+         },
+         {
+            "sheetName": "Sheet1",
+            "columnKey": "city",
+            "dataType": "string",
+            "regexPattern": "^[A-Za-z ]+$"
+         },
+         {
+            "sheetName": "Sheet1",
+            "columnKey": "age",
+            "dataType": "number"
+         },
+         {
+            "sheetName": "Sheet1",
+            "columnKey": "isEmployed",
+            "dataType": "boolean"
+         }
+      ],
+      "cellRangeValidations": [
+         {
+            "sheetName": "Sheet1",
+            "startRow": 2,
+            "endRow": 2,
+            "startCol": 1,
+            "endCol": 1,
+            "dataType": "number",
+            "regexPattern": "^[A-Za-z ]+$"
+         },
+         {
+            "sheetName": "Sheet1",
+            "startRow": 2,
+            "endRow": 2,
+            "startCol": 3,
+            "endCol": 3,
+            "dataType": "number"
+         },
+         {
+            "sheetName": "Sheet1",
+            "startRow": 2,
+            "endRow": 2,
+            "startCol": 4,
+            "endCol": 4,
+            "dataType": "boolean"
+         }
+      ]
    }
 }
 
