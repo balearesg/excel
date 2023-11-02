@@ -47,8 +47,9 @@ export function validateCells({ cellsValidations, sheetData, workbook }: IValida
             return errors
         };
 
-        const isValidColumnValidations: boolean = !!columnValidations && !!Array.isArray(columnValidations) || !!columnValidations.length;
-        const isValidCellRangeValidations: boolean = !!cellRangeValidations && !!Array.isArray(cellRangeValidations) || !!cellRangeValidations.length;
+        const isValidColumnValidations: boolean = !!columnValidations && !!Array.isArray(columnValidations) && !!columnValidations.length;
+
+        const isValidCellRangeValidations: boolean = !!cellRangeValidations && !!Array.isArray(cellRangeValidations) && !!cellRangeValidations.length;
 
         if (isValidColumnValidations) {
             for (const columnValidation of columnValidations) {
@@ -130,6 +131,7 @@ export function validateCells({ cellsValidations, sheetData, workbook }: IValida
                             return
                         }
                         const cell = worksheet.getCell(rowNum, colNum);
+
                         const value = cell ? cell.value : undefined;
                         if (dataType && value !== undefined && !dataTypeValidations[dataType](value, regexPattern)) {
                             errors.push({ status: false, error: `Invalid data in row ${rowNum}, column ${colNum}: ${errorMsgs[dataType]}` });

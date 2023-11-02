@@ -33,28 +33,30 @@ export class /*bundle*/ ExcelHandler {
     */
     async createExcel(params: IParamsExcel): Promise<IReturnHandler> {
 
-        if (typeof params !== "object") throw `invalid params, this is not object is ${typeof params}`;
+        if (!params) throw new Error(`invalid params, this is invalid`);
+
+        if (typeof params !== "object") throw new Error(`invalid params, this is not object`);
 
         const { pathname, options, filename, sheetData, cellsValidations } = params;
 
-        if (!pathname) throw "invalid pathname, this is required";
+        if (!pathname) throw new Error("invalid pathname, this is required");
 
-        if (typeof pathname !== "string") throw `invalid pathname, this is not string is ${typeof pathname}`;
+        if (typeof pathname !== "string") throw new Error(`invalid pathname, this is not string`);
 
-        if (!filename) throw "invalid filename, this is required";
+        if (!filename) throw new Error("invalid filename, this is required");
 
-        if (typeof filename !== "string") throw `invalid filename, this is not string is ${typeof filename}`;
+        if (typeof filename !== "string") throw new Error(`invalid filename, this is not string`);
 
-        if (!sheetData) throw "invalid sheetData, this is required";
+        if (!sheetData) throw new Error("invalid sheetData, this is required");
 
-        if (typeof sheetData !== "object") throw `invalid sheetData, this is not object is ${typeof sheetData}`;
+        if (typeof sheetData !== "object") throw new Error(`invalid sheetData, this is not object`);
 
         const outputPath = path.join(__dirname, pathname);
         // Verifica y crea el directorio si no existe
         if (!fs.existsSync(outputPath)) {
             fs.mkdirSync(outputPath, { recursive: true });
         };
-
+        let errors = []
         try {
 
             this.#workbook = new Excel.Workbook();
@@ -73,21 +75,21 @@ export class /*bundle*/ ExcelHandler {
 
             for (const sheet of sheetData) {
 
-                if (typeof sheet !== "object") throw `invalid sheet, this is not object is ${typeof sheet}`;
+                if (typeof sheet !== "object") throw new Error(`invalid sheet, this is not object`);
 
                 const { sheetName, data, columnsHeader } = sheet;
 
-                if (!sheetName) throw "invalid sheetName in sheetData, this is required";
+                if (!sheetName) throw new Error("invalid sheetName in sheetData, this is required");
 
-                if (typeof sheetName !== "string") throw `invalid sheetName in sheetData, this is not string is ${typeof sheetName}`;
+                if (typeof sheetName !== "string") throw new Error(`invalid sheetName in sheetData, this is not string`);
 
-                if (!data) throw "invalid data in sheetData, this is required";
+                if (!data) throw new Error("invalid data in sheetData, this is required");
 
-                if (!Array.isArray(data) || !data.length) throw `invalid data in sheetData, this is not array or data without content`;
+                if (!Array.isArray(data) || !data.length) throw new Error(`invalid data in sheetData, this is not array or data without content`);
 
-                if (!columnsHeader) throw "invalid columnsHeader in sheetData, this is required";
+                if (!columnsHeader) throw new Error("invalid columnsHeader in sheetData, this is required");
 
-                if (!Array.isArray(columnsHeader) || !columnsHeader.length) throw `invalid columnsHeader in sheetData, this is not array or columnsHeader without content`;
+                if (!Array.isArray(columnsHeader) || !columnsHeader.length) throw new Error(`invalid columnsHeader in sheetData, this is not array or columnsHeader without content`);
 
                 const worksheet: Excel.Worksheet = this.#workbook.addWorksheet(sheetName);
 
@@ -102,16 +104,18 @@ export class /*bundle*/ ExcelHandler {
                 // Antes de guardar el archivo Excel, realizamos las validaciones
                 const validationErrors = validateCells({ cellsValidations, sheetData, workbook: this.#workbook });
                 if (!!validationErrors.length) {
-                    return { status: false, error: validationErrors };
+                    errors = errors.concat(validationErrors)
+                    throw new Error("errors in cells");
                 }
 
-            }
+            };
+
             const pathFile: string = path.join(outputPath, filename);
             await this.#workbook.xlsx.writeFile(pathFile, options);
 
             return { status: true, data: { pathFile, filename, pathname } };
         } catch (error: any) {
-            return { status: false, error };
+            return { status: false, error: errors.length ? errors : error };
         }
     };
 
