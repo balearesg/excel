@@ -9,6 +9,7 @@ POST http://localhost:1080/generate/excel
 Content-Type: application/json
 
 {
+    "typeo": "xlsx",
    "sheetData":[
       {
          "sheetName":"Hoja1",
@@ -57,10 +58,8 @@ Content-Type: application/json
          ]
       }
    ],
-   "filename": "test.xlsx",
-   "options": {
-    // Opciones de escritura del archivo (opcional)
-   }
+   "filename": "test2.xlsx",
+   "options": {}
 }
 
 ### en este caso vemos como se validan las columnas o celdas a traves del parametro cellsValidations:
@@ -68,6 +67,8 @@ POST http://localhost:1080/generate/excel
 Content-Type: application/json
 
 {
+    "type": "xlsx",
+
    "sheetData":[
       {
          "sheetName": "Sheet1",
@@ -84,7 +85,7 @@ Content-Type: application/json
          ]
       }
    ],
-   "filename": "test2.xlsx",
+   "filename": "test3.xlsx",
    "options": {
     // Opciones de escritura del archivo (opcional)
    },
@@ -140,7 +141,8 @@ Content-Type: application/json
             "dataType": "boolean"
          }
       ]
-   }
+   },
+
 }
 
 ### En caso de éxito:

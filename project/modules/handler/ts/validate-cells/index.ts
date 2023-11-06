@@ -1,6 +1,7 @@
 import { IReturnHandler, IValidateCells } from "../interfaces";
 
-export function validateCells({ cellsValidations, sheetData, workbook }: IValidateCells): IReturnHandler[] {
+export function validateCells(params: IValidateCells): IReturnHandler[] {
+    const { cellsValidations, sheetData, workbook } = params;
 
     if (!cellsValidations) return [];
 
@@ -15,16 +16,20 @@ export function validateCells({ cellsValidations, sheetData, workbook }: IValida
 
         const { columnValidations, cellRangeValidations } = cellsValidations;
 
+        const validate = (type, regexPattern, value) => {
+            const regex: RegExp | null = regexPattern ? new RegExp(regexPattern) : null;
+            const validateType = type ? typeof value === type : true;
+            const validateRegex = regex ? regex.test(value) : true
+            const validate: boolean = !!regexPattern && !!type ? validateType && validateRegex : !regexPattern && !!type ? validateType : validateRegex
+            return validate
+        }
+
         // Objeto de validaciones de tipos
-        const dataTypeValidations: { [key: string]: (value: any, regexPattern?: RegExp) => boolean } = {
-            string: (value: any, regexPattern?: RegExp) => {
-                const regex: RegExp | null = regexPattern ? new RegExp(regexPattern) : null;
-                const validate: boolean = regexPattern ? regex.test(value) : typeof value === 'string'
-                return validate
-            },
-            number: (value: any) => typeof value === 'number',
-            boolean: (value: any) => typeof value === 'boolean',
-            date: (value: any) => value instanceof Date,
+        const dataTypeValidations: { [key: string]: (value: any, regexPattern: RegExp,) => boolean } = {
+            string: (value: any, regexPattern) => validate("string", regexPattern, value),
+            number: (value: any, regexPattern) => validate("number", regexPattern, value),
+            boolean: (value: any, regexPattern) => validate("boolean", regexPattern, value),
+            date: (value: any, regexPattern) => validate("date", regexPattern, value),
         };
 
         // Objeto con mensajes de error correspondientes a cada tipo
@@ -66,7 +71,6 @@ export function validateCells({ cellsValidations, sheetData, workbook }: IValida
                     validate: {
                         sheetName: "string",
                         columnKey: "string",
-                        dataType: "string"
                     }, toValidate: columnValidation,
                     entity: "columnValidation"
                 });
@@ -76,7 +80,7 @@ export function validateCells({ cellsValidations, sheetData, workbook }: IValida
                     throw "invalid columnValidation, No valid properties"
                 };
 
-                const dataToValidate: object[] = sheetData.find((sheet) => sheet.sheetName === sheetName)?.data;
+                const dataToValidate: object[] = sheetData[sheetName];
 
                 if (!dataToValidate) {
                     const error: string = `not found data with sheetName ${sheetName}`;
@@ -84,15 +88,24 @@ export function validateCells({ cellsValidations, sheetData, workbook }: IValida
                     throw error;
                 };
 
-                if (dataToValidate && dataType && !dataTypeValidations[dataType]) {
+                if (dataToValidate && dataType && !regexPattern && !dataTypeValidations[dataType]) {
                     errors.push({ status: false, error: `Invalid dataType in columnValidation: ${dataType}` });
                 };
 
                 for (let rowNum = 0; rowNum < dataToValidate.length; rowNum++) {
                     const rowData = dataToValidate[rowNum];
                     const value = rowData[columnKey] ?? undefined;
+                    if (value === undefined) {
+                        errors.push({ status: false, error: `invalid columKey ${columnKey} this not exist` });
+                    }
+
+                    if (!dataType && value !== undefined && !!regexPattern) {
+                        const regex: RegExp | null = new RegExp(regexPattern);
+                        const validate: boolean = regex.test(value)
+                        if (!validate) errors.push({ status: false, error: `Invalid data in column '${columnKey}' at row ${rowNum + 1}: the value ${value} does not comply with the regex ${regexPattern}` });
+                    }
                     if (dataType && value !== undefined && !dataTypeValidations[dataType](value, regexPattern)) {
-                        errors.push({ status: false, error: `Invalid data in column '${columnKey}' at row ${rowNum + 1}: ${errorMsgs[dataType]}` });
+                        errors.push({ status: false, error: `Invalid data in column '${columnKey}' at row ${rowNum + 1}: ${errorMsgs[dataType]} ${!!regexPattern ? `and comply with the regex ${regexPattern}` : ""}` });
                     }
                 }
             }
@@ -116,7 +129,8 @@ export function validateCells({ cellsValidations, sheetData, workbook }: IValida
                     errors = errors.concat(validated);
                     throw "invalid rangeValidation, No valid properties"
                 };
-                const worksheet = workbook.getWorksheet(sheetName) || workbook.addWorksheet(sheetName);
+                const worksheet = workbook.getWorksheet(sheetName);
+
 
                 if (!worksheet) {
                     const error = `not found data with sheetName ${sheetName}`;
@@ -126,15 +140,26 @@ export function validateCells({ cellsValidations, sheetData, workbook }: IValida
 
                 for (let rowNum = startRow; rowNum <= endRow; rowNum++) {
                     for (let colNum = startCol; colNum <= endCol; colNum++) {
-                        if (dataType && !dataTypeValidations[dataType]) {
-                            errors.push({ status: false, error: `Invalid dataType in rangeValidation: ${dataType}` });
-                            return
-                        }
                         const cell = worksheet.getCell(rowNum, colNum);
 
-                        const value = cell ? cell.value : undefined;
+                        const value: any = cell && cell.value ? cell.value : undefined;
+
+                        if (value === undefined) {
+                            errors.push({ status: false, error: `invalid range of cell for startRow: ${rowNum}, endRow: ${endRow}, startCol: ${startCol} and endCol ${endCol} this not exist` });
+                        }
+
+                        if (!!regexPattern && !dataType) {
+                            const regex: RegExp | null = new RegExp(regexPattern);
+                            const validate: boolean = regex.test(value);
+
+                            if (!validate) errors.push({ status: false, error: `Invalid data in row ${rowNum}, column ${colNum}: the value ${value} does not comply with the regex ${regexPattern}` });
+                        }
+                        if (dataType && !dataTypeValidations[dataType]) {
+                            errors.push({ status: false, error: `Invalid dataType in rangeValidation: ${dataType}` });
+                        }
+
                         if (dataType && value !== undefined && !dataTypeValidations[dataType](value, regexPattern)) {
-                            errors.push({ status: false, error: `Invalid data in row ${rowNum}, column ${colNum}: ${errorMsgs[dataType]}` });
+                            errors.push({ status: false, error: `Invalid data in row ${rowNum}, column ${colNum}: ${errorMsgs[dataType]} ${!!regexPattern ? `and comply with the regex ${regexPattern}` : ""}` });
                         }
                     }
                 }

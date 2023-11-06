@@ -1,46 +1,33 @@
 import { Request, Response, Application, Router } from "express";
 import { ExcelHandler } from "@bg/excel/handler";
-import { IReturnHandler } from "./types";
+import { IReturnRead } from "./types";
+import * as path from "path";
 export /*bundle*/
   class Controller {
   #router: Router | undefined;
 
   constructor(router: Router, app: Application) {
     this.#router = router;
-    this.#router.post("/generate/excel", this.generateExcel);
+    this.#router.post("/read/excel", this.readExcel);
     app.use(this.#router);
   }
 
-  generateExcel = async (
+  readExcel = async (
     req: Request,
     res: Response
-  ): Promise<Response<IReturnHandler, Record<string, IReturnHandler>>> => {
+  ): Promise<Response<IReturnRead, Record<string, IReturnRead>>> => {
     try {
       const excelHandler: ExcelHandler = new ExcelHandler();
       const params = req.body;
 
-      if (!params?.sheetData) throw "invalid sheetData, this is required";
-
-      if (!params?.filename) throw "invalid filename, this is required";
-
-      if (!params?.type) throw "invalid type, this is required";
-
-
-      const sheetData = params.sheetData;
-
-      const filename = params.filename;
-      const pathname = "/files";
-      const options = params.options ?? {};
-      const specs = {
-        sheetData,
-        options,
-        pathname,
-        filename,
-        type: params.type
+      const specs: any = {
+        filePath: path.join(__dirname, "static/test.csv"),
+        cellsValidations: params.cellsValidations ?? null,
+        type: "csv"
       };
 
       // Crea el archivo Excel
-      const result: IReturnHandler = await excelHandler.createExcel(
+      const result: IReturnRead = await excelHandler.readExcel(
         specs
       );
       if (!result.status && Array.isArray(result.error))

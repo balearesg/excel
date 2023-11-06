@@ -2,7 +2,7 @@
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-**@bg/excel** es una herramienta que permite la generación de archivos Excel personalizados en aplicaciones Node.js. Esta utilidad proporciona una clase llamada `ExcelHandler` que facilita la creación de archivos Excel con hojas de trabajo personalizables, encabezados y datos.
+Este repositorio contiene una biblioteca que facilita la creación y lectura de archivos Excel en formato .xlsx y .csv. La clase principal, `ExcelHandler`, proporciona una interfaz para crear archivos Excel personalizados y leer archivos existentes para su posterior análisis. La biblioteca se encarga de crear hojas de cálculo, administrar cabeceras de columnas y aplicar validaciones a los datos, lo que facilita la generación y procesamiento de archivos Excel.
 
 ## Instalación
 
@@ -16,182 +16,192 @@ Para utilizar este paquete en su proyecto, siga los siguientes pasos:
     npm install
     ```
 
-## Clase `ExcelHandler`
+## Clase ExcelHandler
 
-La clase `ExcelHandler` es una utilidad para generar archivos Excel en aplicaciones Node.js. Permite crear archivos Excel con hojas de trabajo personalizables, encabezados y datos. Sus principales componentes son:
+La clase `ExcelHandler` es el corazón de esta biblioteca. Proporciona propiedades y métodos para la creación y lectura de archivos Excel. A continuación, se describen sus propiedades y métodos:
 
--   `_columnsHeader`: Almacena información sobre los encabezados de las columnas que se utilizarán en las hojas de trabajo.
+### Propiedades de ExcelHandler
 
--   `_workbook`: Representa el libro de trabajo de Excel y almacena hojas de trabajo, datos y configuraciones.
+| Propiedad       | Descripción                                                                                                                                    |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `columnsHeader` | Un arreglo de objetos que define las cabeceras de las columnas en las hojas de cálculo. Estas cabeceras se utilizan al crear un archivo Excel. |
+| `workbook`      | Un objeto de la biblioteca `exceljs` que representa el libro de trabajo Excel y se utiliza para cargar archivos Excel existentes.              |
 
--   `createExcel`: El método `createExcel` es el núcleo de la clase `ExcelHandler` y se encarga de crear un archivo Excel en función de los parámetros proporcionados. Recibe un solo parámetro, un objeto `params`, que contiene la información necesaria para generar el archivo Excel. Aquí se desglosan los componentes de `params`:
+### Métodos de ExcelHandler
 
-    -   `params`: Un objeto que contiene los siguientes campos:
+| Método                                                       | Descripción                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createExcel(params: IParamsExcel): Promise<IReturnHandler>` | Este método se utiliza para crear un archivo Excel personalizado. Toma un objeto de parámetros `params` que especifica la ubicación, nombre del archivo, datos de las hojas de cálculo y más. Devuelve una promesa que resuelve en un objeto `IReturnHandler` con información sobre el estado y, si es exitoso, la ubicación del archivo creado.      |
+| `readExcel(params: IParamsRead): Promise<IReturnRead>`       | Este método se utiliza para leer un archivo Excel existente, ya sea en formato .xlsx o .csv. Toma un objeto de parámetros `params` que especifica la ubicación del archivo y las validaciones a aplicar. Devuelve una promesa que resuelve en un objeto `IReturnRead` con información sobre el estado y, si es exitoso, los datos leídos del archivo. |
 
-        -   `pathname`: Una cadena que representa la ruta donde se guardará el archivo Excel.
-        -   `options`: Un objeto opcional que contiene opciones de escritura del archivo Excel, como formato, autor, etc.
-        -   `filename`: Una cadena que especifica el nombre del archivo Excel que se creará.
-        -   `sheetData`: Un arreglo de objetos que representan los datos y encabezados de cada hoja de trabajo en el archivo Excel. Cada objeto dentro de este arreglo debe contener:
-            -   `sheetName`: Una cadena que es el nombre de la hoja de trabajo.
-            -   `columnsHeader`: Un arreglo de objetos que especifica los encabezados de columnas para esa hoja de trabajo.
-            -   `data`: Un arreglo que contiene los datos que se agregarán a la hoja de trabajo.
-        -   `cellsValidations` (Opcional): Un objeto que especifica las validaciones que se aplicarán a las celdas. Puede contener dos propiedades:
+## Estructura de las respuestas
 
-            -   `columnValidations`: Un arreglo de objetos que describe las validaciones de tipo de datos para columnas específicas en una hoja de trabajo.
+### Respuesta de `createExcel`
 
-                -   `sheetName`: Una cadena que representa el nombre de la hoja de trabajo a la que se aplicarán las validaciones.
+Cuando se llama al método `createExcel`, la respuesta tiene la siguiente estructura:
 
-                -   `columnKey`: Una cadena que indica la clave de la columna que se debe validar. Corresponde a la propiedad key en columnsHeader.
+| Propiedad | Descripción                                                                                                                  |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `status`  | Indica si la operación fue exitosa (true) o falló (false).                                                                   |
+| `data`    | Un objeto que contiene información sobre el archivo Excel creado, que incluye la ruta, el nombre del archivo y la ubicación. |
+| `error`   | Detalles del error, en caso de que la operación falle. Puede ser una cadena de texto o un arreglo de errores.                |
 
-                -   `dataType`: Una cadena que especifica el tipo de dato que se espera en la columna. Puede ser "string", "number", "boolean" o "date".
+### Respuesta de `readExcel`
 
-                -   `regexPattern` (opcional): Una expresión regular representada como una cadena que se utilizará para validar los valores en la columna. Esta propiedad es opcional.
+Cuando se llama al método `readExcel`, la respuesta tiene la siguiente estructura:
 
-            -   `cellRangeValidations`: Un arreglo de objetos que describe las validaciones de tipo de datos para rangos específicos de celdas en una hoja de trabajo.
+| Propiedad | Descripción                                                                                                   |
+| --------- | ------------------------------------------------------------------------------------------------------------- |
+| `status`  | Indica si la operación fue exitosa (true) o falló (false).                                                    |
+| `data`    | Un objeto que contiene los datos leídos de la hoja de cálculo, organizados por hoja.                          |
+| `error`   | Detalles del error, en caso de que la operación falle. Puede ser una cadena de texto o un arreglo de errores. |
 
-                -   `sheetName`: Una cadena que representa el nombre de la hoja de trabajo a la que se aplicarán las validaciones.
+Estas estructuras de respuestas te permiten verificar el estado de la operación y acceder a los datos o detalles del error según corresponda.
 
-                -   `startRow`: Un número que indica el número de fila de inicio para el rango de celdas a validar.
+## Propiedades y Explicación de los Parámetros de `createExcel`
 
-                -   `endRow`: Un número que indica el número de fila de fin para el rango de celdas a validar.
+El método `createExcel` acepta un objeto `params` que se utiliza para personalizar la creación de un archivo Excel. A continuación, se detallan las propiedades de `params`:
 
-                -   `startCol`: Un número que indica el número de columna de inicio para el rango de celdas a validar.
+### Propiedades de `params` en `createExcel`
 
-                -   `endCol`: Un número que indica el número de columna de fin para el rango de celdas a validar.
+| Propiedad   | Descripción                                                                                                                                                   |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pathname`  | La ubicación o ruta donde se guardará el archivo Excel. Debe ser una cadena de texto.                                                                         |
+| `options`   | Opciones adicionales para la creación del archivo Excel. Es un objeto que se utiliza para configuraciones específicas del archivo.                            |
+| `filename`  | El nombre del archivo Excel que se creará. Debe ser una cadena de texto.                                                                                      |
+| `sheetData` | Un arreglo de objetos que define los datos de las hojas de cálculo a incluir en el archivo Excel. Cada objeto en este arreglo representa una hoja de cálculo. |
+| `type`      | El tipo de archivo Excel que se creará, que puede ser "csv" o "xlsx". Debe ser una cadena de texto.                                                           |
 
-                -   `dataType`: Una cadena que especifica el tipo de dato que se espera en el rango de celdas. Puede ser "string", "number", "boolean" o "date".
+### Propiedades de `sheetData` en `createExcel`
 
-                -   `regexPattern` (opcional): Una expresión regular representada como una cadena que se utilizará para validar los valores en el rango de celdas. Esta propiedad es opcional.
+| Propiedad       | Descripción                                                                                                                                             |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sheetName`     | El nombre de la hoja de cálculo. Debe ser una cadena de texto.                                                                                          |
+| `data`          | Un arreglo de objetos que representa los datos a incluir en la hoja de cálculo. Cada objeto contiene información sobre las filas y columnas de la hoja. |
+| `columnsHeader` | Un arreglo de objetos que define las cabeceras de las columnas en la hoja de cálculo. Estas cabeceras se utilizan al crear un archivo Excel.            |
 
-    Ejemplo de objeto params:
+## Propiedades y Explicación de los Parámetros de `readExcel`
 
-    ```json
-    {
-        "sheetData": [
-            {
-                "sheetName": "Hoja1",
-                "columnsHeader": [
-                    {
-                        "header": "Nombre",
-                        "key": "name"
-                    },
-                    {
-                        "header": "Edad",
-                        "key": "age"
-                    }
-                ],
-                "data": [
-                    {
-                        "name": "Juan",
-                        "age": 25
-                    },
-                    {
-                        "name": "María",
-                        "age": 30
-                    }
-                ]
-            },
-            {
-                "sheetName": "Hoja2",
-                "columnsHeader": [
-                    {
-                        "header": "Producto",
-                        "key": "product"
-                    },
-                    {
-                        "header": "Precio",
-                        "key": "price"
-                    }
-                ],
-                "data": [
-                    {
-                        "product": "Producto A",
-                        "price": 10
-                    },
-                    {
-                        "product": "Producto B",
-                        "price": 15
-                    }
-                ]
-            }
-        ],
-        "filename": "test.xlsx",
-        "options": {
-            // Opciones de escritura del archivo (opcional)
-        },
-        "cellsValidations": {
-            "columnValidations": [
-                {
-                    "sheetName": "Hoja1",
-                    "columnKey": "nombre",
-                    "dataType": "string",
-                    "regexPattern": "/^[A-Za-z]+$/"
-                }
-                // Otras validaciones de columna...
+El método `readExcel` se utiliza para leer un archivo Excel existente y aplicar validaciones según sea necesario. A continuación, se detallan las propiedades de `params`:
+
+### Propiedades de `params` en `readExcel`
+
+| Propiedad          | Descripción                                                                                                 |
+| ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `filePath`         | La ubicación del archivo Excel que se va a leer. Debe ser una cadena de texto.                              |
+| `cellsValidations` | Un objeto que contiene validaciones para celdas, incluyendo validaciones de tipo de datos y patrones regex. |
+| `type`             | El tipo de archivo Excel que se va a leer, que puede ser "csv" o "xlsx". Debe ser una cadena de texto.      |
+
+### Propiedades de `cellsValidations` en `readExcel`
+
+El objeto `cellsValidations` se utiliza para especificar las validaciones que se aplicarán a las celdas del archivo Excel. A continuación, se dividen las propiedades de `cellsValidations` en tablas separadas:
+
+#### Propiedades de `columnValidations`
+
+| Propiedad      | Descripción                                                                                                       |
+| -------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `sheetName`    | El nombre de la hoja de cálculo a la que se aplicarán las validaciones. Debe ser una cadena de texto.             |
+| `columnKey`    | La clave de la columna a la que se aplicarán las validaciones. Debe ser una cadena de texto.                      |
+| `dataType`     | El tipo de dato esperado en la columna (opcional). Puede ser "string", "number", "boolean" o "date".              |
+| `regexPattern` | Un patrón de expresión regular para validar los valores de la columna (opcional). Debe ser una expresión regular. |
+
+#### Propiedades de `cellRangeValidations`
+
+| Propiedad | Descripción |
+| --------- | ----------- |
+
+| `sheetName`
+
+| El nombre de la hoja de cálculo a la que se aplicarán las validaciones. Debe ser una cadena de texto. |
+| `startRow` | El número de fila de inicio para la validación. Debe ser un número. |
+| `endRow` | El número de fila de fin para la validación. Debe ser un número. |
+| `startCol` | El número de columna de inicio para la validación. Debe ser un número. |
+| `endCol` | El número de columna de fin para la validación. Debe ser un número. |
+| `dataType` | El tipo de dato esperado en el rango de celdas (opcional). Puede ser "string", "number", "boolean" o "date". |
+| `regexPattern` | Un patrón de expresión regular para validar los valores en el rango de celdas (opcional). Debe ser una expresión regular. |
+
+Estas propiedades permiten especificar las validaciones a aplicar a las celdas del archivo Excel durante la lectura.
+
+## Uso
+
+```javascript
+import { ExcelHandler } from "@bg/excel/handler";
+
+// Crear una instancia de ExcelHandler
+const excelHandler = new ExcelHandler();
+
+// Crear un archivo Excel (XLSX o CSV)
+const params = {
+    pathname: "output/",
+    options: {
+        // Opciones específicas del tipo de archivo
+        // ...
+    },
+    filename: "example.xlsx",
+    sheetData: [
+        {
+            sheetName: "Hoja1",
+            data: [
+                { name: "Juan", age: 25 },
+                { name: "María", age: 30 },
             ],
-            "cellRangeValidations": [
-                {
-                    "sheetName": "Hoja2",
-                    "startRow": 2,
-                    "endRow": 2,
-                    "startCol": 1,
-                    "endCol": 1,
-                    "dataType": "number",
-                    "regexPattern": "/^[A-Za-z]+$/"
-                }
-                // Otras validaciones de rango...
-            ]
-        }
+            columnsHeader: [
+                // Opcional
+                { header: "Nombre", key: "name" },
+                { header: "Edad", key: "age" },
+            ],
+        },
+        // Agregar más hojas si es necesario
+    ],
+    type: "xlsx", // Tipo de archivo ('xlsx' o 'csv')
+};
+
+excelHandler.createExcel(params).then((result) => {
+    if (result.status) {
+        console.log(`Archivo creado con éxito en: ${result.data.pathFile}`);
+    } else {
+        console.error(`Error al crear el archivo: ${result.error}`);
     }
-    ```
+});
 
-    Respuesta en caso de éxito:
-
-    ```json
-    {
-        "status": true,
-        "data": {
-            "filepath": "ruta/del/archivo_generado.xlsx",
-            "filename": "nombre del archivo descargado",
-            "pathname": "directorio del archivo guardado"
-        }
-    }
-    ```
-
-    Respuesta en caso de error:
-
-    ```json
-    {
-        "status": false,
-        "error": "Mensaje de error"
-    }
-    ```
-
-    o
-
-    ```json
-    {
-        "status": false,
-        "error": [
+// Leer datos desde un archivo Excel o CSV
+const readParams = {
+    filePath: "input/example.xlsx",
+    cellsValidations: {
+        // Opcional
+        columnValidations: [
             {
-                "status": false,
-                "error": "Invalid data in column 'age' at row 2: should be a number"
+                sheetName: "Hoja1",
+                columnKey: "age",
+                dataType: "number",
+                regexPattern: "/^[0-9]+$/",
             },
+        ],
+        cellRangeValidations: [
+            // Opcional
             {
-                "status": false,
-                "error": "Invalid data in column 'isEmployed' at row 3: should be a boolean"
+                sheetName: "Hoja1",
+                startRow: 2,
+                endRow: 3,
+                startCol: 2,
+                endCol: 2,
+                dataType: "number",
+                regexPattern: "/^[0-9]+$/",
             },
-            {
-                "status": false,
-                "error": "Invalid data in row 2, column 1: should be a number"
-            }
-        ]
+        ],
+    },
+    type: "xlsx", // Tipo de archivo ('xlsx' o 'csv')
+};
+
+excelHandler.readExcel(readParams).then((result) => {
+    if (result.status) {
+        console.log("Datos leídos con éxito:");
+        console.log(result.data);
+    } else {
+        console.error(`Error al leer el archivo: ${result.error}`);
     }
-    ```
-
-El método `createExcel` utiliza estos parámetros para generar un archivo Excel con hojas de trabajo, encabezados y datos personalizados. Luego, guarda el archivo en la ubicación especificada en `pathname`. En caso de éxito, devuelve un objeto con una propiedad `status` que indica si la operación fue exitosa (`true`) y, en caso de error, incluye una propiedad `error` que proporciona detalles sobre el error.
-
-La clase es útil para crear informes, exportar datos y automatizar la generación de archivos Excel en aplicaciones Node.js.
+});
+```
 
 ## Contribuciones
 

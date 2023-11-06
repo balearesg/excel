@@ -10,7 +10,6 @@ POST http://localhost:1080/generate/excel
 Content-Type: application/json
 
 {
-    "type": "xlsx",
    "sheetData":[
       {
          "sheetName":"Hoja1",

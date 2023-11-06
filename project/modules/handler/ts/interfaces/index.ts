@@ -46,11 +46,25 @@ export interface IParamsExcel {
     options: object;
     filename: string;
     sheetData: Array<TSheetData>;
-    cellsValidations?: TCellsValidations
+    type: "csv" | "xlsx"
 };
+
+export interface ISheet { [sheetName: string]: any[][] }
 
 export interface IValidateCells {
     cellsValidations: TCellsValidations;
-    sheetData: Array<TSheetData>;
+    sheetData: ISheet;
     workbook: Excel.Workbook;
 };
+
+export interface IReturnRead {
+    status: boolean;
+    data?: ISheet | undefined;
+    error?: string | undefined | any[];
+};
+
+export interface IParamsRead {
+    filePath: string;
+    cellsValidations?: TCellsValidations,
+    type: "csv" | "xlsx"
+}

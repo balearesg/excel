@@ -1,8 +1,8 @@
 import * as Excel from "exceljs";
 import * as path from "path";
 import * as fs from "fs";
-import { IParamsExcel, IReturnHandler } from "./interfaces";
-import { validateCells } from "./validate-cells";
+import { IParamsExcel, IParamsRead, IReturnHandler, IReturnRead } from "./interfaces";
+import { readExcel } from "./read-excel";
 
 export class /*bundle*/ ExcelHandler {
 
@@ -37,11 +37,12 @@ export class /*bundle*/ ExcelHandler {
 
         if (typeof params !== "object") throw new Error(`invalid params, this is not object`);
 
-        const { pathname, options, filename, sheetData, cellsValidations } = params;
+        const { pathname, options, filename, sheetData, type } = params;
 
         if (!pathname) throw new Error("invalid pathname, this is required");
 
         if (typeof pathname !== "string") throw new Error(`invalid pathname, this is not string`);
+
 
         if (!filename) throw new Error("invalid filename, this is required");
 
@@ -50,6 +51,14 @@ export class /*bundle*/ ExcelHandler {
         if (!sheetData) throw new Error("invalid sheetData, this is required");
 
         if (typeof sheetData !== "object") throw new Error(`invalid sheetData, this is not object`);
+
+        if (!type) throw new Error("invalid type, this is required");
+
+        if (typeof type !== "string") throw new Error(`invalid type, this is not string`);
+
+        const types = ["xlsx", "csv"];
+
+        if (!types.includes(type)) throw new Error(`Type must be xlsx or csv`);
 
         const outputPath = path.join(__dirname, pathname);
         // Verifica y crea el directorio si no existe
@@ -87,13 +96,13 @@ export class /*bundle*/ ExcelHandler {
 
                 if (!Array.isArray(data) || !data.length) throw new Error(`invalid data in sheetData, this is not array or data without content`);
 
-                if (!columnsHeader) throw new Error("invalid columnsHeader in sheetData, this is required");
-
-                if (!Array.isArray(columnsHeader) || !columnsHeader.length) throw new Error(`invalid columnsHeader in sheetData, this is not array or columnsHeader without content`);
-
                 const worksheet: Excel.Worksheet = this.#workbook.addWorksheet(sheetName);
 
-                worksheet.columns = columnsHeader;
+                if (!!columnsHeader && !!Array.isArray(columnsHeader) && !!columnsHeader.length) {
+                    worksheet.columns = columnsHeader;
+                    continue
+                };
+
                 worksheet.state = "visible";
 
                 data.forEach((item: object): void => {
@@ -101,17 +110,10 @@ export class /*bundle*/ ExcelHandler {
                 });
                 worksheet.addRow([]);
 
-                // Antes de guardar el archivo Excel, realizamos las validaciones
-                const validationErrors = validateCells({ cellsValidations, sheetData, workbook: this.#workbook });
-                if (!!validationErrors.length) {
-                    errors = errors.concat(validationErrors)
-                    throw new Error("errors in cells");
-                }
-
             };
 
             const pathFile: string = path.join(outputPath, filename);
-            await this.#workbook.xlsx.writeFile(pathFile, options);
+            await this.#workbook[type].writeFile(pathFile, options);
 
             return { status: true, data: { pathFile, filename, pathname } };
         } catch (error: any) {
@@ -119,4 +121,7 @@ export class /*bundle*/ ExcelHandler {
         }
     };
 
+    readExcel(params: IParamsRead): Promise<IReturnRead> {
+        return readExcel(this, params)
+    }
 }

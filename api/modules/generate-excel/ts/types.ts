@@ -6,6 +6,6 @@ type TData = {
 export interface IReturnHandler {
     status: boolean;
     data?: TData | undefined;
-    error?: string | undefined;
+    error?: string | undefined | any[];
 
-};
+}

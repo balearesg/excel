@@ -1,5 +1,6 @@
 import * as express from "express";
 import { Server as ServerHttp } from "http";
+import * as path from "path";
 import { Router, Express, Response, Request, NextFunction } from "express";
 import { Connections } from "./connections";
 import config from "@excel/api/config";
@@ -36,13 +37,18 @@ export class Server {
                 next();
             }
         );
-    }
+    };
+
+    onChange = () => {
+        this.restart();
+    };
+
 
     start = async (): Promise<void> => {
         try {
             this.#app = express();
             this.#app.use(express.json());
-            this.#app.use(express.static("files"));
+            this.#app.use(express.static(path.join(__dirname, 'static')));
 
             this.#setHeader();
             this.#router = express.Router();
@@ -55,7 +61,7 @@ export class Server {
                 if (!Controller)
                     throw new Error("the module is not correctly configured");
                 let controller = new Controller(this.#router, this.#app);
-                hmr.on("change", this.restart);
+                hmr.on("change", this.onChange);
                 this.#controllers.set(controller.id, { controller, hmr });
             });
 
@@ -74,9 +80,7 @@ export class Server {
         if (!this.#connections || !this.#instance) return;
         this.#connections.destroy();
         this.#instance.close(() => {
-            this.#controllers.forEach(({ hmr }) =>
-                hmr.off("change", this.restart)
-            );
+            this.#controllers.forEach(({ hmr }) => hmr.off('change', this.onChange));
             this.start();
         });
     }
