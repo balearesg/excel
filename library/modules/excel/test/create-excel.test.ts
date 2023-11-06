@@ -1,15 +1,15 @@
-import { ExcelHandler } from "../ts/index";
-import * as Excel from "exceljs";
+import { Excel } from "../ts/index";
+import * as ExcelJS from "exceljs";
 
-describe("ExcelHandler", () => {
-    let excelHandler;
+describe("Excel", () => {
+    let excel: Excel;
 
     beforeEach(() => {
-        excelHandler = new ExcelHandler();
+        excel = new Excel();
     });
 
     it("debería crear una instancia de ExcelHandler", () => {
-        expect(excelHandler).toBeInstanceOf(ExcelHandler);
+        expect(excel).toBeInstanceOf(Excel);
     });
 
     it("debería configurar las columnas del encabezado correctamente", () => {
@@ -17,48 +17,49 @@ describe("ExcelHandler", () => {
             { header: "Nombre", key: "name" },
             { header: "Edad", key: "age" },
         ];
-        excelHandler.columnsHeader = columnsHeader;
-        expect(excelHandler.columnsHeader).toEqual(columnsHeader);
+        excel.columnsHeader = columnsHeader;
+        expect(excel.columnsHeader).toEqual(columnsHeader);
     });
 
     it("debería configurar el libro de trabajo correctamente", () => {
-        const workbook = new Excel.Workbook();
-        excelHandler.workbook = workbook;
-        expect(excelHandler.workbook).toEqual(workbook);
+        const workbook = new ExcelJS.Workbook();
+        excel.workbook = workbook;
+        expect(excel.workbook).toEqual(workbook);
     });
 
-    it("debería lanzar un error si los parámetros de createExcel no son un objeto", async () => {
+    it("debería lanzar un error si los parámetros de create no son un objeto", async () => {
         return expect(async () => {
-            await excelHandler.createExcel(null);
+            const params: any = null
+            await excel.create(params);
         }).rejects.toThrow("invalid params, this is invalid");
     });
 
-    it("debería lanzar un error si pathname es inválido en createExcel", async () => {
-        const params = { pathname: 123 };
-        await expect(excelHandler.createExcel(params)).rejects.toThrow(
+    it("debería lanzar un error si pathname es inválido en create", async () => {
+        const params: any = { pathname: 123 };
+        await expect(excel.create(params)).rejects.toThrow(
             "invalid pathname, this is not string"
         );
     });
 
-    it("debería lanzar un error si filename es inválido en createExcel", async () => {
-        const params = { filename: 123, pathname: "/test" };
-        await expect(excelHandler.createExcel(params)).rejects.toThrow(
+    it("debería lanzar un error si filename es inválido en create", async () => {
+        const params: any = { filename: 123, pathname: "/test" };
+        await expect(excel.create(params)).rejects.toThrow(
             "invalid filename, this is not string"
         );
     });
 
-    it("debería lanzar un error si sheetData es inválido en createExcel", async () => {
-        const params = {
+    it("debería lanzar un error si sheetData es inválido en create", async () => {
+        const params: any = {
             sheetData: "invalid",
             pathname: "/test",
             filename: "test",
         };
-        await expect(excelHandler.createExcel(params)).rejects.toThrow(
+        await expect(excel.create(params)).rejects.toThrow(
             "invalid sheetData, this is not object"
         );
     });
 
-    it('debería lanzar un error si el tipo de archivo es incorrecto en createExcel', async () => {
+    it('debería lanzar un error si el tipo de archivo es incorrecto en create', async () => {
         const params: any = {
             pathname: 'test/',
             options: {},
@@ -66,19 +67,19 @@ describe("ExcelHandler", () => {
             sheetData: [],
             type: 'invalid',
         };
-        const excelHandler = new ExcelHandler();
-        await expect(excelHandler.createExcel(params)).rejects.toThrow('Type must be xlsx or csv');
+
+        await expect(excel.create(params)).rejects.toThrow('Type must be xlsx or csv');
     });
 
-    it("debería lanzar un error si sheetName es inválido en createExcel", async () => {
-        const params = {
+    it("debería lanzar un error si sheetName es inválido en create", async () => {
+        const params: any = {
             sheetData: [{ sheetName: 123 }],
             pathname: "/test",
             filename: "test.xlsx",
             type: 'xlsx',
         };
         try {
-            await excelHandler.createExcel(params);
+            await excel.create(params);
         } catch (error) {
 
             expect(error).toThrow(
@@ -88,15 +89,15 @@ describe("ExcelHandler", () => {
     });
 
 
-    it("debería lanzar un error si data es inválido en createExcel", async () => {
-        const params = {
+    it("debería lanzar un error si data es inválido en create", async () => {
+        const params: any = {
             sheetData: [{ data: "invalid", sheetName: "hoja" }],
             pathname: "/test",
             filename: "test",
             type: 'xlsx',
         };
         try {
-            await excelHandler.createExcel(params);
+            await excel.create(params);
         } catch (error) {
             console.log(error); // Agregar esta línea para imprimir el error
             expect(error).toThrow(
@@ -107,7 +108,7 @@ describe("ExcelHandler", () => {
 
 
     it("debería crear un archivo Excel exitosamente", async () => {
-        const params = {
+        const params: any = {
             pathname: "test/",
             filename: "test.xlsx",
             sheetData: [
@@ -125,17 +126,17 @@ describe("ExcelHandler", () => {
             ],
             type: 'xlsx',
         };
-        const result = await excelHandler.createExcel(params);
+        const result = await excel.create(params);
         expect(result.status).toBe(true);
     });
 
     it("debería manejar un error al crear un archivo Excel", async () => {
-        const params = { pathname: null, filename: null, sheetData: null };
+        const params: any = { pathname: null, filename: null, sheetData: null };
         try {
-            const result = await excelHandler.createExcel(params);
+            const result = await excel.create(params);
             expect(result.status).toBe(false);
             expect(result.error).toBeDefined();
-        } catch (error) {
+        } catch (error: any) {
 
             expect(error.message).toMatch("invalid pathname, this is required");
         }

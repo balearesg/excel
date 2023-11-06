@@ -1,5 +1,5 @@
 import { Request, Response, Application, Router } from "express";
-import { ExcelHandler } from "@bg/excel/handler";
+import { Excel } from "@bg/excel/excel";
 import { IReturnRead } from "./types";
 import * as path from "path";
 export /*bundle*/
@@ -17,7 +17,7 @@ export /*bundle*/
     res: Response
   ): Promise<Response<IReturnRead, Record<string, IReturnRead>>> => {
     try {
-      const excelHandler: ExcelHandler = new ExcelHandler();
+      const excel: Excel = new Excel();
       const params = req.body;
 
       const specs: any = {
@@ -27,7 +27,7 @@ export /*bundle*/
       };
 
       // Crea el archivo Excel
-      const result: IReturnRead = await excelHandler.readExcel(
+      const result: IReturnRead = await excel.read(
         specs
       );
       if (!result.status && Array.isArray(result.error))

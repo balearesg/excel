@@ -1,4 +1,4 @@
-import * as Excel from "exceljs";
+import * as ExcelJS from "exceljs";
 
 type TData = {
     pathFile: string;
@@ -27,13 +27,13 @@ export interface ICellRangeValidation {
     startCol: number;
     endCol: number;
     dataType?: TDataType;
-    regexPattern?: RegExp; // Patrón de expresión regular (opcional)
+    regexPattern?: string; // Patrón de expresión regular (opcional)
 }
 export interface IColumnValidation {
     sheetName: string;
     columnKey: string;
     dataType?: TDataType;
-    regexPattern?: RegExp; // Patrón de expresión regular (opcional)
+    regexPattern?: string; // Patrón de expresión regular (opcional)
 };
 
 type TCellsValidations = {
@@ -54,7 +54,7 @@ export interface ISheet { [sheetName: string]: any[][] }
 export interface IValidateCells {
     cellsValidations: TCellsValidations;
     sheetData: ISheet;
-    workbook: Excel.Workbook;
+    workbook: ExcelJS.Workbook;
 };
 
 export interface IReturnRead {

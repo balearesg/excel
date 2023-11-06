@@ -1,11 +1,11 @@
-import * as Excel from "exceljs";
+import * as ExcelJS from "exceljs";
 import * as fs from 'fs';
 import { validateCells, } from "../validate-cells";
 import { IParamsRead, IReturnHandler, IReturnRead, ISheet } from "../interfaces";
-import { ExcelHandler } from "..";
+import { Excel } from "..";
 import { readCSVFile } from "./csv";
 
-export async function readExcel(parent: ExcelHandler, params: IParamsRead): Promise<IReturnRead> {
+export async function read(parent: Excel, params: IParamsRead): Promise<IReturnRead> {
 
     if (!params || typeof params !== "object") throw new Error("invalid params");
 
@@ -27,7 +27,7 @@ export async function readExcel(parent: ExcelHandler, params: IParamsRead): Prom
     let errors: any = [];
 
     try {
-        parent.workbook = new Excel.Workbook();
+        parent.workbook = new ExcelJS.Workbook();
 
         if (type === "xlsx") {
             const fileBuffer: Buffer = fs.readFileSync(filePath);
@@ -38,17 +38,17 @@ export async function readExcel(parent: ExcelHandler, params: IParamsRead): Prom
         }
 
         const dataBySheet: ISheet = {};
-        parent.workbook.eachSheet((worksheet: Excel.Worksheet): void => {
+        parent.workbook.eachSheet((worksheet: ExcelJS.Worksheet): void => {
             const sheetData: any[] = [];
-            const headerRow: Excel.Row = worksheet.getRow(1);
+            const headerRow: ExcelJS.Row = worksheet.getRow(1);
 
-            worksheet.eachRow((row: Excel.Row, rowNumber: number): void => {
+            worksheet.eachRow((row: ExcelJS.Row, rowNumber: number): void => {
                 if (rowNumber === 1) return; // Saltar la fila de cabecera
 
                 const rowData: any = {};
 
-                row.eachCell((cell: Excel.Cell, colNumber: number): void => {
-                    const headerCell: Excel.Cell = headerRow.getCell(colNumber);
+                row.eachCell((cell: ExcelJS.Cell, colNumber: number): void => {
+                    const headerCell: ExcelJS.Cell = headerRow.getCell(colNumber);
                     rowData[headerCell.value.toString()] = cell.value;
                 });
 

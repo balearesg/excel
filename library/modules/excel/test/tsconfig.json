@@ -4,6 +4,8 @@
         "target": "es2018",
         "experimentalDecorators": true,
         "allowSyntheticDefaultImports": true,
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "strict": true,
+        "forceConsistentCasingInFileNames": true
     }
 }
