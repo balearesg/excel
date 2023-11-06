@@ -107,22 +107,19 @@ El objeto `cellsValidations` se utiliza para especificar las validaciones que se
 
 #### Propiedades de `cellRangeValidations`
 
-| Propiedad | Descripción |
-| --------- | ----------- |
-
-| `sheetName`
-
-| El nombre de la hoja de cálculo a la que se aplicarán las validaciones. Debe ser una cadena de texto. |
-| `startRow` | El número de fila de inicio para la validación. Debe ser un número. |
-| `endRow` | El número de fila de fin para la validación. Debe ser un número. |
-| `startCol` | El número de columna de inicio para la validación. Debe ser un número. |
-| `endCol` | El número de columna de fin para la validación. Debe ser un número. |
-| `dataType` | El tipo de dato esperado en el rango de celdas (opcional). Puede ser "string", "number", "boolean" o "date". |
+| Propiedad      | Descripción                                                                                                               |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `sheetName`    | El nombre de la hoja de cálculo a la que se aplicarán las validaciones. Debe ser una cadena de texto.                     |
+| `startRow`     | El número de fila de inicio para la validación. Debe ser un número.                                                       |
+| `endRow`       | El número de fila de fin para la validación. Debe ser un número.                                                          |
+| `startCol`     | El número de columna de inicio para la validación. Debe ser un número.                                                    |
+| `endCol`       | El número de columna de fin para la validación. Debe ser un número.                                                       |
+| `dataType`     | El tipo de dato esperado en el rango de celdas (opcional). Puede ser "string", "number", "boolean" o "date".              |
 | `regexPattern` | Un patrón de expresión regular para validar los valores en el rango de celdas (opcional). Debe ser una expresión regular. |
 
 Estas propiedades permiten especificar las validaciones a aplicar a las celdas del archivo Excel durante la lectura.
 
-## Uso s
+## Uso
 
 ```javascript
 import { ExcelHandler } from "@bg/excel/handler";
