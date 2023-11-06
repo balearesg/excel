@@ -17,6 +17,9 @@ export async function readExcel(parent: ExcelHandler, params: IParamsRead): Prom
 
     if (typeof filePath !== "string") throw new Error(`invalid filePath, this is not string`);
 
+    if (!fs.existsSync(filePath)) throw new Error("File does not exist in the specified path")
+
+
     const types: string[] = ["xlsx", "csv"];
 
     if (!types.includes(type)) throw new Error(`Type must be xlsx or csv`);
