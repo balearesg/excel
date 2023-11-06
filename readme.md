@@ -122,7 +122,7 @@ El objeto `cellsValidations` se utiliza para especificar las validaciones que se
 
 Estas propiedades permiten especificar las validaciones a aplicar a las celdas del archivo Excel durante la lectura.
 
-## Uso
+## Uso s
 
 ```javascript
 import { ExcelHandler } from "@bg/excel/handler";
