@@ -2,6 +2,12 @@
 
 En esta sección, se detallan los casos de uso específicos de la biblioteca [@bg/excel]. Cada caso de uso proporciona una descripción detallada de cómo utilizar la biblioteca para realizar una tarea específica.
 
+## Importación:
+
+```javascript
+import { Excel } from "@bg/excel/excel";
+```
+
 ## Caso de Uso 1: Creación de un Archivo Excel en Formato XLSX
 
 En este caso de uso, se describe cómo crear un archivo Excel en formato XLSX utilizando la biblioteca [@bg/excel].
@@ -35,9 +41,9 @@ excel.create(params).then((result) => {
         console.log(
             `XLSX file created successfully at: ${result.data.pathFile}`
         );
-    } else {
-        console.error(`Error creating the XLSX file: ${result.error}`);
+        return;
     }
+    console.error(`Error creating the XLSX file: ${result.error}`);
 });
 ```
 
@@ -57,8 +63,38 @@ const excel = new Excel();
 const readParams = {
     filePath: "input/example.xlsx",
     cellsValidations: {
-        // Puedes agregar validaciones si es necesario
+        columnValidations: [
+            {
+                sheetName: "Hoja1",
+                columnKey: "Nombre",
+                dataType: "string",
+            },
+            {
+                sheetName: "Hoja1",
+                columnKey: "Edad",
+                dataType: "number",
+            },
+        ],
     },
+       cellRangeValidations: [
+         {
+            sheetName: "Sheet1",
+            startRow: 2,
+            endRow: 2,
+            startCol: 1,
+            endCol: 1,
+            dataType: "number",
+            regexPattern: "^[A-Za-z ]+$"
+         },
+         {
+            sheetName: "Sheet1",
+            startRow: 2,
+            endRow 2,
+            startCol: 3,
+            endCol: 3,
+            dataType: "number"
+         },
+      ]
     type: "xlsx",
 };
 
@@ -66,9 +102,10 @@ excel.readExcel(readParams).then((result) => {
     if (result.status) {
         console.log("Data read successfully:");
         console.log(result.data);
-    } else {
-        console.error(`Error reading the XLSX file: ${result.error}`);
+        return
     }
+     console.error(`Error reading the XLSX file: ${result.error}`);
+
 });
 ```
 
@@ -109,9 +146,9 @@ excel.createExcel(params).then((result) => {
         console.log(
             `CSV file created successfully at: ${result.data.pathFile}`
         );
-    } else {
-        console.error(`Error creating the CSV file: ${result.error}`);
+        return;
     }
+    console.error(`Error creating the CSV file: ${result.error}`);
 });
 ```
 
@@ -131,7 +168,25 @@ const excel = new Excel();
 const readParams = {
     filePath: "input/example.csv",
     cellsValidations: {
-        // Puedes agregar validaciones si es necesario
+          cellRangeValidations: [
+         {
+            sheetName: "Sheet1",
+            startRow: 2,
+            endRow: 2,
+            startCol: 1,
+            endCol: 1,
+            dataType: "number",
+            regexPattern: "^[A-Za-z ]+$"
+         },
+         {
+            sheetName: "Sheet1",
+            startRow: 2,
+            endRow 2,
+            startCol: 3,
+            endCol: 3,
+            dataType: "number"
+         },
+      ]
     },
     type: "csv",
 };
@@ -140,9 +195,9 @@ excel.readExcel(readParams).then((result) => {
     if (result.status) {
         console.log("Data read successfully:");
         console.log(result.data);
-    } else {
-        error.log(`Error reading the CSV file: ${result.error}`);
+        return
     }
+    error.log(`Error reading the CSV file: ${result.error}`);
 });
 ```
 
@@ -161,29 +216,25 @@ En este caso de uso, se muestra cómo manejar parámetros inválidos al crear o 
 const excel = new Excel();
 
 // Ejemplo 1: Parámetros de creación inválidos
-const invalidCreateParams = {
-    // Proporciona parámetros inválidos aquí
-};
+const invalidCreateParams = { pathname: null, filename: null, sheetData: null };
 
 excel.createExcel(invalidCreateParams).then((result) => {
     if (result.status) {
         console.log("El archivo se creó con éxito.");
-    } else {
-        console.error(`Error al crear el archivo: ${result.error}`);
+        return;
     }
+    console.error(`Error al crear el archivo: ${result.error}`);
 });
 
 // Ejemplo 2: Parámetros de lectura inválidos
-const invalidReadParams = {
-    // Proporciona parámetros inválidos aquí
-};
+const invalidReadParams = { filePath: null, type: null };
 
 excel.readExcel(invalidReadParams).then((result) => {
     if (result.status) {
         console.log("Los datos se leyeron con éxito.");
-    } else {
-        console.error(`Error al leer el archivo: ${result.error}`);
+        return;
     }
+    console.error(`Error al leer el archivo: ${result.error}`);
 });
 ```
 
