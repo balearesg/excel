@@ -2,19 +2,19 @@ import { IReturnHandler, IValidateCells } from "../interfaces";
 import { validateColumns } from "./columns";
 import { validateRange } from "./range";
 
-export function validateCells(params: IValidateCells): IReturnHandler[] {
+export function validateCells(params: IValidateCells): string[] {
     const { cellsValidations, sheetData, workbook } = params;
 
     if (!cellsValidations) return [];
 
-    let errors: IReturnHandler[] = [];
+    let errors: string[] = [];
 
     try {
         if (!!cellsValidations && typeof cellsValidations !== "object") {
             const error: string = `invalid cellsValidations this is not a objet is a ${typeof cellsValidations}`;
-            errors.push({ status: false, error });
+            errors.push(error);
             throw error;
-        }
+        };
 
         const { columnValidations, cellRangeValidations } = cellsValidations;
 
@@ -25,5 +25,5 @@ export function validateCells(params: IValidateCells): IReturnHandler[] {
         return errors;
     } catch (error) {
         return errors;
-    }
-}
+    };
+};

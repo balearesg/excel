@@ -1,30 +1,43 @@
 import * as ExcelJS from "exceljs";
 import * as fs from 'fs';
 import { validateCells, } from "../validate-cells";
-import { IParamsRead, IReturnHandler, IReturnRead, ISheet } from "../interfaces";
+import { IParamsRead, IReturnRead, ISheet } from "../interfaces";
 import { Excel } from "..";
 import { readCSVFile } from "./csv";
+import { validateValues } from "../utils/validate-values";
 
 export async function read(parent: Excel, params: IParamsRead): Promise<IReturnRead> {
 
-    if (!params || typeof params !== "object") throw new Error("invalid params");
+    let errors: string[] = [];
+
+    const validated = validateValues({
+        validate: {
+            filePath: "string",
+            type: "string",
+        }, toValidate: params,
+        entity: "params"
+    });
+
+    if (validated.length) {
+        errors = errors.concat(validated);
+        return { status: false, error: errors };
+    };
 
     const { filePath, cellsValidations, type } = params;
 
-    if (!type) throw new Error("invalid type, this is required");
-
-    if (!filePath) throw new Error("invalid filePath, this is required");
-
-    if (typeof filePath !== "string") throw new Error(`invalid filePath, this is not string`);
-
     if (!fs.existsSync(filePath)) throw new Error("File does not exist in the specified path")
-
 
     const types: string[] = ["xlsx", "csv"];
 
     if (!types.includes(type)) throw new Error(`Type must be xlsx or csv`);
 
-    let errors: any = [];
+    const fileExtension = filePath.slice(((filePath.lastIndexOf(".") - 1) >>> 0) + 2);
+
+    if (!fileExtension) throw new Error(`The filePath does not have an extension`);
+
+    if (!types.includes(fileExtension)) throw new Error(`The file extension must be csv or xlsx in filePath`);
+
+    if (fileExtension !== type) throw new Error(`The file extension in filePath must be equal to the parameter type`)
 
     try {
         parent.workbook = new ExcelJS.Workbook();
@@ -60,7 +73,7 @@ export async function read(parent: Excel, params: IParamsRead): Promise<IReturnR
 
         if (cellsValidations) {
 
-            const validates: IReturnHandler[] = validateCells({ cellsValidations, workbook: parent.workbook, sheetData: dataBySheet })
+            const validates: string[] = validateCells({ cellsValidations, workbook: parent.workbook, sheetData: dataBySheet })
 
             if (validates.length) {
                 errors = errors.concat(validates);

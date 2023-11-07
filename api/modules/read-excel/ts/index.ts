@@ -21,9 +21,9 @@ export /*bundle*/
       const params = req.body;
 
       const specs: any = {
-        filePath: path.join(__dirname, "static/test.csv"),
+        filePath: path.join(__dirname, params.filePath ?? "static/test.csv"),
         cellsValidations: params.cellsValidations ?? null,
-        type: "csv"
+        type: params.type
       };
 
       // Crea el archivo Excel

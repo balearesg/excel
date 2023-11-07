@@ -1,6 +1,6 @@
-import { errorMsgs } from "../utils/error-msgs";
-import { dataTypeValidations } from "../utils/type-validations";
-import { validateValues } from "../utils/validate-values";
+import { errorMsgs } from "../../utils/error-msgs";
+import { dataTypeValidations } from "../../utils/type-validations";
+import { validateValues } from "../../utils/validate-values";
 
 export async function validateRange({ cellRangeValidations, workbook, errors }) {
     const isValidCellRangeValidations: boolean = !!cellRangeValidations && !!Array.isArray(cellRangeValidations) && !!cellRangeValidations.length;
@@ -28,7 +28,7 @@ export async function validateRange({ cellRangeValidations, workbook, errors }) 
 
         if (!worksheet) {
             const error = `not found data with sheetName ${sheetName}`;
-            errors.push({ status: false, error });
+            errors.push(error);
             throw error;
         };
 
@@ -39,21 +39,21 @@ export async function validateRange({ cellRangeValidations, workbook, errors }) 
                 const value: any = cell && cell.value ? cell.value : undefined;
 
                 if (value === undefined) {
-                    errors.push({ status: false, error: `invalid range of cell for startRow: ${rowNum}, endRow: ${endRow}, startCol: ${startCol} and endCol ${endCol} this not exist` });
+                    errors.push(`invalid range of cell for startRow: ${rowNum}, endRow: ${endRow}, startCol: ${startCol} and endCol ${endCol} this not exist`);
                 }
 
                 if (!!regexPattern && !dataType) {
                     const regex: RegExp | null = new RegExp(regexPattern);
                     const validate: boolean = regex.test(value);
 
-                    if (!validate) errors.push({ status: false, error: `Invalid data in row ${rowNum}, column ${colNum}: the value ${value} does not comply with the regex ${regexPattern}` });
+                    if (!validate) errors.push(`Invalid data in row ${rowNum}, column ${colNum}: the value ${value} does not comply with the regex ${regexPattern}`);
                 }
                 if (dataType && !dataTypeValidations[dataType]) {
-                    errors.push({ status: false, error: `Invalid dataType in rangeValidation: ${dataType}` });
+                    errors.push(`Invalid dataType in rangeValidation: ${dataType}`);
                 }
 
                 if (dataType && value !== undefined && !dataTypeValidations[dataType](value, regexPattern)) {
-                    errors.push({ status: false, error: `Invalid data in row ${rowNum}, column ${colNum}: ${errorMsgs[dataType]} ${!!regexPattern ? `and comply with the regex ${regexPattern}` : ""}` });
+                    errors.push(`Invalid data in row ${rowNum}, column ${colNum}: ${errorMsgs[dataType]} ${!!regexPattern ? `and comply with the regex ${regexPattern}` : ""}`);
                 }
             }
         }

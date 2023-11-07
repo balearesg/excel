@@ -1,4 +1,4 @@
-import { Excel } from "../ts/index";
+import { Excel } from '../../../../library/modules/excel/ts';
 
 describe("Excel", () => {
     let excel: Excel;
@@ -9,7 +9,7 @@ describe("Excel", () => {
 
     describe('read', () => {
 
-        it('debería leer un archivo Excel xlsx correctamente con readExcel', async () => {
+        it('debería leer un archivo Excel xlsx correctamente con read', async () => {
             const filePath = './assets/test.xlsx';
             const params: any = { filePath, type: 'xlsx' };
 
@@ -29,7 +29,7 @@ describe("Excel", () => {
 
 
         it('debería leer un archivo Excel xlsx válido con validación de celdas y columnas', async () => {
-            const filePath = './assets/test.xlsx'; // Ruta al archivo Excel xlsx válido
+            const filePath = './assets/test.xlsx';
             const params: any = {
                 filePath,
                 type: 'xlsx',
@@ -54,7 +54,7 @@ describe("Excel", () => {
         });
 
         it('debería manejar un error al leer un excel con celdas y columnas no válidas', async () => {
-            const filePath = './assets/test.xlsx'; // Ruta al archivo Excel xlsx inválido
+            const filePath = './assets/test.xlsx';
             const params: any = {
                 filePath,
                 type: 'xlsx',
@@ -78,7 +78,5 @@ describe("Excel", () => {
 
         });
     });
-
-
 
 });

@@ -67,4 +67,10 @@ export interface IParamsRead {
     filePath: string;
     cellsValidations?: TCellsValidations,
     type: "csv" | "xlsx"
+};
+
+export interface IValidateValues {
+    validate: { [x: string]: string };
+    toValidate: any;
+    entity: string;
 }

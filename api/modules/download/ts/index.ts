@@ -15,8 +15,8 @@ export /*bundle*/
     const params: any = req.query;
 
     try {
-      if (!params?.pathFile) throw "invalids pathFile, this is required";
-      if (!params?.filename) throw "invalids pathFile, this is required";
+      if (!params?.pathFile) throw "invalid pathFile, this is required";
+      if (!params?.filename) throw "invalid filename, this is required";
 
       if (!fs.existsSync(params.pathFile)) {
         res.status(404).send("File not found");

@@ -1,6 +1,6 @@
-import { errorMsgs } from "../utils/error-msgs";
-import { dataTypeValidations } from "../utils/type-validations";
-import { validateValues } from "../utils/validate-values";
+import { errorMsgs } from "../../utils/error-msgs";
+import { dataTypeValidations } from "../../utils/type-validations";
+import { validateValues } from "../../utils/validate-values";
 
 export async function validateColumns({ columnValidations, errors, sheetData }) {
     const isValidColumnValidations: boolean = !!columnValidations && !!Array.isArray(columnValidations) && !!columnValidations.length;
@@ -10,7 +10,7 @@ export async function validateColumns({ columnValidations, errors, sheetData }) 
 
         if (typeof columnValidation !== "object") {
             const error = `invalid columnValidation, this is not object is ${typeof columnValidation}`;
-            errors.push({ status: false, error });
+            errors.push(error);
             throw error;
         };
 
@@ -33,28 +33,28 @@ export async function validateColumns({ columnValidations, errors, sheetData }) 
 
         if (!dataToValidate) {
             const error: string = `not found data with sheetName ${sheetName}`;
-            errors.push({ status: false, error })
+            errors.push(error)
             throw error;
         };
 
         if (dataToValidate && dataType && !regexPattern && !dataTypeValidations[dataType]) {
-            errors.push({ status: false, error: `Invalid dataType in columnValidation: ${dataType}` });
+            errors.push(`Invalid dataType in columnValidation: ${dataType}`);
         };
 
         for (let rowNum = 0; rowNum < dataToValidate.length; rowNum++) {
             const rowData = dataToValidate[rowNum];
             const value = rowData[columnKey] ?? undefined;
             if (value === undefined) {
-                errors.push({ status: false, error: `invalid columKey ${columnKey} this not exist` });
+                errors.push(`invalid columKey ${columnKey} this not exist`);
             }
 
             if (!dataType && value !== undefined && !!regexPattern) {
                 const regex: RegExp | null = new RegExp(regexPattern);
                 const validate: boolean = regex.test(value)
-                if (!validate) errors.push({ status: false, error: `Invalid data in column '${columnKey}' at row ${rowNum + 1}: the value ${value} does not comply with the regex ${regexPattern}` });
+                if (!validate) errors.push(`Invalid data in column '${columnKey}' at row ${rowNum + 1}: the value ${value} does not comply with the regex ${regexPattern}`);
             }
             if (dataType && value !== undefined && !dataTypeValidations[dataType](value, regexPattern)) {
-                errors.push({ status: false, error: `Invalid data in column '${columnKey}' at row ${rowNum + 1}: ${errorMsgs[dataType]} ${!!regexPattern ? `and comply with the regex ${regexPattern}` : ""}` });
+                errors.push(`Invalid data in column '${columnKey}' at row ${rowNum + 1}: ${errorMsgs[dataType]} ${!!regexPattern ? `and comply with the regex ${regexPattern}` : ""}`);
             }
         }
     }

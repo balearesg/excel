@@ -1,6 +1,6 @@
 # Casos de Uso de [@bg/excel](https://github.com/balearesg/bg-excel)
 
-En esta sección, se detallan los casos de uso específicos de la biblioteca [@bg/excel]. Cada caso de uso proporciona una descripción detallada de cómo utilizar la biblioteca para realizar una tarea específica.
+En esta sección, se detallan los casos de uso específicos de la biblioteca [@bg/excel](https://github.com/balearesg/bg-excel). Cada caso de uso proporciona una descripción detallada de cómo utilizar la biblioteca para realizar una tarea específica.
 
 ## Importación:
 
@@ -10,7 +10,7 @@ import { Excel } from "@bg/excel/excel";
 
 ## Caso de Uso 1: Creación de un Archivo Excel en Formato XLSX
 
-En este caso de uso, se describe cómo crear un archivo Excel en formato XLSX utilizando la biblioteca [@bg/excel].
+En este caso de uso, se describe cómo crear un archivo Excel en formato XLSX
 
 ### Uso
 
@@ -53,7 +53,7 @@ La respuesta de este caso de uso incluye detalles sobre el estado y la ubicació
 
 ## Caso de Uso 2: Lectura de un Archivo Excel en Formato XLSX
 
-En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX utilizando la biblioteca [@bg/excel].
+En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX, Las validación de columnas o celdas por rango es opcional con la propiedad `cellsValidations`
 
 ### Uso
 
@@ -62,7 +62,7 @@ En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX uti
 const excel = new Excel();
 const readParams = {
     filePath: "input/example.xlsx",
-    cellsValidations: {
+    cellsValidations: { // OPCIONAL
         columnValidations: [
             {
                 sheetName: "Hoja1",
@@ -115,7 +115,7 @@ La respuesta de este caso de uso incluye los datos leídos de la hoja de cálcul
 
 ## Caso de Uso 4: Creación de un Archivo Excel en Formato CSV
 
-En este caso de uso, se describe cómo crear un archivo Excel en formato CSV utilizando la biblioteca [@bg/excel].
+En este caso de uso, se describe cómo crear un archivo Excel en formato CSV. por el momento no se pueden crear archivos csv con más de 1 hoja
 
 ### Uso
 
@@ -158,7 +158,7 @@ La respuesta de este caso de uso es similar a la del Caso de Uso 1.
 
 ## Caso de Uso 5: Lectura de un Archivo Excel en Formato CSV
 
-En este caso de uso, se describe cómo leer un archivo Excel en formato CSV utilizando la biblioteca [@bg/excel].
+En este caso de uso, se describe cómo leer un archivo Excel en formato CSV, por ahora la validación de columnas no está disponible en esete caso.
 
 ### Uso
 
@@ -167,27 +167,6 @@ En este caso de uso, se describe cómo leer un archivo Excel en formato CSV util
 const excel = new Excel();
 const readParams = {
     filePath: "input/example.csv",
-    cellsValidations: {
-        cellRangeValidations: [
-            {
-                sheetName: "Sheet1",
-                startRow: 2,
-                endRow: 2,
-                startCol: 1,
-                endCol: 1,
-                dataType: "number",
-                regexPattern: "^[A-Za-z ]+$",
-            },
-            {
-                sheetName: "Sheet1",
-                startRow: 2,
-                endRow: 2,
-                startCol: 3,
-                endCol: 3,
-                dataType: "number",
-            },
-        ],
-    },
     type: "csv",
 };
 
@@ -240,4 +219,4 @@ excel.read(invalidReadParams).then((result) => {
 
 ### Respuesta
 
-La respuesta de este caso de uso varía según la naturaleza de los parámetros inválidos. La biblioteca [@bg/excel] debe manejar parámetros inválidos y proporcionar detalles en la respuesta en caso de errores.
+La respuesta de este caso de uso varía según la naturaleza de los parámetros inválido
