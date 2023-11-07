@@ -89,7 +89,7 @@ const readParams = {
          {
             sheetName: "Sheet1",
             startRow: 2,
-            endRow 2,
+            endRow: 2,
             startCol: 3,
             endCol: 3,
             dataType: "number"
@@ -168,25 +168,25 @@ const excel = new Excel();
 const readParams = {
     filePath: "input/example.csv",
     cellsValidations: {
-          cellRangeValidations: [
-         {
-            sheetName: "Sheet1",
-            startRow: 2,
-            endRow: 2,
-            startCol: 1,
-            endCol: 1,
-            dataType: "number",
-            regexPattern: "^[A-Za-z ]+$"
-         },
-         {
-            sheetName: "Sheet1",
-            startRow: 2,
-            endRow 2,
-            startCol: 3,
-            endCol: 3,
-            dataType: "number"
-         },
-      ]
+        cellRangeValidations: [
+            {
+                sheetName: "Sheet1",
+                startRow: 2,
+                endRow: 2,
+                startCol: 1,
+                endCol: 1,
+                dataType: "number",
+                regexPattern: "^[A-Za-z ]+$",
+            },
+            {
+                sheetName: "Sheet1",
+                startRow: 2,
+                endRow: 2,
+                startCol: 3,
+                endCol: 3,
+                dataType: "number",
+            },
+        ],
     },
     type: "csv",
 };
@@ -195,7 +195,7 @@ excel.readExcel(readParams).then((result) => {
     if (result.status) {
         console.log("Data read successfully:");
         console.log(result.data);
-        return
+        return;
     }
     error.log(`Error reading the CSV file: ${result.error}`);
 });
