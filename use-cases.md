@@ -98,7 +98,7 @@ const readParams = {
     type: "xlsx",
 };
 
-excel.readExcel(readParams).then((result) => {
+excel.read(readParams).then((result) => {
     if (result.status) {
         console.log("Data read successfully:");
         console.log(result.data);
@@ -141,7 +141,7 @@ const params = {
     type: "csv",
 };
 
-excel.createExcel(params).then((result) => {
+excel.create(params).then((result) => {
     if (result.status) {
         console.log(
             `CSV file created successfully at: ${result.data.pathFile}`
@@ -191,7 +191,7 @@ const readParams = {
     type: "csv",
 };
 
-excel.readExcel(readParams).then((result) => {
+excel.read(readParams).then((result) => {
     if (result.status) {
         console.log("Data read successfully:");
         console.log(result.data);
@@ -218,7 +218,7 @@ const excel = new Excel();
 // Ejemplo 1: Parámetros de creación inválidos
 const invalidCreateParams = { pathname: null, filename: null, sheetData: null };
 
-excel.createExcel(invalidCreateParams).then((result) => {
+excel.create(invalidCreateParams).then((result) => {
     if (result.status) {
         console.log("El archivo se creó con éxito.");
         return;
@@ -229,7 +229,7 @@ excel.createExcel(invalidCreateParams).then((result) => {
 // Ejemplo 2: Parámetros de lectura inválidos
 const invalidReadParams = { filePath: null, type: null };
 
-excel.readExcel(invalidReadParams).then((result) => {
+excel.read(invalidReadParams).then((result) => {
     if (result.status) {
         console.log("Los datos se leyeron con éxito.");
         return;

@@ -2,7 +2,7 @@
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-Este repositorio contiene una biblioteca que facilita la creación y lectura de archivos Excel en formato .xlsx y .csv. La clase principal, `ExcelHandler`, proporciona una interfaz para crear archivos Excel personalizados y leer archivos existentes para su posterior análisis. La biblioteca se encarga de crear hojas de cálculo, administrar cabeceras de columnas y aplicar validaciones a los datos, lo que facilita la generación y procesamiento de archivos Excel.
+Este repositorio contiene una biblioteca que facilita la creación y lectura de archivos Excel en formato .xlsx y .csv. La clase principal, `Excel`, proporciona una interfaz para crear archivos Excel personalizados y leer archivos existentes para su posterior análisis. La biblioteca se encarga de crear hojas de cálculo, administrar cabeceras de columnas y aplicar validaciones a los datos, lo que facilita la generación y procesamiento de archivos Excel.
 
 ## Instalación
 
@@ -16,29 +16,29 @@ Para utilizar este paquete en su proyecto, siga los siguientes pasos:
     npm install
     ```
 
-## Clase ExcelHandler
+## Clase Excel
 
-La clase `ExcelHandler` es el corazón de esta biblioteca. Proporciona propiedades y métodos para la creación y lectura de archivos Excel. A continuación, se describen sus propiedades y métodos:
+La clase `Excel` es el corazón de esta biblioteca. Proporciona propiedades y métodos para la creación y lectura de archivos Excel. A continuación, se describen sus propiedades y métodos:
 
-### Propiedades de ExcelHandler
+### Propiedades de Excel
 
 | Propiedad     | Descripción                                                                                                                                    |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | columnsHeader | Un arreglo de objetos que define las cabeceras de las columnas en las hojas de cálculo. Estas cabeceras se utilizan al crear un archivo Excel. |
 | workbook      | Un objeto de la biblioteca `exceljs` que representa el libro de trabajo Excel y se utiliza para cargar archivos Excel existentes.              |
 
-### Métodos de ExcelHandler
+### Métodos de Excel
 
-| Método      | Descripción                                                                                                                                                                                                                                                                                                                             |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| createExcel | Este método se utiliza para crear un archivo Excel personalizado. Toma un objeto de parámetros `params` que especifica la ubicación, nombre del archivo, datos de las hojas de cálculo y más. Devuelve una promesa que resuelve en un objeto con información sobre el estado y, si es exitoso, la ubicación del archivo creado.         |
-| readExcel   | Este método se utiliza para leer un archivo Excel existente, ya sea en formato .xlsx o .csv. Toma un objeto de parámetros `params` que especifica la ubicación del archivo y las validaciones a aplicar. Devuelve una promesa que resuelve en un objeto con información sobre el estado y, si es exitoso, los datos leídos del archivo. |
+| Método | Descripción                                                                                                                                                                                                                                                                                                                             |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| create | Este método se utiliza para crear un archivo Excel personalizado. Toma un objeto de parámetros `params` que especifica la ubicación, nombre del archivo, datos de las hojas de cálculo y más. Devuelve una promesa que resuelve en un objeto con información sobre el estado y, si es exitoso, la ubicación del archivo creado.         |
+| read   | Este método se utiliza para leer un archivo Excel existente, ya sea en formato .xlsx o .csv. Toma un objeto de parámetros `params` que especifica la ubicación del archivo y las validaciones a aplicar. Devuelve una promesa que resuelve en un objeto con información sobre el estado y, si es exitoso, los datos leídos del archivo. |
 
 ## Estructura de las respuestas
 
-### Respuesta de `createExcel`
+### Respuesta de `create`
 
-Cuando se llama al método `createExcel`, la respuesta tiene la siguiente estructura:
+Cuando se llama al método `create`, la respuesta tiene la siguiente estructura:
 
 | Propiedad | Descripción                                                                                                                  |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------- |
@@ -46,9 +46,9 @@ Cuando se llama al método `createExcel`, la respuesta tiene la siguiente estruc
 | data      | Un objeto que contiene información sobre el archivo Excel creado, que incluye la ruta, el nombre del archivo y la ubicación. |
 | error     | Detalles del error, en caso de que la operación falle. Puede ser una cadena de texto o un arreglo de errores.                |
 
-### Respuesta de `readExcel`
+### Respuesta de `read`
 
-Cuando se llama al método `readExcel`, la respuesta tiene la siguiente estructura:
+Cuando se llama al método `read`, la respuesta tiene la siguiente estructura:
 
 | Propiedad | Descripción                                                                                                   |
 | --------- | ------------------------------------------------------------------------------------------------------------- |
@@ -58,11 +58,11 @@ Cuando se llama al método `readExcel`, la respuesta tiene la siguiente estructu
 
 Estas estructuras de respuestas te permiten verificar el estado de la operación y acceder a los datos o detalles del error según corresponda.
 
-## Propiedades y Explicación de los Parámetros de `createExcel`
+## Propiedades y Explicación de los Parámetros de `create`
 
-El método `createExcel` acepta un objeto `params` que se utiliza para personalizar la creación de un archivo Excel. A continuación, se detallan las propiedades de `params`:
+El método `create` acepta un objeto `params` que se utiliza para personalizar la creación de un archivo Excel. A continuación, se detallan las propiedades de `params`:
 
-### Propiedades de `params` en `createExcel`
+### Propiedades de `params` en `create`
 
 | Propiedad | Descripción                                                                                                                                                   |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -72,7 +72,7 @@ El método `createExcel` acepta un objeto `params` que se utiliza para personali
 | sheetData | Un arreglo de objetos que define los datos de las hojas de cálculo a incluir en el archivo Excel. Cada objeto en este arreglo representa una hoja de cálculo. |
 | type      | El tipo de archivo Excel que se creará, que puede ser "csv" o "xlsx". Debe ser una cadena de texto.                                                           |
 
-### Propiedades de `sheetData` en `createExcel`
+### Propiedades de `sheetData` en `create`
 
 | Propiedad     | Descripción                                                                                                                                             |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -80,11 +80,11 @@ El método `createExcel` acepta un objeto `params` que se utiliza para personali
 | data          | Un arreglo de objetos que representa los datos a incluir en la hoja de cálculo. Cada objeto contiene información sobre las filas y columnas de la hoja. |
 | columnsHeader | Un arreglo de objetos que define las cabeceras de las columnas en la hoja de cálculo. Estas cabeceras se utilizan al crear un archivo Excel.            |
 
-## Propiedades y Explicación de los Parámetros de `readExcel`
+## Propiedades y Explicación de los Parámetros de `read`
 
-El método `readExcel` se utiliza para leer un archivo Excel existente y aplicar validaciones según sea necesario. A continuación, se detallan las propiedades de `params`:
+El método `read` se utiliza para leer un archivo Excel existente y aplicar validaciones según sea necesario. A continuación, se detallan las propiedades de `params`:
 
-### Propiedades de `params` en `readExcel`
+### Propiedades de `params` en `read`
 
 | Propiedad        | Descripción                                                                                                 |
 | ---------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -92,7 +92,7 @@ El método `readExcel` se utiliza para leer un archivo Excel existente y aplicar
 | cellsValidations | Un objeto que contiene validaciones para celdas, incluyendo validaciones de tipo de datos y patrones regex. |
 | type             | El tipo de archivo Excel que se va a leer, que puede ser "csv" o "xlsx". Debe ser una cadena de texto.      |
 
-### Propiedades de `cellsValidations` en `readExcel`
+### Propiedades de `cellsValidations` en `read`
 
 El objeto `cellsValidations` se utiliza para especificar las validaciones que se aplicarán a las celdas del archivo Excel. A continuación, se dividen las propiedades de `cellsValidations` en tablas separadas:
 
