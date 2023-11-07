@@ -10,7 +10,7 @@ Para utilizar este paquete en su proyecto, siga los siguientes pasos:
 
 1. Clone este repositorio en su sistema local.
 
-2. Instale las dependencias ejecutando el siguiente comando en el directorio `/project`:
+2. Instale las dependencias ejecutando el siguiente comando en el directorio `/library`:
 
     ```bash
     npm install
