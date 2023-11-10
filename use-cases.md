@@ -154,6 +154,7 @@ const excel = new Excel();
 const params = {
     pathname: "output/",
     filename: "example.csv",
+    type: "csv",
     sheetData: [
         {
             sheetName: "Sheet1",
@@ -167,7 +168,6 @@ const params = {
             ],
         },
     ],
-    type: "csv",
 };
 
 excel.create(params).then((result) => {
