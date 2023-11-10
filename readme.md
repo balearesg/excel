@@ -125,15 +125,15 @@ const readParams = {
     filePath: "input/example.xlsx",
     type: "xlsx",
     // OPCIONAL
-    cellRangeValidations: [
+    cells: [
         {
             sheetName: "Sheet1",
             startRow: 2,
             endRow: 2,
             startCol: 1,
             endCol: 1,
-            dataType: "string",
-            regexPattern: "^[A-Za-z ]+$",
+            type: "string",
+            regex: "^[A-Za-z ]+$",
         },
         {
             sheetName: "Sheet1",
@@ -141,7 +141,7 @@ const readParams = {
             endRow: 2,
             startCol: 3,
             endCol: 3,
-            dataType: "number",
+            type: "number",
         },
     ],
 };
@@ -346,24 +346,24 @@ El objeto `cellsValidations` se utiliza para especificar las validaciones que se
 
 #### Propiedades de `columnValidations`
 
-| Propiedad    | Descripción                                                                                                       |
-| ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| sheetName    | El nombre de la hoja de cálculo a la que se aplicarán las validaciones. Debe ser una cadena de texto.             |
-| columnKey    | La clave de la columna a la que se aplicarán las validaciones. Debe ser una cadena de texto.                      |
-| dataType     | El tipo de dato esperado en la columna (opcional). Puede ser "string", "number", "boolean" o "date".              |
-| regexPattern | Un patrón de expresión regular para validar los valores de la columna (opcional). Debe ser una expresión regular. |
+| Propiedad | Descripción                                                                                                       |
+| --------- | ----------------------------------------------------------------------------------------------------------------- |
+| sheetName | El nombre de la hoja de cálculo a la que se aplicarán las validaciones. Debe ser una cadena de texto.             |
+| columnKey | La clave de la columna a la que se aplicarán las validaciones. Debe ser una cadena de texto.                      |
+| type      | El tipo de dato esperado en la columna (opcional). Puede ser "string", "number", "boolean" o "date".              |
+| regex     | Un patrón de expresión regular para validar los valores de la columna (opcional). Debe ser una expresión regular. |
 
 #### Propiedades de `cellRangeValidations`
 
-| Propiedad    | Descripción                                                                                                               |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| sheetName    | El nombre de la hoja de cálculo a la que se aplicarán las validaciones. Debe ser una cadena de texto.                     |
-| startRow     | El número de fila de inicio para la validación. Debe ser un número.                                                       |
-| endRow       | El número de fila de fin para la validación. Debe ser un número.                                                          |
-| startCol     | El número de columna de inicio para la validación. Debe ser un número.                                                    |
-| endCol       | El número de columna de fin para la validación. Debe ser un número.                                                       |
-| dataType     | El tipo de dato esperado en el rango de celdas (opcional). Puede ser "string", "number", "boolean" o "date".              |
-| regexPattern | Un patrón de expresión regular para validar los valores en el rango de celdas (opcional). Debe ser una expresión regular. |
+| Propiedad | Descripción                                                                                                               |
+| --------- | ------------------------------------------------------------------------------------------------------------------------- |
+| sheetName | El nombre de la hoja de cálculo a la que se aplicarán las validaciones. Debe ser una cadena de texto.                     |
+| startRow  | El número de fila de inicio para la validación. Debe ser un número.                                                       |
+| endRow    | El número de fila de fin para la validación. Debe ser un número.                                                          |
+| startCol  | El número de columna de inicio para la validación. Debe ser un número.                                                    |
+| endCol    | El número de columna de fin para la validación. Debe ser un número.                                                       |
+| type      | El tipo de dato esperado en el rango de celdas (opcional). Puede ser "string", "number", "boolean" o "date".              |
+| regex     | Un patrón de expresión regular para validar los valores en el rango de celdas (opcional). Debe ser una expresión regular. |
 
 Estas propiedades permiten especificar las validaciones a aplicar a las celdas del archivo Excel durante la lectura.
 

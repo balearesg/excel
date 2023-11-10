@@ -107,15 +107,15 @@ const readParams = {
     filePath: "input/example.xlsx",
     type: "xlsx",
     // OPCIONAL
-    cellRangeValidations: [
+    cells: [
         {
             sheetName: "Sheet1",
             startRow: 2,
             endRow: 2,
             startCol: 1,
             endCol: 1,
-            dataType: "string",
-            regexPattern: "^[A-Za-z ]+$",
+            type: "string",
+            regex: "^[A-Za-z ]+$",
         },
         {
             sheetName: "Sheet1",
@@ -123,7 +123,7 @@ const readParams = {
             endRow: 2,
             startCol: 3,
             endCol: 3,
-            dataType: "number",
+            type: "number",
         },
     ],
 };
