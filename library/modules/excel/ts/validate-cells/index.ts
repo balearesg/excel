@@ -3,24 +3,24 @@ import { validateColumns } from "./columns";
 import { validateRange } from "./range";
 
 export function validateCells(params: IValidateCells): string[] {
-    const { cellsValidations, sheetData, workbook } = params;
+    const { validations, sheetData, workbook } = params;
 
-    if (!cellsValidations) return [];
+    if (!validations) return [];
 
     let errors: string[] = [];
 
     try {
-        if (!!cellsValidations && typeof cellsValidations !== "object") {
-            const error: string = `invalid cellsValidations this is not a objet is a ${typeof cellsValidations}`;
+        if (!!validations && typeof validations !== "object") {
+            const error: string = `invalid validations this is not a objet is a ${typeof validations}`;
             errors.push(error);
             throw error;
         };
 
-        const { columnValidations, cellRangeValidations } = cellsValidations;
+        const { cells, columns } = validations;
 
-        validateColumns({ errors, sheetData, columnValidations });
+        validateColumns({ errors, sheetData, columns });
 
-        validateRange({ errors, workbook, cellRangeValidations });
+        validateRange({ errors, workbook, cells });
 
         return errors;
     } catch (error) {

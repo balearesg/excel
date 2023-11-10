@@ -23,7 +23,7 @@ export async function read(parent: Excel, params: IParamsRead): Promise<IReturnR
         return { status: false, error: errors };
     };
 
-    const { filePath, cellsValidations, type } = params;
+    const { filePath, validations, type } = params;
 
     if (!fs.existsSync(filePath)) throw new Error("File does not exist in the specified path")
 
@@ -71,9 +71,9 @@ export async function read(parent: Excel, params: IParamsRead): Promise<IReturnR
             dataBySheet[worksheet.name] = sheetData;
         });
 
-        if (cellsValidations) {
+        if (validations) {
 
-            const validates: string[] = validateCells({ cellsValidations, workbook: parent.workbook, sheetData: dataBySheet })
+            const validates: string[] = validateCells({ validations, workbook: parent.workbook, sheetData: dataBySheet })
 
             if (validates.length) {
                 errors = errors.concat(validates);

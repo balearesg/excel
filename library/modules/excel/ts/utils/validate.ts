@@ -1,7 +1,7 @@
-export const validate = (type: string, regexPattern: string, value: any): boolean => {
-    const regex: RegExp | null = regexPattern ? new RegExp(regexPattern) : null;
+export const validate = (type: string, regex: string, value: any): boolean => {
+    const regEx: RegExp | null = regex ? new RegExp(regex) : null;
     const validateType = type ? typeof value === type : true;
-    const validateRegex = regex ? regex.test(value) : true
-    const validate: boolean = !!regexPattern && !!type ? validateType && validateRegex : !regexPattern && !!type ? validateType : validateRegex
+    const validateRegex = regex ? regEx.test(value) : true
+    const validate: boolean = !!regex && !!type ? validateType && validateRegex : !regex && !!type ? validateType : validateRegex
     return validate
 };

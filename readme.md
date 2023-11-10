@@ -71,7 +71,7 @@ La respuesta de este caso de uso incluye detalles sobre el estado y la ubicació
 
 ## Caso de Uso 2: Lectura de un Archivo Excel en Formato XLSX
 
-En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX, Las validación de columnas o celdas por rango es opcional con la propiedad `cellsValidations`
+En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX, Las validación de columnas o celdas por rango es opcional con la propiedad `validations`, en este caso se describe con validación de columnas
 
 ### Uso
 
@@ -80,50 +80,79 @@ En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX, La
 const excel = new Excel();
 const readParams = {
     filePath: "input/example.xlsx",
-    cellsValidations: { // OPCIONAL
-        columnValidations: [
+    type: "xlsx",
+    // OPCIONAL
+    validations: {
+        columns: [
             {
                 sheetName: "Hoja1",
-                columnKey: "Nombre",
-                dataType: "string",
+                key: "Nombre",
+                type: "string",
             },
             {
                 sheetName: "Hoja1",
-                columnKey: "Edad",
-                dataType: "number",
+                key: "Edad",
+                type: "number",
             },
         ],
     },
-       cellRangeValidations: [
-         {
-            sheetName: "Sheet1",
-            startRow: 2,
-            endRow: 2,
-            startCol: 1,
-            endCol: 1,
-            dataType: "number",
-            regexPattern: "^[A-Za-z ]+$"
-         },
-         {
-            sheetName: "Sheet1",
-            startRow: 2,
-            endRow: 2,
-            startCol: 3,
-            endCol: 3,
-            dataType: "number"
-         },
-      ]
-    type: "xlsx",
 };
 
 excel.read(readParams).then((result) => {
     if (result.status) {
         console.log("Data read successfully:");
         console.log(result.data);
-        return
+        return;
     }
-     console.error(`Error reading the XLSX file: ${result.error}`);
+    console.error(`Error reading the XLSX file: ${result.error}`);
+});
+```
 
+### Respuesta
+
+La respuesta de este caso de uso incluye los datos leídos de la hoja de cálculo y detalles del error en caso de que falle.
+
+## Caso de Uso 3: Lectura de un Archivo Excel en Formato XLSX con validaciones de celdas específicas por rango
+
+En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX aplicando una validación de celdas específicas por rango
+
+### Uso
+
+```javascript
+// Código de ejemplo para leer un archivo Excel en formato XLSX
+const excel = new Excel();
+const readParams = {
+    filePath: "input/example.xlsx",
+    type: "xlsx",
+    // OPCIONAL
+    cellRangeValidations: [
+        {
+            sheetName: "Sheet1",
+            startRow: 2,
+            endRow: 2,
+            startCol: 1,
+            endCol: 1,
+            dataType: "string",
+            regexPattern: "^[A-Za-z ]+$",
+        },
+        {
+            sheetName: "Sheet1",
+            startRow: 2,
+            endRow: 2,
+            startCol: 3,
+            endCol: 3,
+            dataType: "number",
+        },
+    ],
+};
+
+excel.read(readParams).then((result) => {
+    if (result.status) {
+        console.log("Data read successfully:");
+        console.log(result.data);
+        return;
+    }
+    console.error(`Error reading the XLSX file: ${result.error}`);
 });
 ```
 
