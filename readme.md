@@ -38,6 +38,7 @@ const excel = new Excel();
 const params = {
     pathname: "output/",
     filename: "example.xlsx",
+    type: "xlsx",
     sheetData: [
         {
             sheetName: "Sheet1",
@@ -51,7 +52,6 @@ const params = {
             ],
         },
     ],
-    type: "xlsx",
 };
 
 excel.create(params).then((result) => {
@@ -172,6 +172,7 @@ const excel = new Excel();
 const params = {
     pathname: "output/",
     filename: "example.csv",
+    type: "csv",
     sheetData: [
         {
             sheetName: "Sheet1",
@@ -185,7 +186,6 @@ const params = {
             ],
         },
     ],
-    type: "csv",
 };
 
 excel.create(params).then((result) => {
@@ -334,26 +334,26 @@ El método `read` se utiliza para leer un archivo Excel existente y aplicar vali
 
 ### Propiedades de `params` en `read`
 
-| Propiedad        | Descripción                                                                                                 |
-| ---------------- | ----------------------------------------------------------------------------------------------------------- |
-| filePath         | La ubicación del archivo Excel que se va a leer. Debe ser una cadena de texto.                              |
-| cellsValidations | Un objeto que contiene validaciones para celdas, incluyendo validaciones de tipo de datos y patrones regex. |
-| type             | El tipo de archivo Excel que se va a leer, que puede ser "csv" o "xlsx". Debe ser una cadena de texto.      |
+| Propiedad   | Descripción                                                                                                 |
+| ----------- | ----------------------------------------------------------------------------------------------------------- |
+| filePath    | La ubicación del archivo Excel que se va a leer. Debe ser una cadena de texto.                              |
+| validations | Un objeto que contiene validaciones para celdas, incluyendo validaciones de tipo de datos y patrones regex. |
+| type        | El tipo de archivo Excel que se va a leer, que puede ser "csv" o "xlsx". Debe ser una cadena de texto.      |
 
-### Propiedades de `cellsValidations` en `read`
+### Propiedades de `validations` en `read`
 
-El objeto `cellsValidations` se utiliza para especificar las validaciones que se aplicarán a las celdas del archivo Excel. A continuación, se dividen las propiedades de `cellsValidations` en tablas separadas:
+El objeto `validations` se utiliza para especificar las validaciones que se aplicarán a las celdas del archivo Excel. A continuación, se dividen las propiedades de `validations` en tablas separadas:
 
-#### Propiedades de `columnValidations`
+#### Propiedades de `columns`
 
 | Propiedad | Descripción                                                                                                       |
 | --------- | ----------------------------------------------------------------------------------------------------------------- |
 | sheetName | El nombre de la hoja de cálculo a la que se aplicarán las validaciones. Debe ser una cadena de texto.             |
-| columnKey | La clave de la columna a la que se aplicarán las validaciones. Debe ser una cadena de texto.                      |
+| key       | La clave de la columna a la que se aplicarán las validaciones. Debe ser una cadena de texto.                      |
 | type      | El tipo de dato esperado en la columna (opcional). Puede ser "string", "number", "boolean" o "date".              |
 | regex     | Un patrón de expresión regular para validar los valores de la columna (opcional). Debe ser una expresión regular. |
 
-#### Propiedades de `cellRangeValidations`
+#### Propiedades de `range`
 
 | Propiedad | Descripción                                                                                                               |
 | --------- | ------------------------------------------------------------------------------------------------------------------------- |
