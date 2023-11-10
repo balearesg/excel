@@ -5,6 +5,8 @@ import { IParamsRead, IReturnRead, ISheet } from "../interfaces";
 import { Excel } from "..";
 import { readCSVFile } from "./csv";
 import { validateValues } from "../utils/validate-values";
+import { allSheet } from "./all-sheet";
+import { getSheet } from "./sheet";
 
 export async function read(parent: Excel, params: IParamsRead): Promise<IReturnRead> {
 
@@ -23,7 +25,7 @@ export async function read(parent: Excel, params: IParamsRead): Promise<IReturnR
         return { status: false, error: errors };
     };
 
-    const { filePath, validations, type } = params;
+    const { filePath, validations, type, sheet } = params;
 
     if (!fs.existsSync(filePath)) throw new Error("File does not exist in the specified path")
 
@@ -31,7 +33,7 @@ export async function read(parent: Excel, params: IParamsRead): Promise<IReturnR
 
     if (!types.includes(type)) throw new Error(`Type must be xlsx or csv`);
 
-    const fileExtension = filePath.slice(((filePath.lastIndexOf(".") - 1) >>> 0) + 2);
+    const fileExtension: string = filePath.slice(((filePath.lastIndexOf(".") - 1) >>> 0) + 2);
 
     if (!fileExtension) throw new Error(`The filePath does not have an extension`);
 
@@ -40,40 +42,25 @@ export async function read(parent: Excel, params: IParamsRead): Promise<IReturnR
     if (fileExtension !== type) throw new Error(`The file extension in filePath must be equal to the parameter type`)
 
     try {
+
+        if (type === "csv") {
+            return readCSVFile(params)
+        };
+
         parent.workbook = new ExcelJS.Workbook();
 
         if (type === "xlsx") {
             const fileBuffer: Buffer = fs.readFileSync(filePath);
             await parent.workbook.xlsx.load(fileBuffer);
-        }
-        if (type === "csv") {
-            return readCSVFile(params)
-        }
+        };
 
-        const dataBySheet: ISheet = {};
-        parent.workbook.eachSheet((worksheet: ExcelJS.Worksheet): void => {
-            const sheetData: any[] = [];
-            const headerRow: ExcelJS.Row = worksheet.getRow(1);
+        const isSheet = !!sheet && typeof sheet === "string";
 
-            worksheet.eachRow((row: ExcelJS.Row, rowNumber: number): void => {
-                if (rowNumber === 1) return; // Saltar la fila de cabecera
-
-                const rowData: any = {};
-
-                row.eachCell((cell: ExcelJS.Cell, colNumber: number): void => {
-                    const headerCell: ExcelJS.Cell = headerRow.getCell(colNumber);
-                    rowData[headerCell.value.toString()] = cell.value;
-                });
-
-                sheetData.push(rowData);
-            });
-
-            dataBySheet[worksheet.name] = sheetData;
-        });
+        const dataBySheet: ISheet | object[] = isSheet ? getSheet(parent, sheet) : allSheet(parent);
 
         if (validations) {
 
-            const validates: string[] = validateCells({ validations, workbook: parent.workbook, sheetData: dataBySheet })
+            const validates: string[] = validateCells({ validations, workbook: parent.workbook, sheetData: dataBySheet, isSheet })
 
             if (validates.length) {
                 errors = errors.concat(validates);

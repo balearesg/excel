@@ -1,9 +1,9 @@
-import { IReturnHandler, IValidateCells } from "../interfaces";
+import { IValidateCells } from "../interfaces";
 import { validateColumns } from "./columns";
 import { validateRange } from "./range";
 
 export function validateCells(params: IValidateCells): string[] {
-    const { validations, sheetData, workbook } = params;
+    const { validations, sheetData, workbook, isSheet } = params;
 
     if (!validations) return [];
 
@@ -18,9 +18,12 @@ export function validateCells(params: IValidateCells): string[] {
 
         const { cells, columns } = validations;
 
-        validateColumns({ errors, sheetData, columns });
+        const validatedColumns = validateColumns({ errors, sheetData, columns, isSheet });
 
-        validateRange({ errors, workbook, cells });
+        const validatedCellsSheet = validateRange({ errors, workbook, cells });
+
+        if (validatedCellsSheet.length) errors = errors.concat(validatedCellsSheet);
+        if (validatedColumns.length) errors = errors.concat(validatedColumns)
 
         return errors;
     } catch (error) {

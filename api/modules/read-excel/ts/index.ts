@@ -22,8 +22,9 @@ export /*bundle*/
 
       const specs: any = {
         filePath: path.join(__dirname, params.filePath ?? "static/test.csv"),
-        cellsValidations: params.cellsValidations ?? null,
-        type: params.type
+        validations: params.validations ?? null,
+        type: params.type,
+        sheet: params.sheet
       };
 
       // Crea el archivo Excel
@@ -39,7 +40,7 @@ export /*bundle*/
 
       return res
         .status(200)
-        .send({ status: true, data: { ...result.data } });
+        .send({ status: true, data: result.data });
     } catch (error) {
       console.error("error", error);
       return res.status(500).send({

@@ -67,14 +67,19 @@ const readParams = {
     validations: {
         columns: [
             {
-                sheetName: "Hoja1",
-                key: "Nombre",
-                type: "string",
-            },
-            {
-                sheetName: "Hoja1",
-                key: "Edad",
-                type: "number",
+                sheet: "Hoja1",
+                items: [
+                    {
+                        sheetName: "Hoja1",
+                        key: "Nombre",
+                        type: "string",
+                    },
+                    {
+                        sheetName: "Hoja1",
+                        key: "Edad",
+                        type: "number",
+                    },
+                ],
             },
         ],
     },
@@ -107,25 +112,30 @@ const readParams = {
     filePath: "input/example.xlsx",
     type: "xlsx",
     // OPCIONAL
-    cells: [
-        {
-            sheetName: "Sheet1",
-            startRow: 2,
-            endRow: 2,
-            startCol: 1,
-            endCol: 1,
-            type: "string",
-            regex: "^[A-Za-z ]+$",
-        },
-        {
-            sheetName: "Sheet1",
-            startRow: 2,
-            endRow: 2,
-            startCol: 3,
-            endCol: 3,
-            type: "number",
-        },
-    ],
+    validations: {
+        cells: [
+            {
+                sheet: "Hoja1",
+                items: [
+                    {
+                        startRow: 2,
+                        endRow: 2,
+                        startCol: 1,
+                        endCol: 1,
+                        type: "string",
+                        regex: "^[A-Za-z ]+$",
+                    },
+                    {
+                        startRow: 2,
+                        endRow: 2,
+                        startCol: 3,
+                        endCol: 3,
+                        type: "number",
+                    },
+                ],
+            },
+        ],
+    },
 };
 
 excel.read(readParams).then((result) => {
@@ -142,7 +152,36 @@ excel.read(readParams).then((result) => {
 
 La respuesta de este caso de uso incluye los datos leídos de la hoja de cálculo y detalles del error en caso de que falle.
 
-## Caso de Uso 4: Creación de un Archivo Excel en Formato CSV
+## Caso de Uso 4: Lectura de un Archivo Excel en Formato XLSX por hoja específica
+
+En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX por hoja específica
+
+### Uso
+
+```javascript
+// Código de ejemplo para leer un archivo Excel en formato XLSX
+const excel = new Excel();
+const readParams = {
+    filePath: "input/example.xlsx",
+    type: "xlsx",
+    sheet: "Hoja1",
+};
+
+excel.read(readParams).then((result) => {
+    if (result.status) {
+        console.log("Data read successfully:");
+        console.log(result.data);
+        return;
+    }
+    console.error(`Error reading the XLSX file: ${result.error}`);
+});
+```
+
+### Respuesta
+
+La respuesta de este caso de uso incluye los datos leídos de la hoja de cálculo y detalles del error en caso de que falle.
+
+## Caso de Uso 5: Creación de un Archivo Excel en Formato CSV
 
 En este caso de uso, se describe cómo crear un archivo Excel en formato CSV. por el momento no se pueden crear archivos csv con más de 1 hoja
 
@@ -185,7 +224,7 @@ excel.create(params).then((result) => {
 
 La respuesta de este caso de uso es similar a la del Caso de Uso 1.
 
-## Caso de Uso 5: Lectura de un Archivo Excel en Formato CSV
+## Caso de Uso 6: Lectura de un Archivo Excel en Formato CSV
 
 En este caso de uso, se describe cómo leer un archivo Excel en formato CSV, por ahora la validación de columnas no está disponible en esete caso.
 
@@ -213,7 +252,7 @@ excel.read(readParams).then((result) => {
 
 La respuesta de este caso de uso es similar a la del Caso de Uso 2.
 
-## Caso de Uso 6: Parámetros Inválidos
+## Caso de Uso 7: Parámetros Inválidos
 
 En este caso de uso, se muestra cómo manejar parámetros inválidos al crear o leer archivos Excel.
 

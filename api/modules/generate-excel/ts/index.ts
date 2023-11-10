@@ -43,7 +43,7 @@ export /*bundle*/
       const result: IReturnHandler = await excel.create(
         specs
       );
-      console.log("result", result)
+
       if (!result.status && Array.isArray(result.error))
         return res.status(500).send({
           status: false,
