@@ -70,12 +70,10 @@ const readParams = {
                 sheet: "Hoja1",
                 items: [
                     {
-                        sheetName: "Hoja1",
                         key: "Nombre",
                         type: "string",
                     },
                     {
-                        sheetName: "Hoja1",
                         key: "Edad",
                         type: "number",
                     },
