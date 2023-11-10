@@ -20,6 +20,7 @@ const excel = new Excel();
 const params = {
     pathname: "output/",
     filename: "example.xlsx",
+    type: "xlsx",
     sheetData: [
         {
             sheetName: "Sheet1",
@@ -33,7 +34,6 @@ const params = {
             ],
         },
     ],
-    type: "xlsx",
 };
 
 excel.create(params).then((result) => {
