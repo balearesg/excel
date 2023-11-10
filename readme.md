@@ -404,10 +404,6 @@ El objeto `validations` se utiliza para especificar las validaciones que se apli
 
 Estas propiedades permiten especificar las validaciones a aplicar a las celdas del archivo Excel durante la lectura.
 
-## Uso
-
-Puede detallar en [Este archivo](./use-cases.md) los casos de uso
-
 ## Contribuciones
 
 Las contribuciones, problemas y solicitudes de características son bienvenidos. Siéntase libre de consultar la [página de issues](https://github.com/balearesg/bg-excel/issues) o abrir nuevas.
