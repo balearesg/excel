@@ -33,17 +33,17 @@ describe("Excel", () => {
             const params: any = {
                 filePath,
                 type: 'xlsx',
-                cellsValidations: {
-                    columnValidations: [
+                cells: {
+                    columns: [
                         {
-                            sheetName: 'Hoja1',
-                            columnKey: 'Nombre',
-                            dataType: 'string',
+                            sheet: 'Hoja1',
+                            key: 'Nombre',
+                            type: 'string',
                         },
                         {
-                            sheetName: 'Hoja1',
-                            columnKey: 'Edad',
-                            dataType: 'number',
+                            sheet: 'Hoja1',
+                            key: 'Edad',
+                            type: 'number',
                         },
                     ],
                 },
@@ -58,17 +58,17 @@ describe("Excel", () => {
             const params: any = {
                 filePath,
                 type: 'xlsx',
-                cellsValidations: {
-                    columnValidations: [
+                validations: {
+                    columns: [
                         {
-                            sheetName: 'Hoja1',
-                            columnKey: 'name',
-                            dataType: 'string',
+                            sheet: 'Hoja1',
+                            key: 'name',
+                            type: 'string',
                         },
                         {
-                            sheetName: 'Hoja1',
-                            columnKey: 'age',
-                            dataType: 'number',
+                            sheet: 'Hoja1',
+                            key: 'age',
+                            type: 'number',
                         },
                     ],
                 },

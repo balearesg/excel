@@ -17,14 +17,14 @@ describe("Excel", () => {
     it("debería lanzar un error si pathname es inválido en create", async () => {
         const params: any = { pathname: 123 };
         await expect(excel.create(params)).rejects.toThrow(
-            "invalid pathname, this is not string"
+            "Invalid pathname in params, this is not string is number"
         );
     });
 
     it("debería lanzar un error si filename es inválido en create", async () => {
         const params: any = { filename: 123, pathname: "/test" };
         await expect(excel.create(params)).rejects.toThrow(
-            "invalid filename, this is not string"
+            "Invalid filename in params, this is not string is number"
         );
     });
 
@@ -35,8 +35,20 @@ describe("Excel", () => {
             filename: "test",
         };
         await expect(excel.create(params)).rejects.toThrow(
-            "invalid sheetData, this is not object"
+            "Invalid sheetData in params, this is not array is string"
         );
+    });
+
+    it('debería lanzar un error si sheetData esta vacio', async () => {
+        const params: any = {
+            pathname: 'test/',
+            options: {},
+            filename: 'test.csv',
+            sheetData: [],
+            type: 'invalid',
+        };
+
+        await expect(excel.create(params)).rejects.toThrow('Invalid sheetData in params, sheetData can not be empty');
     });
 
     it('debería lanzar un error si el tipo de archivo es incorrecto en create', async () => {
@@ -44,7 +56,7 @@ describe("Excel", () => {
             pathname: 'test/',
             options: {},
             filename: 'test.csv',
-            sheetData: [],
+            sheetData: [{}],
             type: 'invalid',
         };
 

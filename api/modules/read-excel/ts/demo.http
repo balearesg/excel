@@ -6,78 +6,28 @@
 
 ##El cuerpo de la solicitud debe contener un objeto JSON con la siguiente estructura:
 
-POST http://localhost:1080/generate/excel
+POST http://localhost:1080/read/excel
 Content-Type: application/json
 
 {
-   "sheetData":[
-      {
-         "sheetName":"Hoja1",
-         "columnsHeader":[
-            {
-               "header":"Nombre",
-               "key":"name"
-            },
-            {
-               "header":"Edad",
-               "key":"age"
-            }
-         ],
-         "data":[
-            {
-               "name":"Juan",
-               "age":25
-            },
-            {
-               "name":"María",
-               "age":30
-            }
-         ]
-      },
-      {
-         "sheetName":"Hoja2",
-         "columnsHeader":[
-            {
-               "header":"Producto",
-               "key":"product"
-            },
-            {
-               "header":"Precio",
-               "key":"price"
-            }
-         ],
-         "data":[
-            {
-               "product":"Producto A",
-               "price":10
-            },
-            {
-               "product":"Producto B",
-               "price":15
-            }
-         ]
-      }
-   ],
-   "filename": "test.xlsx",
-   "options": {
-    // Opciones de escritura del archivo (opcional)
+  "filePath": "static/test.xlsx",
+   "type": "xlsx",
+   "validations": {
+      "columns": [
+         {
+            "sheet": "Hoja1",
+            "items": [
+               {
+                  "key": "Nombre",
+                  "type": "string"
+               },
+               {
+               "key": "Edad",
+               "type": "number"
+               }  
+            ]
+         }  
+      ]
    }
 }
 
-### En caso de éxito:
-
-{
-  "status": true,
-  "data": {
-    "filepath": "ruta/del/archivo_generado.xlsx",
-    "filename": "nombre del archivo descargado",
-    "pathname": "directorio del archivo guardado"
-  }
-}
-
-### En caso de error:
-
-{
-  "status": false,
-  "error": "Mensaje de error"
-}

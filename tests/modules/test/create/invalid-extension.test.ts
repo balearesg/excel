@@ -12,7 +12,7 @@ describe("Excel", () => {
             pathname: "test/",
             options: {},
             filename: "test",
-            sheetData: [],
+            sheetData: [{}],
             type: "csv",
         };
 
@@ -26,7 +26,7 @@ describe("Excel", () => {
             pathname: "test/",
             options: {},
             filename: "test.txt",
-            sheetData: [],
+            sheetData: [{}],
             type: "csv",
         };
 
@@ -40,7 +40,7 @@ describe("Excel", () => {
             pathname: "test/",
             options: {},
             filename: "test.xlsx",
-            sheetData: [],
+            sheetData: [{}],
             type: "csv",
         };
 

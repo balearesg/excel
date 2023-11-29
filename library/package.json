@@ -1,8 +1,8 @@
 {
   "name": "excel",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "title": "excel",
-  "scope": "bg",
+  "scope": "bggroup",
   "description": "package for excel handlig",
   "license": "ISC",
   "modules": {

@@ -24,10 +24,10 @@ export async function create(parent: Excel, params: IParamsExcel): Promise<IRetu
         }, toValidate: params,
         entity: "params"
     });
-
+    console.log("validated", validated)
     if (validated.length) {
         errors = errors.concat(validated);
-        return { status: false, error: errors };
+        throw new Error(errors[0])
     };
 
     const { pathname, options, filename, sheetData, type } = params;

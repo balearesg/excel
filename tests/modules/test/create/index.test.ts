@@ -16,6 +16,7 @@ describe("Excel", () => {
         const params: any = {
             pathname: "test/",
             filename: "test.xlsx",
+            type: 'xlsx',
             sheetData: [
                 {
                     sheetName: "Hoja1",
@@ -29,16 +30,16 @@ describe("Excel", () => {
                     ],
                 },
             ],
-            type: 'xlsx',
         };
         const result = await excel.create(params);
         expect(result.status).toBe(true);
     });
 
-    it("debería crear un archivo Excel xlsx exitosamente", async () => {
+    it("debería crear un archivo Excel csv exitosamente", async () => {
         const params: any = {
             pathname: "test/",
             filename: "test.csv",
+            type: 'csv',
             sheetData: [
                 {
                     sheetName: "Hoja1",
@@ -52,7 +53,6 @@ describe("Excel", () => {
                     ],
                 },
             ],
-            type: 'csv',
         };
         const result = await excel.create(params);
         expect(result.status).toBe(true);

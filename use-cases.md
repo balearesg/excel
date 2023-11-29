@@ -1,11 +1,11 @@
-# Casos de Uso de [@bg/excel](https://github.com/balearesg/bg-excel)
+# Casos de Uso de [@bggroup/excel](https://github.com/balearesg/bg-excel)
 
-En esta sección, se detallan los casos de uso específicos de la biblioteca [@bg/excel](https://github.com/balearesg/bg-excel). Cada caso de uso proporciona una descripción detallada de cómo utilizar la biblioteca para realizar una tarea específica.
+En esta sección, se detallan los casos de uso específicos de la biblioteca [@bggroup/excel](https://github.com/balearesg/bg-excel). Cada caso de uso proporciona una descripción detallada de cómo utilizar la biblioteca para realizar una tarea específica.
 
 ## Importación:
 
 ```javascript
-import { Excel } from "@bg/excel/excel";
+import { Excel } from "@bggroup/excel/excel";
 ```
 
 ## Caso de Uso 1: Creación de un Archivo Excel en Formato XLSX

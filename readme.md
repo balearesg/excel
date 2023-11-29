@@ -23,7 +23,7 @@ La clase `Excel` es el corazón de esta biblioteca. Proporciona propiedades y m�
 ## Importación:
 
 ```javascript
-import { Excel } from "@bg/excel/excel";
+import { Excel } from "@bggroup/excel/excel";
 ```
 
 ## Caso de Uso 1: Creación de un Archivo Excel en Formato XLSX
