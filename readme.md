@@ -16,7 +16,7 @@ Para utilizar este paquete en su proyecto, siga los siguientes pasos:
 2. Instale las dependencias ejecutando el siguiente comando en el directorio `/library`:
 
     ```bash
-    npm install
+    npm install @bggroup/excel
     ```
 
 ## Clase Excel
@@ -26,7 +26,7 @@ archivos Excel. A continuación, se describen sus propiedades y métodos:
 
 ## Importación:
 
-```javascript
+```ts
 import { Excel } from '@bggroup/excel/excel';
 ```
 
@@ -84,25 +84,7 @@ rango es opcional con la propiedad `validations`, en este caso se describe con v
 const excel = new Excel();
 const readParams = {
 	filePath: 'input/example.xlsx',
-	type: 'xlsx',
-	// OPCIONAL
-	validations: {
-		columns: [
-			{
-				sheet: 'Hoja1',
-				items: [
-					{
-						key: 'Nombre',
-						type: 'string',
-					},
-					{
-						key: 'Edad',
-						type: 'number',
-					},
-				],
-			},
-		],
-	},
+	type: 'xlsx'
 };
 
 excel.read(readParams).then(result => {
@@ -133,7 +115,6 @@ const excel = new Excel();
 const readParams = {
 	filePath: 'input/example.xlsx',
 	type: 'xlsx',
-	// OPCIONAL
 	validations: {
 		cells: [
 			{
