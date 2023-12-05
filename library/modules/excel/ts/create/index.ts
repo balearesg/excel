@@ -24,7 +24,7 @@ export async function create(parent: Excel, params: IParamsExcel): Promise<IRetu
         }, toValidate: params,
         entity: "params"
     });
-    console.log("validated", validated)
+
     if (validated.length) {
         errors = errors.concat(validated);
         throw new Error(errors[0])

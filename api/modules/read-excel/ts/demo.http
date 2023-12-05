@@ -10,24 +10,46 @@ POST http://localhost:1080/read/excel
 Content-Type: application/json
 
 {
-  "filePath": "static/test.xlsx",
-   "type": "xlsx",
+  "filePath": "static/test.csv",
+   "type": "csv",
    "validations": {
       "columns": [
          {
             "sheet": "Hoja1",
             "items": [
                {
-                  "key": "Nombre",
+                  "key": "Tipo",
                   "type": "string"
                },
                {
-               "key": "Edad",
+               "key": "Lugar",
                "type": "number"
                }  
             ]
          }  
-      ]
+      ],
+        "cells": [
+            {
+                "sheet": "Hoja1",
+                "items": [
+                    {
+                        "startRow": 2,
+                        "endRow": 2,
+                        "startCol": 1,
+                        "endCol": 1,
+                        "type": "string",
+                        "regex": "^[A-Za-z ]+$"
+                    },
+                    {
+                        "startRow": 2,
+                        "endRow": 2,
+                        "startCol": 2,
+                        "endCol": 2,
+                        "type": "string"
+                    }
+                ]
+            }
+        ]
    }
 }
 

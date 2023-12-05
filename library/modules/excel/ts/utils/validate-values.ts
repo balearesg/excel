@@ -1,7 +1,7 @@
 import { IValidateValues } from "../interfaces";
 
 export const validateValues = (params: IValidateValues): string[] => {
-    console.log("🚀 ~ file: validate-values.ts:4 ~ validateValues ~ params:", params)
+
     const errors: string[] = [];
     if (!params.toValidate) {
         errors.push(`invalid ${params.entity}, this is invalid`);
