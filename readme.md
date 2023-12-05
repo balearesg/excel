@@ -1,8 +1,11 @@
-# [@bg/excel](https://github.com/balearesg/bg-excel) &middot; [![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-blue.svg)](./LICENSE)
+# [@bggroup/excel](https://github.com/balearesg/bg-excel) &middot; [![Licencia MIT](https://img.shields.io/badge/Licencia-MIT-blue.svg)](./LICENSE)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-Este repositorio contiene una biblioteca que facilita la creación y lectura de archivos Excel en formato .xlsx y .csv. La clase principal, `Excel`, proporciona una interfaz para crear archivos Excel personalizados y leer archivos existentes para su posterior análisis. La biblioteca se encarga de crear hojas de cálculo, administrar cabeceras de columnas y aplicar validaciones a los datos, lo que facilita la generación y procesamiento de archivos Excel.
+Este repositorio contiene una biblioteca que facilita la creación y lectura de archivos Excel en formato .xlsx y .csv.
+La clase principal, `Excel`, proporciona una interfaz para crear archivos Excel personalizados y leer archivos
+existentes para su posterior análisis. La biblioteca se encarga de crear hojas de cálculo, administrar cabeceras de
+columnas y aplicar validaciones a los datos, lo que facilita la generación y procesamiento de archivos Excel.
 
 ## Instalación
 
@@ -18,12 +21,13 @@ Para utilizar este paquete en su proyecto, siga los siguientes pasos:
 
 ## Clase Excel
 
-La clase `Excel` es el corazón de esta biblioteca. Proporciona propiedades y métodos para la creación y lectura de archivos Excel. A continuación, se describen sus propiedades y métodos:
+La clase `Excel` es el corazón de esta biblioteca. Proporciona propiedades y métodos para la creación y lectura de
+archivos Excel. A continuación, se describen sus propiedades y métodos:
 
 ## Importación:
 
 ```javascript
-import { Excel } from "@bggroup/excel/excel";
+import { Excel } from '@bggroup/excel/excel';
 ```
 
 ## Caso de Uso 1: Creación de un Archivo Excel en Formato XLSX
@@ -36,42 +40,42 @@ En este caso de uso, se describe cómo crear un archivo Excel en formato XLSX
 // Código de ejemplo para crear un archivo Excel en formato XLSX
 const excel = new Excel();
 const params = {
-    pathname: "output/",
-    filename: "example.xlsx",
-    type: "xlsx",
-    sheetData: [
-        {
-            sheetName: "Sheet1",
-            data: [
-                { name: "Alice", age: 28 },
-                { name: "Bob", age: 32 },
-            ],
-            columnsHeader: [
-                { header: "Name", key: "name" },
-                { header: "Age", key: "age" },
-            ],
-        },
-    ],
+	pathname: 'output/',
+	filename: 'example.xlsx',
+	type: 'xlsx',
+	sheetData: [
+		{
+			sheetName: 'Sheet1',
+			data: [
+				{ name: 'Alice', age: 28 },
+				{ name: 'Bob', age: 32 },
+			],
+			columnsHeader: [
+				{ header: 'Name', key: 'name' },
+				{ header: 'Age', key: 'age' },
+			],
+		},
+	],
 };
 
-excel.create(params).then((result) => {
-    if (result.status) {
-        console.log(
-            `XLSX file created successfully at: ${result.data.pathFile}`
-        );
-        return;
-    }
-    console.error(`Error creating the XLSX file: ${result.error}`);
+excel.create(params).then(result => {
+	if (result.status) {
+		console.log(`XLSX file created successfully at: ${result.data.pathFile}`);
+		return;
+	}
+	console.error(`Error creating the XLSX file: ${result.error}`);
 });
 ```
 
 ### Respuesta
 
-La respuesta de este caso de uso incluye detalles sobre el estado y la ubicación del archivo creado, así como detalles del error en caso de que falle.
+La respuesta de este caso de uso incluye detalles sobre el estado y la ubicación del archivo creado, así como detalles
+del error en caso de que falle.
 
 ## Caso de Uso 2: Lectura de un Archivo Excel en Formato XLSX
 
-En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX, Las validación de columnas o celdas por rango es opcional con la propiedad `validations`, en este caso se describe con validación de columnas
+En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX, Las validación de columnas o celdas por
+rango es opcional con la propiedad `validations`, en este caso se describe con validación de columnas
 
 ### Uso
 
@@ -79,45 +83,47 @@ En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX, La
 // Código de ejemplo para leer un archivo Excel en formato XLSX
 const excel = new Excel();
 const readParams = {
-    filePath: "input/example.xlsx",
-    type: "xlsx",
-    // OPCIONAL
-    validations: {
-        columns: [
-            {
-                sheet: "Hoja1",
-                items: [
-                    {
-                        key: "Nombre",
-                        type: "string",
-                    },
-                    {
-                        key: "Edad",
-                        type: "number",
-                    },
-                ],
-            },
-        ],
-    },
+	filePath: 'input/example.xlsx',
+	type: 'xlsx',
+	// OPCIONAL
+	validations: {
+		columns: [
+			{
+				sheet: 'Hoja1',
+				items: [
+					{
+						key: 'Nombre',
+						type: 'string',
+					},
+					{
+						key: 'Edad',
+						type: 'number',
+					},
+				],
+			},
+		],
+	},
 };
 
-excel.read(readParams).then((result) => {
-    if (result.status) {
-        console.log("Data read successfully:");
-        console.log(result.data);
-        return;
-    }
-    console.error(`Error reading the XLSX file: ${result.error}`);
+excel.read(readParams).then(result => {
+	if (result.status) {
+		console.log('Data read successfully:');
+		console.log(result.data);
+		return;
+	}
+	console.error(`Error reading the XLSX file: ${result.error}`);
 });
 ```
 
 ### Respuesta
 
-La respuesta de este caso de uso incluye los datos leídos de la hoja de cálculo y detalles del error en caso de que falle.
+La respuesta de este caso de uso incluye los datos leídos de la hoja de cálculo y detalles del error en caso de que
+falle.
 
 ## Caso de Uso 3: Lectura de un Archivo Excel en Formato XLSX con validaciones de celdas específicas por rango
 
-En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX aplicando una validación de celdas específicas por rango
+En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX aplicando una validación de celdas
+específicas por rango
 
 ### Uso
 
@@ -125,48 +131,49 @@ En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX apl
 // Código de ejemplo para leer un archivo Excel en formato XLSX
 const excel = new Excel();
 const readParams = {
-    filePath: "input/example.xlsx",
-    type: "xlsx",
-    // OPCIONAL
-    validations: {
-        cells: [
-            {
-                sheet: "Hoja1",
-                items: [
-                    {
-                        startRow: 2,
-                        endRow: 2,
-                        startCol: 1,
-                        endCol: 1,
-                        type: "string",
-                        regex: "^[A-Za-z ]+$",
-                    },
-                    {
-                        startRow: 2,
-                        endRow: 2,
-                        startCol: 3,
-                        endCol: 3,
-                        type: "number",
-                    },
-                ],
-            },
-        ],
-    },
+	filePath: 'input/example.xlsx',
+	type: 'xlsx',
+	// OPCIONAL
+	validations: {
+		cells: [
+			{
+				sheet: 'Hoja1',
+				items: [
+					{
+						startRow: 2,
+						endRow: 2,
+						startCol: 1,
+						endCol: 1,
+						type: 'string',
+						regex: '^[A-Za-z ]+$',
+					},
+					{
+						startRow: 2,
+						endRow: 2,
+						startCol: 3,
+						endCol: 3,
+						type: 'number',
+					},
+				],
+			},
+		],
+	},
 };
 
-excel.read(readParams).then((result) => {
-    if (result.status) {
-        console.log("Data read successfully:");
-        console.log(result.data);
-        return;
-    }
-    console.error(`Error reading the XLSX file: ${result.error}`);
+excel.read(readParams).then(result => {
+	if (result.status) {
+		console.log('Data read successfully:');
+		console.log(result.data);
+		return;
+	}
+	console.error(`Error reading the XLSX file: ${result.error}`);
 });
 ```
 
 ### Respuesta
 
-La respuesta de este caso de uso incluye los datos leídos de la hoja de cálculo y detalles del error en caso de que falle.
+La respuesta de este caso de uso incluye los datos leídos de la hoja de cálculo y detalles del error en caso de que
+falle.
 
 ## Caso de Uso 4: Lectura de un Archivo Excel en Formato XLSX por hoja específica
 
@@ -178,28 +185,30 @@ En este caso de uso, se describe cómo leer un archivo Excel en formato XLSX por
 // Código de ejemplo para leer un archivo Excel en formato XLSX
 const excel = new Excel();
 const readParams = {
-    filePath: "input/example.xlsx",
-    type: "xlsx",
-    sheet: "Hoja1",
+	filePath: 'input/example.xlsx',
+	type: 'xlsx',
+	sheet: 'Hoja1',
 };
 
-excel.read(readParams).then((result) => {
-    if (result.status) {
-        console.log("Data read successfully:");
-        console.log(result.data);
-        return;
-    }
-    console.error(`Error reading the XLSX file: ${result.error}`);
+excel.read(readParams).then(result => {
+	if (result.status) {
+		console.log('Data read successfully:');
+		console.log(result.data);
+		return;
+	}
+	console.error(`Error reading the XLSX file: ${result.error}`);
 });
 ```
 
 ### Respuesta
 
-La respuesta de este caso de uso incluye los datos leídos de la hoja de cálculo y detalles del error en caso de que falle.
+La respuesta de este caso de uso incluye los datos leídos de la hoja de cálculo y detalles del error en caso de que
+falle.
 
 ## Caso de Uso 5: Creación de un Archivo Excel en Formato CSV
 
-En este caso de uso, se describe cómo crear un archivo Excel en formato CSV. por el momento no se pueden crear archivos csv con más de 1 hoja
+En este caso de uso, se describe cómo crear un archivo Excel en formato CSV. por el momento no se pueden crear archivos
+csv con más de 1 hoja
 
 ### Uso
 
@@ -207,32 +216,30 @@ En este caso de uso, se describe cómo crear un archivo Excel en formato CSV. po
 // Código de ejemplo para crear un archivo Excel en formato CSV
 const excel = new Excel();
 const params = {
-    pathname: "output/",
-    filename: "example.csv",
-    type: "csv",
-    sheetData: [
-        {
-            sheetName: "Sheet1",
-            data: [
-                { name: "Alice", age: 28 },
-                { name: "Bob", age: 32 },
-            ],
-            columnsHeader: [
-                { header: "Name", key: "name" },
-                { header: "Age", key: "age" },
-            ],
-        },
-    ],
+	pathname: 'output/',
+	filename: 'example.csv',
+	type: 'csv',
+	sheetData: [
+		{
+			sheetName: 'Sheet1',
+			data: [
+				{ name: 'Alice', age: 28 },
+				{ name: 'Bob', age: 32 },
+			],
+			columnsHeader: [
+				{ header: 'Name', key: 'name' },
+				{ header: 'Age', key: 'age' },
+			],
+		},
+	],
 };
 
-excel.create(params).then((result) => {
-    if (result.status) {
-        console.log(
-            `CSV file created successfully at: ${result.data.pathFile}`
-        );
-        return;
-    }
-    console.error(`Error creating the CSV file: ${result.error}`);
+excel.create(params).then(result => {
+	if (result.status) {
+		console.log(`CSV file created successfully at: ${result.data.pathFile}`);
+		return;
+	}
+	console.error(`Error creating the CSV file: ${result.error}`);
 });
 ```
 
@@ -242,7 +249,8 @@ La respuesta de este caso de uso es similar a la del Caso de Uso 1.
 
 ## Caso de Uso 6: Lectura de un Archivo Excel en Formato CSV
 
-En este caso de uso, se describe cómo leer un archivo Excel en formato CSV, por ahora la validación de columnas no está disponible en esete caso.
+En este caso de uso, se describe cómo leer un archivo Excel en formato CSV, por ahora la validación de columnas no está
+disponible en esete caso.
 
 ### Uso
 
@@ -250,17 +258,17 @@ En este caso de uso, se describe cómo leer un archivo Excel en formato CSV, por
 // Código de ejemplo para leer un archivo Excel en formato CSV
 const excel = new Excel();
 const readParams = {
-    filePath: "input/example.csv",
-    type: "csv",
+	filePath: 'input/example.csv',
+	type: 'csv',
 };
 
-excel.read(readParams).then((result) => {
-    if (result.status) {
-        console.log("Data read successfully:");
-        console.log(result.data);
-        return;
-    }
-    error.log(`Error reading the CSV file: ${result.error}`);
+excel.read(readParams).then(result => {
+	if (result.status) {
+		console.log('Data read successfully:');
+		console.log(result.data);
+		return;
+	}
+	error.log(`Error reading the CSV file: ${result.error}`);
 });
 ```
 
@@ -281,23 +289,23 @@ const excel = new Excel();
 // Ejemplo 1: Parámetros de creación inválidos
 const invalidCreateParams = { pathname: null, filename: null, sheetData: null };
 
-excel.create(invalidCreateParams).then((result) => {
-    if (result.status) {
-        console.log("El archivo se creó con éxito.");
-        return;
-    }
-    console.error(`Error al crear el archivo: ${result.error}`);
+excel.create(invalidCreateParams).then(result => {
+	if (result.status) {
+		console.log('El archivo se creó con éxito.');
+		return;
+	}
+	console.error(`Error al crear el archivo: ${result.error}`);
 });
 
 // Ejemplo 2: Parámetros de lectura inválidos
 const invalidReadParams = { filePath: null, type: null };
 
-excel.read(invalidReadParams).then((result) => {
-    if (result.status) {
-        console.log("Los datos se leyeron con éxito.");
-        return;
-    }
-    console.error(`Error al leer el archivo: ${result.error}`);
+excel.read(invalidReadParams).then(result => {
+	if (result.status) {
+		console.log('Los datos se leyeron con éxito.');
+		return;
+	}
+	console.error(`Error al leer el archivo: ${result.error}`);
 });
 ```
 
@@ -341,11 +349,13 @@ Cuando se llama al método `read`, la respuesta tiene la siguiente estructura:
 | data      | Un objeto que contiene los datos leídos de la hoja de cálculo, organizados por hoja.                          |
 | error     | Detalles del error, en caso de que la operación falle. Puede ser una cadena de texto o un arreglo de errores. |
 
-Estas estructuras de respuestas te permiten verificar el estado de la operación y acceder a los datos o detalles del error según corresponda.
+Estas estructuras de respuestas te permiten verificar el estado de la operación y acceder a los datos o detalles del
+error según corresponda.
 
 ## Propiedades y Explicación de los Parámetros de `create`
 
-El método `create` acepta un objeto `params` que se utiliza para personalizar la creación de un archivo Excel. A continuación, se detallan las propiedades de `params`:
+El método `create` acepta un objeto `params` que se utiliza para personalizar la creación de un archivo Excel. A
+continuación, se detallan las propiedades de `params`:
 
 ### Propiedades de `params` en `create`
 
@@ -367,7 +377,8 @@ El método `create` acepta un objeto `params` que se utiliza para personalizar l
 
 ## Propiedades y Explicación de los Parámetros de `read`
 
-El método `read` se utiliza para leer un archivo Excel existente y aplicar validaciones según sea necesario. A continuación, se detallan las propiedades de `params`:
+El método `read` se utiliza para leer un archivo Excel existente y aplicar validaciones según sea necesario. A
+continuación, se detallan las propiedades de `params`:
 
 ### Propiedades de `params` en `read`
 
@@ -379,7 +390,8 @@ El método `read` se utiliza para leer un archivo Excel existente y aplicar vali
 
 ### Propiedades de `validations` en `read`
 
-El objeto `validations` se utiliza para especificar las validaciones que se aplicarán a las celdas del archivo Excel. A continuación, se dividen las propiedades de `validations` en tablas separadas:
+El objeto `validations` se utiliza para especificar las validaciones que se aplicarán a las celdas del archivo Excel. A
+continuación, se dividen las propiedades de `validations` en tablas separadas:
 
 #### Propiedades de `columns`
 
@@ -406,7 +418,8 @@ Estas propiedades permiten especificar las validaciones a aplicar a las celdas d
 
 ## Contribuciones
 
-Las contribuciones, problemas y solicitudes de características son bienvenidos. Siéntase libre de consultar la [página de issues](https://github.com/balearesg/bg-excel/issues) o abrir nuevas.
+Las contribuciones, problemas y solicitudes de características son bienvenidos. Siéntase libre de consultar la
+[página de issues](https://github.com/balearesg/bg-excel/issues) o abrir nuevas.
 
 ## Licencia
 
