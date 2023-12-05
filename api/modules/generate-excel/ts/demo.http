@@ -16,22 +16,22 @@ Content-Type: application/json
          "sheetName":"Hoja1",
          "columnsHeader":[
             {
-               "header":"Nombre",
-               "key":"name"
+               "header":"Tipo",
+               "key":"type"
             },
             {
-               "header":"Edad",
-               "key":"age"
+               "header":"Lugar",
+               "key":"place"
             }
          ],
          "data":[
             {
-               "name":"Juan",
-               "age":25
+               "place":"Juan",
+               "type":25
             },
             {
-               "name":"María",
-               "age":30
+               "type":"María",
+               "place":30
             }
          ]
       },

@@ -1,5 +1,5 @@
 import { Request, Response, Application, Router } from "express";
-import { ExcelHandler } from "@bg/excel/handler";
+import { Excel } from "@bggroup/excel/excel";
 import { IReturnRead } from "./types";
 import * as path from "path";
 export /*bundle*/
@@ -17,17 +17,18 @@ export /*bundle*/
     res: Response
   ): Promise<Response<IReturnRead, Record<string, IReturnRead>>> => {
     try {
-      const excelHandler: ExcelHandler = new ExcelHandler();
+      const excel: Excel = new Excel();
       const params = req.body;
 
       const specs: any = {
-        filePath: path.join(__dirname, "static/test.csv"),
-        cellsValidations: params.cellsValidations ?? null,
-        type: "csv"
+        filePath: path.join(__dirname, params.filePath ?? "static/test.csv"),
+        validations: params.validations ?? null,
+        type: params.type,
+        sheet: params.sheet
       };
 
       // Crea el archivo Excel
-      const result: IReturnRead = await excelHandler.readExcel(
+      const result: IReturnRead = await excel.read(
         specs
       );
       if (!result.status && Array.isArray(result.error))
@@ -39,7 +40,7 @@ export /*bundle*/
 
       return res
         .status(200)
-        .send({ status: true, data: { ...result.data } });
+        .send({ status: true, data: result.data });
     } catch (error) {
       console.error("error", error);
       return res.status(500).send({

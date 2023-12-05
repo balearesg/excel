@@ -1,5 +1,5 @@
 import { Request, Response, Application, Router } from "express";
-import { ExcelHandler } from "@bg/excel/handler";
+import { Excel } from "@bggroup/excel/excel";
 import { IReturnHandler } from "./types";
 export /*bundle*/
   class Controller {
@@ -16,14 +16,14 @@ export /*bundle*/
     res: Response
   ): Promise<Response<IReturnHandler, Record<string, IReturnHandler>>> => {
     try {
-      const excelHandler: ExcelHandler = new ExcelHandler();
+      const excel: Excel = new Excel();
       const params = req.body;
 
-      if (!params?.sheetData) throw "invalid sheetData, this is required";
+      // if (!params?.sheetData) throw "invalid sheetData, this is required";
 
-      if (!params?.filename) throw "invalid filename, this is required";
+      // if (!params?.filename) throw "invalid filename, this is required";
 
-      if (!params?.type) throw "invalid type, this is required";
+      // if (!params?.type) throw "invalid type, this is required";
 
 
       const sheetData = params.sheetData;
@@ -40,9 +40,10 @@ export /*bundle*/
       };
 
       // Crea el archivo Excel
-      const result: IReturnHandler = await excelHandler.createExcel(
+      const result: IReturnHandler = await excel.create(
         specs
       );
+
       if (!result.status && Array.isArray(result.error))
         return res.status(500).send({
           status: false,

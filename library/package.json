@@ -1,0 +1,30 @@
+{
+  "name": "excel",
+  "version": "0.0.1",
+  "title": "excel",
+  "scope": "bggroup",
+  "description": "package for excel handlig",
+  "license": "ISC",
+  "modules": {
+    "path": "modules"
+  },
+  "deployment": {
+    "distributions": [
+      {
+        "name": "web",
+        "environment": "development",
+        "platform": "web",
+        "ports": {
+          "bundles": 3600
+        }
+      }
+    ]
+  },
+  "dependencies": {
+    "@beyond-js/kernel": "~0.1.9",
+    "@beyond-js/local": "~0.1.3",
+    "csv-parser": "^3.0.0",
+    "exceljs": "^4.4.0",
+    "socket.io-client": "^4.5.4"
+  }
+}
