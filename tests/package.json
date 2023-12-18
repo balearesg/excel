@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"title": "implementation",
 	"scope": "excel",
-	"description": "Package with example of express api implementation @bggroup/excel",
+	"description": "Package with example of express api implementation @bgroup/excel",
 	"license": "ISC",
 	"layout": "main-layout",
 	"template": "template/template.json",
