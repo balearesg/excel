@@ -2,7 +2,7 @@
   "name": "excel",
   "version": "0.0.1",
   "title": "excel",
-  "scope": "bggroup",
+  "scope": "bgroup",
   "description": "package for excel handlig",
   "license": "ISC",
   "modules": {
