@@ -1,15 +1,12 @@
 {
   "name": "excel",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "title": "excel",
-  "scope": "bg",
+  "scope": "bggroup",
   "description": "package for excel handlig",
   "license": "ISC",
   "modules": {
     "path": "modules"
-  },
-  "scripts": {
-    "test": "jest"
   },
   "deployment": {
     "distributions": [
@@ -29,18 +26,5 @@
     "csv-parser": "^3.0.0",
     "exceljs": "^4.4.0",
     "socket.io-client": "^4.5.4"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
-    "@babel/preset-typescript": "^7.23.2",
-    "@types/jest": "^29.5.7",
-    "babel-jest": "^29.7.0",
-    "ts-jest": "^29.1.1"
-  },
-  "static": {
-    "includes": [
-      "assets"
-    ]
   }
 }

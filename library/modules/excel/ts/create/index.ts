@@ -3,6 +3,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { Excel } from "..";
 import { IParamsExcel, IReturnHandler } from "../interfaces";
+import { validateValues } from "../utils/validate-values";
 
 /***
     The `createExcel` method is an asynchronous function that takes in an object `params` as a
@@ -12,39 +13,43 @@ import { IParamsExcel, IReturnHandler } from "../interfaces";
    */
 export async function create(parent: Excel, params: IParamsExcel): Promise<IReturnHandler> {
 
-    if (!params) throw new Error(`invalid params, this is invalid`);
+    let errors = [];
 
-    if (typeof params !== "object") throw new Error(`invalid params, this is not object`);
+    const validated = validateValues({
+        validate: {
+            pathname: "string",
+            filename: "string",
+            sheetData: "array",
+            type: "string"
+        }, toValidate: params,
+        entity: "params"
+    });
+
+    if (validated.length) {
+        errors = errors.concat(validated);
+        throw new Error(errors[0])
+    };
 
     const { pathname, options, filename, sheetData, type } = params;
-
-    if (!pathname) throw new Error("invalid pathname, this is required");
-
-    if (typeof pathname !== "string") throw new Error(`invalid pathname, this is not string`);
-
-
-    if (!filename) throw new Error("invalid filename, this is required");
-
-    if (typeof filename !== "string") throw new Error(`invalid filename, this is not string`);
-
-    if (!sheetData) throw new Error("invalid sheetData, this is required");
-
-    if (typeof sheetData !== "object") throw new Error(`invalid sheetData, this is not object`);
-
-    if (!type) throw new Error("invalid type, this is required");
-
-    if (typeof type !== "string") throw new Error(`invalid type, this is not string`);
 
     const types = ["xlsx", "csv"];
 
     if (!types.includes(type)) throw new Error(`Type must be xlsx or csv`);
+
+    const fileExtension = filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
+
+    if (!fileExtension) throw new Error(`The filename does not have an extension`);
+
+    if (!types.includes(fileExtension)) throw new Error(`The file extension must be csv or xlsx in filename`);
+
+    if (fileExtension !== type) throw new Error(`The file extension in filename must be equal to the parameter type`)
 
     const outputPath = path.join(__dirname, pathname);
     // Verifica y crea el directorio si no existe
     if (!fs.existsSync(outputPath)) {
         fs.mkdirSync(outputPath, { recursive: true });
     };
-    let errors = []
+
     try {
 
         parent.workbook = new ExcelJS.Workbook();
@@ -63,26 +68,28 @@ export async function create(parent: Excel, params: IParamsExcel): Promise<IRetu
 
         for (const sheet of sheetData) {
 
-            if (typeof sheet !== "object") throw new Error(`invalid sheet, this is not object`);
+            const validated = validateValues({
+                validate: {
+                    sheetName: "string",
+                    data: "array",
+                }, toValidate: sheet,
+                entity: "sheetData"
+            });
+
+            if (validated.length) {
+                errors = errors.concat(validated);
+                return { status: false, error: errors };
+            };
 
             const { sheetName, data, columnsHeader } = sheet;
-
-            if (!sheetName) throw new Error("invalid sheetName in sheetData, this is required");
-
-            if (typeof sheetName !== "string") throw new Error(`invalid sheetName in sheetData, this is not string`);
-
-            if (!data) throw new Error("invalid data in sheetData, this is required");
-
-            if (!Array.isArray(data) || !data.length) throw new Error(`invalid data in sheetData, this is not array or data without content`);
-
             const worksheet: ExcelJS.Worksheet = parent.workbook.addWorksheet(sheetName);
 
             if (!!columnsHeader && !!Array.isArray(columnsHeader) && !!columnsHeader.length) {
                 worksheet.columns = columnsHeader;
-                continue
             };
 
             worksheet.state = "visible";
+            worksheet.name = sheetName
 
             data.forEach((item: object): void => {
                 worksheet.addRow(item);
@@ -92,6 +99,7 @@ export async function create(parent: Excel, params: IParamsExcel): Promise<IRetu
         };
 
         const pathFile: string = path.join(outputPath, filename);
+
         await parent.workbook[type].writeFile(pathFile, options);
 
         return { status: true, data: { pathFile, filename, pathname } };

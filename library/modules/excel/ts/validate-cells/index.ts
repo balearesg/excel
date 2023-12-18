@@ -1,29 +1,32 @@
-import { IReturnHandler, IValidateCells } from "../interfaces";
+import { IValidateCells } from "../interfaces";
 import { validateColumns } from "./columns";
 import { validateRange } from "./range";
 
-export function validateCells(params: IValidateCells): IReturnHandler[] {
-    const { cellsValidations, sheetData, workbook } = params;
+export function validateCells(params: IValidateCells): string[] {
+    const { validations, sheetData, workbook, isSheet } = params;
 
-    if (!cellsValidations) return [];
+    if (!validations) return [];
 
-    let errors: IReturnHandler[] = [];
+    let errors: string[] = [];
 
     try {
-        if (!!cellsValidations && typeof cellsValidations !== "object") {
-            const error: string = `invalid cellsValidations this is not a objet is a ${typeof cellsValidations}`;
-            errors.push({ status: false, error });
+        if (!!validations && typeof validations !== "object") {
+            const error: string = `invalid validations this is not a objet is a ${typeof validations}`;
+            errors.push(error);
             throw error;
-        }
+        };
 
-        const { columnValidations, cellRangeValidations } = cellsValidations;
+        const { cells, columns } = validations;
 
-        validateColumns({ errors, sheetData, columnValidations });
+        const validatedColumns = validateColumns({ errors, sheetData, columns, isSheet });
 
-        validateRange({ errors, workbook, cellRangeValidations });
+        const validatedCellsSheet = validateRange({ errors, workbook, cells });
+
+        if (validatedCellsSheet.length) errors = errors.concat(validatedCellsSheet);
+        if (validatedColumns.length) errors = errors.concat(validatedColumns)
 
         return errors;
     } catch (error) {
         return errors;
-    }
-}
+    };
+};

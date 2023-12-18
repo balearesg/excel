@@ -23,7 +23,7 @@
   },
   "libraries": {
     "imports": [
-      "@bg/excel"
+      "@bggroup/excel"
     ]
   },
   "deployment": {

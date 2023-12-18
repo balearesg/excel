@@ -9,7 +9,7 @@ POST http://localhost:1080/generate/excel
 Content-Type: application/json
 
 {
-    "typeo": "xlsx",
+    "type": "xlsx",
    "sheetData":[
       {
          "sheetName":"Hoja1",
@@ -62,130 +62,36 @@ Content-Type: application/json
    "options": {}
 }
 
-### en este caso vemos como se validan las columnas o celdas a traves del parametro cellsValidations:
-POST http://localhost:1080/generate/excel
+### Método POST para Generar un Archivo Excel
+
+##Este método POST permite generar un archivo Excel basado en los datos proporcionados en el cuerpo de la solicitud. Utiliza la clase `ExcelHandler` para crear archivos Excel con hojas de trabajo personalizables, encabezados y datos.
+
+#### Datos de Solicitud
+
+##El cuerpo de la solicitud debe contener un objeto JSON con la siguiente estructura:
+
+POST http://localhost:1080/read/excel
 Content-Type: application/json
 
 {
-    "type": "xlsx",
-
-   "sheetData":[
-      {
-         "sheetName": "Sheet1",
-         "columnsHeader": [
-            { "header": "Name", "key": "name" },
-            { "header": "City", "key": "city" },
-            { "header": "Age", "key": "age" },
-            { "header": "Is Employed", "key": "isEmployed" }
-         ],
-         "data": [
-            { "name": "John", "city": "NewYork", "age": 30, "isEmployed": true },
-            { "name": "Alice", "city": "Los Angeles", "age": "invalid", "isEmployed": false },
-            { "name": "Bob", "city": "Chicago", "age": 25, "isEmployed": "invalid" }
-         ]
-      }
-   ],
-   "filename": "test3.xlsx",
-   "options": {
-    // Opciones de escritura del archivo (opcional)
-   },
-     "cellsValidations": {
-      "columnValidations": [
+  "filePath": "static/test.xlsx",
+   "type": "xlsx",
+   "validations": {
+      "columns": [
          {
-            "sheetName": "Sheet1",
-            "columnKey": "name",
-            "dataType": "string",
-            "regexPattern": "^[A-Za-z ]+$"
-         },
-         {
-            "sheetName": "Sheet1",
-            "columnKey": "city",
-            "dataType": "string",
-            "regexPattern": "^[A-Za-z ]+$"
-         },
-         {
-            "sheetName": "Sheet1",
-            "columnKey": "age",
-            "dataType": "number"
-         },
-         {
-            "sheetName": "Sheet1",
-            "columnKey": "isEmployed",
-            "dataType": "boolean"
-         }
-      ],
-      "cellRangeValidations": [
-         {
-            "sheetName": "Sheet1",
-            "startRow": 2,
-            "endRow": 2,
-            "startCol": 1,
-            "endCol": 1,
-            "dataType": "number",
-            "regexPattern": "^[A-Za-z ]+$"
-         },
-         {
-            "sheetName": "Sheet1",
-            "startRow": 2,
-            "endRow": 2,
-            "startCol": 3,
-            "endCol": 3,
-            "dataType": "number"
-         },
-         {
-            "sheetName": "Sheet1",
-            "startRow": 2,
-            "endRow": 2,
-            "startCol": 4,
-            "endCol": 4,
-            "dataType": "boolean"
-         }
+            "sheet": "Hoja1",
+            "items": [
+               {
+                  "key": "Nombre",
+                  "type": "string"
+               },
+               {
+               "key": "Edad",
+               "type": "number"
+               }  
+            ]
+         }  
       ]
-   },
-
+   }
 }
-
-### En caso de éxito:
-
-{
-  "status": true,
-  "data": {
-    "filepath": "ruta/del/archivo_generado.xlsx",
-    "filename": "nombre del archivo descargado",
-    "pathname": "directorio del archivo guardado"
-  }
-}
-
-### En caso de error:
-
-{
-  "status": false,
-  "error": "Mensaje de error" 
-}
-o 
-{
-  "status": false,
-  "error": [
-    {
-      "status": false,
-      "error": "Invalid data in column 'age' at row 2: should be a number"
-    },
-    {
-      "status": false,
-      "error": "Invalid data in column 'isEmployed' at row 3: should be a boolean"
-    },
-    {
-      "status": false,
-      "error": "Invalid data in row 2, column 1: should be a number"
-    }
-  ]
-}
-
-### Método GET para descargar archivos
-
-##Este método GET permite la descarga de archivos pasando como query params pathFile con la ruta del archivo y filename con el nombre, de no exister retorna una respuesta 404
-
-###
-
-GET http://localhost:1080/download?pathFile=C:\\Users\\Franc\\OneDrive\\Documentos\\workspace\\bg\\bg-excel\\project\\files\\test.xlsx&filename=test.xlsx
 

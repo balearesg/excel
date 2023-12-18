@@ -9,7 +9,6 @@ export interface IReturnHandler {
     status: boolean;
     data?: TData | undefined;
     error?: string | undefined | any[];
-
 }
 
 export type TSheetData = {
@@ -18,53 +17,86 @@ export type TSheetData = {
     columnsHeader: object[];
 };
 
-type TDataType = 'string' | 'number' | 'boolean' | 'date' // Tipo de datos (opcional)
+type TDataType = "string" | "number" | "boolean" | "date"; // Tipo de datos (opcional)
 
 export interface ICellRangeValidation {
-    sheetName: string;
     startRow: number;
     endRow: number;
     startCol: number;
     endCol: number;
-    dataType?: TDataType;
-    regexPattern?: string; // Patrón de expresión regular (opcional)
+    type?: TDataType;
+    regex?: string; // Patrón de expresión regular (opcional)
 }
 export interface IColumnValidation {
-    sheetName: string;
-    columnKey: string;
-    dataType?: TDataType;
-    regexPattern?: string; // Patrón de expresión regular (opcional)
-};
+    key: string;
+    type?: TDataType;
+    regex?: string; // Patrón de expresión regular (opcional)
+}
 
 type TCellsValidations = {
-    columnValidations: IColumnValidation[];
-    cellRangeValidations: ICellRangeValidation[];
-}
+    columns: Array<{
+        sheet: string,
+        items: IColumnValidation[]
+    }>;
+    cells: Array<{
+        sheet: string,
+        items: ICellRangeValidation[]
+    }>;
+};
 
 export interface IParamsExcel {
     pathname: string;
     options: object;
     filename: string;
     sheetData: Array<TSheetData>;
-    type: "csv" | "xlsx"
-};
+    type: "csv" | "xlsx";
+}
 
-export interface ISheet { [sheetName: string]: any[][] }
+export interface ISheet {
+    [sheetName: string]: any[][];
+}
 
 export interface IValidateCells {
-    cellsValidations: TCellsValidations;
-    sheetData: ISheet;
+    validations: TCellsValidations;
+    sheetData: ISheet | object[];
     workbook: ExcelJS.Workbook;
-};
+    isSheet: boolean
+}
 
 export interface IReturnRead {
     status: boolean;
-    data?: ISheet | undefined;
+    data?: ISheet | undefined | object[];
     error?: string | undefined | any[];
-};
+}
 
 export interface IParamsRead {
     filePath: string;
-    cellsValidations?: TCellsValidations,
-    type: "csv" | "xlsx"
+    validations?: TCellsValidations;
+    type: "csv" | "xlsx";
+    sheet: string
+}
+
+export interface IValidateValues {
+    validate: { [x: string]: string };
+    toValidate: any;
+    entity: string;
+}
+
+export interface IParamsValidateColumns {
+    columns: Array<{
+        sheet: string,
+        items: IColumnValidation[]
+    }>;
+    errors: string[];
+    sheetData: ISheet | object[];
+    isSheet: boolean
+}
+
+export interface IParamsValidateRange {
+    cells: Array<{
+        sheet: string,
+        items: ICellRangeValidation[]
+    }>;
+    errors: string[];
+    workbook: ExcelJS.Workbook;
 }
