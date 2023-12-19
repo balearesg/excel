@@ -3,16 +3,16 @@ import { Code } from 'pragmate-ui/code';
 import { implementationGenerateExcel } from './implementations';
 import { Action } from './action';
 export /*bundle*/
-function View(): JSX.Element {
+	function View(): JSX.Element {
 	return (
 		<div className="excel-api">
 			<h1>
 				<a href="https://github.com/balearesg/bg-excel" target="_blank" rel="noopener noreferrer">
-					@bggroup/excel (Implementación)
+					@bgroup/excel (Implementación)
 				</a>
 			</h1>
 			<p>
-				@bggroup/excel es una API para generar y descargar archivos Excel, con futuras funciones de carga y
+				@bgroup/excel es una API para generar y descargar archivos Excel, con futuras funciones de carga y
 				lectura.
 			</p>
 

@@ -1,5 +1,5 @@
 import { Request, Response, Application, Router } from "express";
-import { Excel } from "@bggroup/excel/excel";
+import { Excel } from "@bgroup/excel/excel";
 import { IReturnHandler } from "./types";
 export /*bundle*/
   class Controller {

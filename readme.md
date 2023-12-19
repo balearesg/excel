@@ -1,4 +1,4 @@
-# [@Bggroup/excel](https://github.com/balearesg/bg-excel) &middot; [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+# [@bgroup/excel](https://github.com/balearesg/bg-excel) &middot; [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
@@ -16,7 +16,7 @@ To use this package in your project, follow these steps:
 2. Install the dependencies by running the following command in the `/library` directory:
 
     ```bash
-    npm install @bggroup/excel
+    npm install @bgroup/excel
     ```
 
 ## Excel Class
@@ -27,7 +27,7 @@ files. Below are descriptions of its properties and methods:
 ## Import:
 
 ```javascript
-import { Excel } from '@bggroup/excel/excel';
+import { Excel } from '@bgroup/excel/excel';
 ```
 
 ## Use Case 1: Creating an Excel File in XLSX Format
@@ -40,30 +40,32 @@ This use case describes how to create an Excel file in XLSX format.
 // Example code to create an Excel file in XLSX format
 const excel = new Excel();
 const params = {
-	pathname: 'output/',
-	filename: 'example.xlsx',
-	type: 'xlsx',
-	sheetData: [
-		{
-			sheetName: 'Sheet1',
-			data: [
-				{ name: 'Alice', age: 28 },
-				{ name: 'Bob', age: 32 },
-			],
-			columnsHeader: [
-				{ header: 'Name', key: 'name' },
-				{ header: 'Age', key: 'age' },
-			],
-		},
-	],
+    pathname: 'output/',
+    filename: 'example.xlsx',
+    type: 'xlsx',
+    sheetData: [
+        {
+            sheetName: 'Sheet1',
+            data: [
+                { name: 'Alice', age: 28 },
+                { name: 'Bob', age: 32 },
+            ],
+            columnsHeader: [
+                { header: 'Name', key: 'name' },
+                { header: 'Age', key: 'age' },
+            ],
+        },
+    ],
 };
 
-excel.create(params).then(result => {
-	if (result.status) {
-		console.log(`XLSX file created successfully at: ${result.data.pathFile}`);
-		return;
-	}
-	console.error(`Error creating the XLSX file: ${result.error}`);
+excel.create(params).then((result) => {
+    if (result.status) {
+        console.log(
+            `XLSX file created successfully at: ${result.data.pathFile}`
+        );
+        return;
+    }
+    console.error(`Error creating the XLSX file: ${result.error}`);
 });
 ```
 
@@ -83,17 +85,17 @@ the `validations` property, in this case, it's described with column validation.
 // Example code to read an Excel file in XLSX format
 const excel = new Excel();
 const readParams = {
-	filePath: 'input/example.xlsx',
-	type: 'xlsx',
+    filePath: 'input/example.xlsx',
+    type: 'xlsx',
 };
 
-excel.read(readParams).then(result => {
-	if (result.status) {
-		console.log('Data read successfully:');
-		console.log(result.data);
-		return;
-	}
-	console.error(`Error reading the XLSX file: ${result.error}`);
+excel.read(readParams).then((result) => {
+    if (result.status) {
+        console.log('Data read successfully:');
+        console.log(result.data);
+        return;
+    }
+    console.error(`Error reading the XLSX file: ${result.error}`);
 });
 ```
 
@@ -165,18 +167,18 @@ This use case describes how to read an Excel file in XLSX format by a specific s
 // Example code to read an Excel file in XLSX format
 const excel = new Excel();
 const readParams = {
-	filePath: 'input/example.xlsx',
-	type: 'xlsx',
-	sheet: 'Sheet1',
+    filePath: 'input/example.xlsx',
+    type: 'xlsx',
+    sheet: 'Sheet1',
 };
 
-excel.read(readParams).then(result => {
-	if (result.status) {
-		console.log('Data read successfully:');
-		console.log(result.data);
-		return;
-	}
-	console.error(`Error reading the XLSX file: ${result.error}`);
+excel.read(readParams).then((result) => {
+    if (result.status) {
+        console.log('Data read successfully:');
+        console.log(result.data);
+        return;
+    }
+    console.error(`Error reading the XLSX file: ${result.error}`);
 });
 ```
 
@@ -195,30 +197,32 @@ one sheet.
 // Example code to create an Excel file in CSV format
 const excel = new Excel();
 const params = {
-	pathname: 'output/',
-	filename: 'example.csv',
-	type: 'csv',
-	sheetData: [
-		{
-			sheetName: 'Sheet1',
-			data: [
-				{ name: 'Alice', age: 28 },
-				{ name: 'Bob', age: 32 },
-			],
-			columnsHeader: [
-				{ header: 'Name', key: 'name' },
-				{ header: 'Age', key: 'age' },
-			],
-		},
-	],
+    pathname: 'output/',
+    filename: 'example.csv',
+    type: 'csv',
+    sheetData: [
+        {
+            sheetName: 'Sheet1',
+            data: [
+                { name: 'Alice', age: 28 },
+                { name: 'Bob', age: 32 },
+            ],
+            columnsHeader: [
+                { header: 'Name', key: 'name' },
+                { header: 'Age', key: 'age' },
+            ],
+        },
+    ],
 };
 
-excel.create(params).then(result => {
-	if (result.status) {
-		console.log(`CSV file created successfully at: ${result.data.pathFile}`);
-		return;
-	}
-	console.error(`Error creating the CSV file: ${result.error}`);
+excel.create(params).then((result) => {
+    if (result.status) {
+        console.log(
+            `CSV file created successfully at: ${result.data.pathFile}`
+        );
+        return;
+    }
+    console.error(`Error creating the CSV file: ${result.error}`);
 });
 ```
 
@@ -237,17 +241,17 @@ case.
 // Example code to read an Excel file in CSV format
 const excel = new Excel();
 const readParams = {
-	filePath: 'input/example.csv',
-	type: 'csv',
+    filePath: 'input/example.csv',
+    type: 'csv',
 };
 
-excel.read(readParams).then(result => {
-	if (result.status) {
-		console.log('Data read successfully:');
-		console.log(result.data);
-		return;
-	}
-	console.error(`Error reading the CSV file: ${result.error}`);
+excel.read(readParams).then((result) => {
+    if (result.status) {
+        console.log('Data read successfully:');
+        console.log(result.data);
+        return;
+    }
+    console.error(`Error reading the CSV file: ${result.error}`);
 });
 ```
 
@@ -268,23 +272,23 @@ const excel = new Excel();
 // Example 1: Invalid creation parameters
 const invalidCreateParams = { pathname: null, filename: null, sheetData: null };
 
-excel.create(invalidCreateParams).then(result => {
-	if (result.status) {
-		console.log('File created successfully.');
-		return;
-	}
-	console.error(`Error creating the file: ${result.error}`);
+excel.create(invalidCreateParams).then((result) => {
+    if (result.status) {
+        console.log('File created successfully.');
+        return;
+    }
+    console.error(`Error creating the file: ${result.error}`);
 });
 
 // Example 2: Invalid reading parameters
 const invalidReadParams = { filePath: null, type: null };
 
-excel.read(invalidReadParams).then(result => {
-	if (result.status) {
-		console.log('Data read successfully.');
-		return;
-	}
-	console.error(`Error reading the file: ${result.error}`);
+excel.read(invalidReadParams).then((result) => {
+    if (result.status) {
+        console.log('Data read successfully.');
+        return;
+    }
+    console.error(`Error reading the file: ${result.error}`);
 });
 ```
 

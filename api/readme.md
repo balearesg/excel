@@ -6,7 +6,7 @@
 
 Este proyecto alberga una API Node.js desarrollada con Express que ofrece dos endpoints principales: `/generate/excel` y
 `/download`. El propósito de este proyecto es permitir a los usuarios generar archivos Excel a partir de los datos
-proporcionados y descargar esos archivos mediante el paquete **@bggroup/excel**.
+proporcionados y descargar esos archivos mediante el paquete **@bgroup/excel**.
 
 ## Instalación
 
@@ -45,7 +45,7 @@ ubicación del archivo generado en caso de éxito. A continuación, se describe 
 -   La función extrae los parámetros necesarios del cuerpo de la solicitud, como los datos de las hojas de trabajo y el
     nombre del archivo.
 -   Realiza una validación para asegurarse de que los parámetros requeridos (`sheetData` y `filename`) estén presentes.
--   Utiliza la clase `ExcelHandler` de `@bggroup/excel` para crear el archivo Excel con los datos y encabezados
+-   Utiliza la clase `ExcelHandler` de `@bgroup/excel` para crear el archivo Excel con los datos y encabezados
     proporcionados.
 -   Responde con un mensaje de éxito y la ubicación del archivo Excel generado si la operación se realiza con éxito.
 -   En caso de errores, captura las excepciones y responde con un mensaje de error junto con los detalles del error.
@@ -59,13 +59,13 @@ Content-Type: application/json
 
 ```json
 {
-	"sheetData": [
-		/* Datos de las hojas de trabajo */
-	],
-	"filename": "nombre_del_archivo.xlsx",
-	"options": {
-		// Opciones de escritura del archivo (opcional)
-	}
+    "sheetData": [
+        /* Datos de las hojas de trabajo */
+    ],
+    "filename": "nombre_del_archivo.xlsx",
+    "options": {
+        // Opciones de escritura del archivo (opcional)
+    }
 }
 ```
 
