@@ -44,7 +44,7 @@ export async function create(parent: Excel, params: IParamsExcel): Promise<IRetu
 
     if (fileExtension !== type) throw new Error(`The file extension in filename must be equal to the parameter type`)
 
-    const outputPath = path.join(__dirname, pathname);
+    const outputPath = pathname
     // Verifica y crea el directorio si no existe
     if (!fs.existsSync(outputPath)) {
         fs.mkdirSync(outputPath, { recursive: true });
