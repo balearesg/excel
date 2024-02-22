@@ -23,12 +23,6 @@ export const validateValues = (params: IValidateValues): string[] => {
                     }, this is not ${value} is ${typeof params.toValidate[key]}`
                 );
             };
-            if (!!Array.isArray(params.toValidate[key]) && !params.toValidate[key].length) {
-                errors.push(
-                    `Invalid ${key} in ${params.entity
-                    }, ${key} can not be empty`
-                );
-            }
             return
         }
         if (typeof params.toValidate[key] !== value)
