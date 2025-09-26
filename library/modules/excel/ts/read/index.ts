@@ -1,76 +1,71 @@
-import * as ExcelJS from "exceljs";
-import * as fs from 'fs';
-import { validateCells, } from "../validate-cells";
-import { IParamsRead, IReturnRead, ISheet } from "../interfaces";
-import { Excel } from "..";
-import { readCSVFile } from "./csv";
-import { validateValues } from "../utils/validate-values";
-import { allSheet } from "./all-sheet";
-import { getSheet } from "./sheet";
+import * as ExcelJS from 'exceljs';
+import { Excel } from '..';
+import { IParamsRead, IReturnRead, ISheet } from '../interfaces';
+import { allSheet } from './all-sheet';
+import { readCSVFile } from './csv';
+import { getSheet } from './sheet';
+import {
+	processMultipleSheetsData,
+	processSingleSheetData,
+} from './utils/processing';
 
-export async function read(parent: Excel, params: IParamsRead): Promise<IReturnRead> {
+export async function read(
+	parent: Excel,
+	params: IParamsRead
+): Promise<IReturnRead> {
+	try {
+		const { buffer, schema, type, sheet } = params;
 
-    let errors: string[] = [];
+		// Handle CSV files
+		if (type === 'csv') {
+			return await readCSVFile(params);
+		}
 
-    const validated = validateValues({
-        validate: {
-            filePath: "string",
-            type: "string",
-        }, toValidate: params,
-        entity: "params"
-    });
+		// Load Excel workbook from buffer
+		if (type === 'xlsx') {
+			parent.workbook = new ExcelJS.Workbook();
+			await parent.workbook.xlsx.load(buffer);
+		}
 
-    if (validated.length) {
-        errors = errors.concat(validated);
-        return { status: false, error: errors };
-    };
+		// Extract raw data from workbook
+		const isSheet = !!sheet && typeof sheet === 'string';
+		const rawData: ISheet | object[] = isSheet
+			? getSheet(parent, sheet)
+			: allSheet(parent);
 
-    const { filePath, validations, type, sheet } = params;
+		// If no schema provided, return raw data without validation
+		if (!schema) {
+			return { status: true, data: rawData };
+		}
 
-    if (!fs.existsSync(filePath)) throw new Error("File does not exist in the specified path")
+		// Process data with Zod schema validation
+		if (isSheet && Array.isArray(rawData)) {
+			// Single sheet processing
+			const { validData, invalidRows } = processSingleSheetData(
+				rawData,
+				schema
+			);
 
-    const types: string[] = ["xlsx", "csv"];
+			return {
+				status: true,
+				data: validData,
+				invalidRows: invalidRows.length > 0 ? invalidRows : [],
+			};
+		} else if (!isSheet && typeof rawData === 'object') {
+			// Multiple sheets processing
+			const { processedSheets, invalidRowsBySheet } =
+				processMultipleSheetsData(rawData as ISheet, schema);
 
-    if (!types.includes(type)) throw new Error(`Type must be xlsx or csv`);
+			return {
+				status: true,
+				data: processedSheets,
+				invalidRows: invalidRowsBySheet,
+			};
+		}
 
-    const fileExtension: string = filePath.slice(((filePath.lastIndexOf(".") - 1) >>> 0) + 2);
-
-    if (!fileExtension) throw new Error(`The filePath does not have an extension`);
-
-    if (!types.includes(fileExtension)) throw new Error(`The file extension must be csv or xlsx in filePath`);
-
-    if (fileExtension !== type) throw new Error(`The file extension in filePath must be equal to the parameter type`)
-
-    try {
-
-        if (type === "csv") {
-            return readCSVFile(params)
-        };
-
-        parent.workbook = new ExcelJS.Workbook();
-
-        if (type === "xlsx") {
-            const fileBuffer: Buffer = fs.readFileSync(filePath);
-            await parent.workbook.xlsx.load(fileBuffer);
-        };
-
-        const isSheet = !!sheet && typeof sheet === "string";
-
-        const dataBySheet: ISheet | object[] = isSheet ? getSheet(parent, sheet) : allSheet(parent);
-
-        if (validations) {
-
-            const validates: string[] = validateCells({ validations, workbook: parent.workbook, sheetData: dataBySheet, isSheet })
-
-            if (validates.length) {
-                errors = errors.concat(validates);
-                throw new Error("cells invalid")
-            };
-        }
-        return { status: true, data: dataBySheet };
-
-    } catch (error) {
-        return { status: false, error: errors.length ? errors : error };
-    }
-
+		// Fallback return
+		return { status: true, data: rawData };
+	} catch (error) {
+		return { status: false, error };
+	}
 }

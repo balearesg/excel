@@ -1,16 +1,8 @@
 {
-    "name": "excel",
-    "ts": {
-        "path": "ts",
-        "files": [
-            "*"
-        ]
-    },
-    "platforms": [
-        "node",
-        "web",
-        "backend",
-        "ios",
-        "android"
-    ]
+	"name": "excel",
+	"ts": {
+		"path": "ts",
+		"files": ["*"]
+	},
+	"platforms": ["node", "web", "backend", "ios", "android"]
 }

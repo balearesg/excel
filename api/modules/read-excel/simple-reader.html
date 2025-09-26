@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Simple Excel Reader</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				max-width: 600px;
+				margin: 50px auto;
+				padding: 20px;
+			}
+			.container {
+				text-align: center;
+			}
+			input[type='file'] {
+				margin: 20px 0;
+				padding: 10px;
+				border: 2px dashed #ccc;
+				border-radius: 5px;
+				width: 100%;
+			}
+			button {
+				background-color: #007bff;
+				color: white;
+				padding: 12px 24px;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 16px;
+			}
+			button:hover {
+				background-color: #0056b3;
+			}
+			button:disabled {
+				background-color: #ccc;
+				cursor: not-allowed;
+			}
+			#result {
+				margin-top: 20px;
+				padding: 15px;
+				border-radius: 5px;
+				text-align: left;
+			}
+			.success {
+				background-color: #d4edda;
+				border: 1px solid #c3e6cb;
+				color: #155724;
+			}
+			.error {
+				background-color: #f8d7da;
+				border: 1px solid #f5c6cb;
+				color: #721c24;
+			}
+			pre {
+				background-color: #f8f9fa;
+				padding: 10px;
+				border-radius: 3px;
+				overflow-x: auto;
+				white-space: pre-wrap;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Excel Reader</h1>
+			<p>
+				Select an Excel file (.xlsx) or CSV file (.csv) or XLS file
+				(.xls) to read:
+			</p>
+
+			<input type="file" id="fileInput" accept=".xlsx,.csv,.xls" />
+
+			<br />
+
+			<button id="readBtn" onclick="readExcel()" disabled>
+				Read File
+			</button>
+
+			<div id="result"></div>
+		</div>
+
+		<script>
+			const fileInput = document.getElementById('fileInput');
+			const readBtn = document.getElementById('readBtn');
+			const resultDiv = document.getElementById('result');
+
+			// Enable button when file is selected
+			fileInput.addEventListener('change', function () {
+				readBtn.disabled = !this.files[0];
+			});
+
+			async function readExcel() {
+				const file = fileInput.files[0];
+				if (!file) {
+					alert('Please select a file first');
+					return;
+				}
+
+				// Determine file type from extension
+				const fileExtension = file.name.split('.').pop().toLowerCase();
+				const type = fileExtension === 'csv' ? 'csv' : 'xlsx';
+
+				// Show loading state
+				readBtn.disabled = true;
+				readBtn.textContent = 'Reading...';
+				resultDiv.innerHTML = '<p>Reading file, please wait...</p>';
+
+				try {
+					// Create FormData
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('type', type);
+					formData.append('sheet', ''); // Empty for all sheets
+
+					// Send to API
+					const response = await fetch(
+						'http://localhost:1080/read/excel',
+						{
+							method: 'POST',
+							body: formData,
+						}
+					);
+
+					const result = await response.json();
+
+					if (result.status) {
+						resultDiv.className = 'success';
+						resultDiv.innerHTML = `
+                        <h3>✅ File read successfully!</h3>
+                        <p><strong>File:</strong> ${file.name}</p>
+                        <p><strong>Type:</strong> ${type.toUpperCase()}</p>
+                        <p><strong>Valid rows:</strong> ${
+							Array.isArray(result.data)
+								? result.data.length
+								: 'Multiple sheets'
+						}</p>
+                        ${
+							result.invalidRows && result.invalidRows.length > 0
+								? `<p><strong>Invalid rows:</strong> ${result.invalidRows.length}</p>`
+								: '<p>✅ All rows are valid!</p>'
+						}
+                        <details>
+                            <summary>View Data</summary>
+                            <pre>${JSON.stringify(result.data, null, 2)}</pre>
+                        </details>
+                        ${
+							result.invalidRows && result.invalidRows.length > 0
+								? `
+                            <details>
+                                <summary>View Invalid Rows</summary>
+                                <pre>${JSON.stringify(
+									result.invalidRows,
+									null,
+									2
+								)}</pre>
+                            </details>
+                        `
+								: ''
+						}
+                    `;
+					} else {
+						resultDiv.className = 'error';
+						resultDiv.innerHTML = `
+                        <h3>❌ Error reading file</h3>
+                        <p>${result.error || 'Unknown error occurred'}</p>
+                    `;
+					}
+				} catch (error) {
+					resultDiv.className = 'error';
+					resultDiv.innerHTML = `
+                    <h3>❌ Error</h3>
+                    <p>${error.message}</p>
+                `;
+				} finally {
+					// Reset button state
+					readBtn.disabled = false;
+					readBtn.textContent = 'Read File';
+				}
+			}
+		</script>
+	</body>
+</html>
