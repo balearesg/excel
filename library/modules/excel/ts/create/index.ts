@@ -1,109 +1,155 @@
-import * as ExcelJS from "exceljs";
-import * as path from "path";
-import * as fs from "fs";
-import { Excel } from "..";
-import { IParamsExcel, IReturnHandler } from "../interfaces";
-import { validateValues } from "../utils/validate-values";
+import * as ExcelJS from 'exceljs';
+import * as fs from 'fs';
+import { Excel } from '..';
+import {
+	ICreateResultData,
+	IInvalidRowDetail,
+	IParamsExcel,
+	IReturnHandler,
+} from '../interfaces';
 
 /***
-    The `createExcel` method is an asynchronous function that takes in an object `params` as a
-   parameter. This method is responsible for creating an Excel file based on the provided parameters. 
+    The `create` method is an asynchronous function that takes in an object `params` as a
+   parameter. This method is responsible for creating Excel buffers based on the provided parameters. 
    * @param {IParamsExcel} params 
-   * @returns {IReturnHandler} - objet with status and data 
+   * @returns {IReturnHandler} - object with status, data buffer, and invalid data structure
    */
-export async function create(parent: Excel, params: IParamsExcel): Promise<IReturnHandler> {
+export async function create(
+	parent: Excel,
+	params: IParamsExcel
+): Promise<IReturnHandler> {
+	let errors = [];
 
-    let errors = [];
+	const { pathname, options, filename, sheetData, type } = params;
 
-    const validated = validateValues({
-        validate: {
-            pathname: "string",
-            filename: "string",
-            sheetData: "array",
-            type: "string"
-        }, toValidate: params,
-        entity: "params"
-    });
+	const types = ['xlsx', 'csv'];
 
-    if (validated.length) {
-        errors = errors.concat(validated);
-        throw new Error(errors[0])
-    };
+	if (!types.includes(type)) throw new Error(`Type must be xlsx or csv`);
 
-    const { pathname, options, filename, sheetData, type } = params;
+	const fileExtension = filename.slice(
+		((filename.lastIndexOf('.') - 1) >>> 0) + 2
+	);
 
-    const types = ["xlsx", "csv"];
+	if (!fileExtension)
+		throw new Error(`The filename does not have an extension`);
 
-    if (!types.includes(type)) throw new Error(`Type must be xlsx or csv`);
+	if (!types.includes(fileExtension))
+		throw new Error(`The file extension must be csv or xlsx in filename`);
 
-    const fileExtension = filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
+	if (fileExtension !== type)
+		throw new Error(
+			`The file extension in filename must be equal to the parameter type`
+		);
 
-    if (!fileExtension) throw new Error(`The filename does not have an extension`);
+	const outputPath = pathname;
+	// Verifica y crea el directorio si no existe
+	if (!fs.existsSync(outputPath)) {
+		fs.mkdirSync(outputPath, { recursive: true });
+	}
 
-    if (!types.includes(fileExtension)) throw new Error(`The file extension must be csv or xlsx in filename`);
+	try {
+		// Create main workbook for valid data
+		parent.workbook = new ExcelJS.Workbook();
+		parent.workbook.views = [
+			{
+				x: 0,
+				y: 0,
+				width: 10000,
+				height: 20000,
+				firstSheet: 0,
+				activeTab: 1,
+				visibility: 'visible',
+			},
+		];
 
-    if (fileExtension !== type) throw new Error(`The file extension in filename must be equal to the parameter type`)
+		// Create error workbook for invalid data
+		const errorWorkbook = new ExcelJS.Workbook();
+		errorWorkbook.views = [
+			{
+				x: 0,
+				y: 0,
+				width: 10000,
+				height: 20000,
+				firstSheet: 0,
+				activeTab: 1,
+				visibility: 'visible',
+			},
+		];
 
-    const outputPath = pathname
-    // Verifica y crea el directorio si no existe
-    if (!fs.existsSync(outputPath)) {
-        fs.mkdirSync(outputPath, { recursive: true });
-    };
+		const invalidItems: IInvalidRowDetail[] = [];
+		let hasInvalidData = false;
 
-    try {
+		for (const sheet of sheetData) {
+			const { sheetName, data, columnsHeader, schema } = sheet;
 
-        parent.workbook = new ExcelJS.Workbook();
+			// Create main worksheet
+			const worksheet: ExcelJS.Worksheet =
+				parent.workbook.addWorksheet(sheetName);
+			worksheet.state = 'visible';
+			worksheet.name = sheetName;
 
-        parent.workbook.views = [
-            {
-                x: 0,
-                y: 0,
-                width: 10000,
-                height: 20000,
-                firstSheet: 0,
-                activeTab: 1,
-                visibility: "visible",
-            },
-        ];
+			const errorWorksheet: ExcelJS.Worksheet =
+				errorWorkbook.addWorksheet(sheetName);
+			errorWorksheet.state = 'visible';
+			errorWorksheet.name = sheetName;
 
-        for (const sheet of sheetData) {
+			if (
+				!!columnsHeader &&
+				!!Array.isArray(columnsHeader) &&
+				!!columnsHeader.length
+			) {
+				worksheet.columns = columnsHeader;
+				errorWorksheet.columns = columnsHeader;
+			}
 
-            const validated = validateValues({
-                validate: {
-                    sheetName: "string",
-                    data: "array",
-                }, toValidate: sheet,
-                entity: "sheetData"
-            });
+			data.forEach((item: object): void => {
+				if (schema) {
+					const validationResult = schema.safeParse(item);
 
-            if (validated.length) {
-                errors = errors.concat(validated);
-                return { status: false, error: errors };
-            };
+					if (validationResult.success) {
+						worksheet.addRow(item);
+					} else {
+						errorWorksheet.addRow(item);
+						hasInvalidData = true;
 
-            const { sheetName, data, columnsHeader } = sheet;
-            const worksheet: ExcelJS.Worksheet = parent.workbook.addWorksheet(sheetName);
+						const errorDetails = validationResult.error.issues
+							.map(
+								issue =>
+									`${issue.path.join('.')}: ${issue.message}`
+							)
+							.join('; ');
 
-            if (!!columnsHeader && !!Array.isArray(columnsHeader) && !!columnsHeader.length) {
-                worksheet.columns = columnsHeader;
-            };
+						invalidItems.push({
+							item,
+							error: errorDetails,
+						});
+					}
+				} else {
+					worksheet.addRow(item);
+				}
+			});
 
-            worksheet.state = "visible";
-            worksheet.name = sheetName
+			worksheet.addRow([]);
+			errorWorksheet.addRow([]);
+		}
 
-            data.forEach((item: object): void => {
-                worksheet.addRow(item);
-            });
-            worksheet.addRow([]);
+		// Generate buffers
+		const mainFileBuffer = await parent.workbook.xlsx.writeBuffer();
 
-        };
+		let errorFileBuffer: ExcelJS.Buffer | undefined;
+		if (hasInvalidData) {
+			errorFileBuffer = await errorWorkbook.xlsx.writeBuffer();
+		}
 
-        const pathFile: string = path.join(outputPath, filename);
-
-        await parent.workbook[type].writeFile(pathFile, options);
-
-        return { status: true, data: { pathFile, filename, pathname } };
-    } catch (error: any) {
-        return { status: false, error: errors.length ? errors : error };
-    }
-};
+		const resultData: ICreateResultData = {
+			data: mainFileBuffer,
+			invalid: {
+				report: errorFileBuffer || Buffer.alloc(0), // Empty buffer if no invalid data
+				items: invalidItems,
+			},
+		};
+		return { status: true, data: resultData };
+	} catch (error: any) {
+		return { status: false, error: errors.length ? errors : error };
+	}
+}

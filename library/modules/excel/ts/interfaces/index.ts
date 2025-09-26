@@ -6,9 +6,18 @@ type TData = {
 	filename: string;
 	pathname: string;
 };
+
+export interface ICreateResultData {
+	data: ExcelJS.Buffer;
+	invalid: {
+		report: ExcelJS.Buffer | Buffer;
+		items: IInvalidRowDetail[];
+	};
+}
+
 export interface IReturnHandler {
 	status: boolean;
-	data?: TData | undefined;
+	data?: TData | ICreateResultData | undefined;
 	error?: string | undefined | any[];
 }
 
@@ -16,6 +25,7 @@ export type TSheetData = {
 	sheetName: string;
 	data: object[];
 	columnsHeader: object[];
+	schema?: z.ZodSchema;
 };
 
 type TDataType = 'string' | 'number' | 'boolean' | 'date'; // Tipo de datos (opcional)

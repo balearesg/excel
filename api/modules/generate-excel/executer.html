@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Sales Excel Generator</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				min-height: 100vh;
+				padding: 20px;
+			}
+
+			.container {
+				max-width: 800px;
+				margin: 0 auto;
+				background: white;
+				border-radius: 15px;
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+				overflow: hidden;
+			}
+
+			.header {
+				background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+				color: white;
+				padding: 30px;
+				text-align: center;
+			}
+
+			.header h1 {
+				font-size: 2.5em;
+				margin-bottom: 10px;
+				font-weight: 300;
+			}
+
+			.header p {
+				font-size: 1.1em;
+				opacity: 0.9;
+			}
+
+			.content {
+				padding: 40px;
+			}
+
+			.form-group {
+				margin-bottom: 25px;
+			}
+
+			.form-group label {
+				display: block;
+				margin-bottom: 8px;
+				font-weight: 600;
+				color: #333;
+				font-size: 1.1em;
+			}
+
+			.form-group input {
+				width: 100%;
+				padding: 15px;
+				border: 2px solid #e1e5e9;
+				border-radius: 8px;
+				font-size: 1em;
+				transition: all 0.3s ease;
+			}
+
+			.form-group input:focus {
+				outline: none;
+				border-color: #4facfe;
+				box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+			}
+
+			.form-group input.error {
+				border-color: #e74c3c;
+				box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+			}
+
+			.error-message {
+				color: #e74c3c;
+				font-size: 0.9em;
+				margin-top: 5px;
+				display: none;
+			}
+
+			.add-row-btn {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+				border: none;
+				padding: 12px 25px;
+				border-radius: 8px;
+				cursor: pointer;
+				font-size: 1em;
+				font-weight: 600;
+				transition: all 0.3s ease;
+				margin-bottom: 20px;
+			}
+
+			.add-row-btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+			}
+
+			.remove-row-btn {
+				background: #e74c3c;
+				color: white;
+				border: none;
+				padding: 8px 15px;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 0.9em;
+				transition: all 0.3s ease;
+			}
+
+			.remove-row-btn:hover {
+				background: #c0392b;
+			}
+
+			.sales-row {
+				background: #f8f9fa;
+				border: 1px solid #e9ecef;
+				border-radius: 10px;
+				padding: 20px;
+				margin-bottom: 15px;
+				position: relative;
+			}
+
+			.sales-row h3 {
+				color: #495057;
+				margin-bottom: 15px;
+				font-size: 1.2em;
+			}
+
+			.row-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 15px;
+			}
+
+			.generate-btn {
+				background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+				color: white;
+				border: none;
+				padding: 18px 40px;
+				border-radius: 10px;
+				cursor: pointer;
+				font-size: 1.2em;
+				font-weight: 600;
+				transition: all 0.3s ease;
+				width: 100%;
+				margin-top: 20px;
+			}
+
+			.generate-btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 8px 25px rgba(86, 171, 47, 0.4);
+			}
+
+			.generate-btn:disabled {
+				background: #95a5a6;
+				cursor: not-allowed;
+				transform: none;
+				box-shadow: none;
+			}
+
+			.success-message {
+				background: #d4edda;
+				color: #155724;
+				padding: 15px;
+				border-radius: 8px;
+				margin-top: 20px;
+				display: none;
+			}
+
+			.loading {
+				display: none;
+				text-align: center;
+				margin-top: 20px;
+			}
+
+			.spinner {
+				border: 4px solid #f3f3f3;
+				border-top: 4px solid #4facfe;
+				border-radius: 50%;
+				width: 40px;
+				height: 40px;
+				animation: spin 1s linear infinite;
+				margin: 0 auto;
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			.sample-data-btn {
+				background: #6c757d;
+				color: white;
+				border: none;
+				padding: 10px 20px;
+				border-radius: 5px;
+				cursor: pointer;
+				font-size: 0.9em;
+				margin-bottom: 20px;
+			}
+
+			.sample-data-btn:hover {
+				background: #5a6268;
+			}
+
+			.form-group small {
+				display: block;
+				margin-top: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1>📊 Sales Excel Generator</h1>
+				<p>Generate Excel files with sales data validation</p>
+			</div>
+
+			<div class="content">
+				<div class="form-group">
+					<label for="apiUrl">API Base URL:</label>
+					<input
+						type="text"
+						id="apiUrl"
+						value="http://localhost:1080"
+						placeholder="http://localhost:1080" />
+					<small style="color: #666; font-size: 0.9em"
+						>Change this to match your API server URL</small
+					>
+				</div>
+
+				<button
+					type="button"
+					class="sample-data-btn"
+					onclick="loadSampleData()">
+					Load Sample Data
+				</button>
+
+				<button
+					type="button"
+					class="add-row-btn"
+					onclick="addSalesRow()">
+					➕ Add Sales Record
+				</button>
+
+				<div id="salesDataContainer">
+					<!-- Sales rows will be added here dynamically -->
+				</div>
+
+				<button
+					type="button"
+					class="generate-btn"
+					onclick="generateExcel()"
+					id="generateBtn">
+					📈 Generate Excel File
+				</button>
+
+				<div class="loading" id="loading">
+					<div class="spinner"></div>
+					<p>Generating Excel file...</p>
+				</div>
+
+				<div class="success-message" id="successMessage">
+					✅ Excel file generated successfully! Check your downloads
+					folder.
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// Global variables
+			let salesData = [];
+			let rowCounter = 0;
+
+			// Native JavaScript validation functions
+			function validateSalesData(data) {
+				const errors = [];
+
+				// Validate Postalcode
+				if (!data.Postalcode || isNaN(data.Postalcode)) {
+					errors.push({
+						field: 'Postalcode',
+						message: 'Postal code is required and must be a number',
+					});
+				} else {
+					const postalcode = parseInt(data.Postalcode);
+					if (postalcode < 10000 || postalcode > 99999) {
+						errors.push({
+							field: 'Postalcode',
+							message:
+								'Postal code must be between 10000 and 99999',
+						});
+					}
+				}
+
+				// Validate Sales Rep Name
+				if (
+					!data['Sales Rep Name'] ||
+					typeof data['Sales Rep Name'] !== 'string'
+				) {
+					errors.push({
+						field: 'Sales Rep Name',
+						message: 'Sales Rep Name is required',
+					});
+				} else if (data['Sales Rep Name'].length > 100) {
+					errors.push({
+						field: 'Sales Rep Name',
+						message:
+							'Sales Rep Name must be less than 100 characters',
+					});
+				}
+
+				// Validate Year
+				if (!data.Year || isNaN(data.Year)) {
+					errors.push({
+						field: 'Year',
+						message: 'Year is required and must be a number',
+					});
+				} else {
+					const year = parseInt(data.Year);
+					const currentYear = new Date().getFullYear();
+					if (year < 2000 || year > currentYear) {
+						errors.push({
+							field: 'Year',
+							message: `Year must be between 2000 and ${currentYear}`,
+						});
+					}
+				}
+
+				// Validate Value
+				if (!data.Value || isNaN(data.Value)) {
+					errors.push({
+						field: 'Value',
+						message: 'Value is required and must be a number',
+					});
+				} else {
+					const value = parseFloat(data.Value);
+					if (value < 0) {
+						errors.push({
+							field: 'Value',
+							message: 'Value must be positive',
+						});
+					} else if (value > 1000000) {
+						errors.push({
+							field: 'Value',
+							message: 'Value must be less than 1,000,000',
+						});
+					}
+				}
+
+				return {
+					success: errors.length === 0,
+					errors: errors,
+				};
+			}
+
+			// API Configuration
+			const API_ENDPOINT = '/generate/excel';
+
+			// Get API URL from input field
+			function getApiBaseUrl() {
+				return (
+					document.getElementById('apiUrl').value.trim() ||
+					'http://localhost:1080'
+				);
+			}
+
+			// Add a new sales row
+			function addSalesRow() {
+				rowCounter++;
+				const container = document.getElementById('salesDataContainer');
+
+				const rowHTML = `
+                <div class="sales-row" id="row-${rowCounter}">
+                    <h3>Sales Record #${rowCounter}</h3>
+                    <div class="row-grid">
+                        <div class="form-group">
+                            <label for="postalcode-${rowCounter}">Postal Code *</label>
+                            <input type="number" id="postalcode-${rowCounter}" placeholder="e.g., 12345" min="10000" max="99999">
+                            <div class="error-message" id="postalcode-error-${rowCounter}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="salesrep-${rowCounter}">Sales Rep Name *</label>
+                            <input type="text" id="salesrep-${rowCounter}" placeholder="e.g., John Smith" maxlength="100">
+                            <div class="error-message" id="salesrep-error-${rowCounter}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="year-${rowCounter}">Year *</label>
+                            <input type="number" id="year-${rowCounter}" placeholder="e.g., 2024" min="2000" max="${new Date().getFullYear()}">
+                            <div class="error-message" id="year-error-${rowCounter}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="value-${rowCounter}">Value ($) *</label>
+                            <input type="number" id="value-${rowCounter}" placeholder="e.g., 15000" min="0" max="1000000" step="0.01">
+                            <div class="error-message" id="value-error-${rowCounter}"></div>
+                        </div>
+                    </div>
+                    <button type="button" class="remove-row-btn" onclick="removeSalesRow(${rowCounter})">
+                        🗑️ Remove Row
+                    </button>
+                </div>
+            `;
+
+				container.insertAdjacentHTML('beforeend', rowHTML);
+			}
+
+			// Remove a sales row
+			function removeSalesRow(rowId) {
+				const row = document.getElementById(`row-${rowId}`);
+				if (row) {
+					row.remove();
+				}
+			}
+
+			// Load sample data
+			function loadSampleData() {
+				// Clear existing data
+				document.getElementById('salesDataContainer').innerHTML = '';
+				rowCounter = 0;
+
+				const sampleData = [
+					// Valid records
+					{
+						Postalcode: 12345,
+						'Sales Rep Name': 'John Smith',
+						Year: 2024,
+						Value: 25000,
+					},
+					{
+						Postalcode: 67890,
+						'Sales Rep Name': 'Jane Doe',
+						Year: 2024,
+						Value: 32000,
+					},
+					{
+						Postalcode: 54321,
+						'Sales Rep Name': 'Mike Johnson',
+						Year: 2023,
+						Value: 18000,
+					},
+					{
+						Postalcode: 98765,
+						'Sales Rep Name': 'Sarah Wilson',
+						Year: 2024,
+						Value: 41000,
+					},
+					{
+						Postalcode: 45678,
+						'Sales Rep Name': 'Robert Brown',
+						Year: 2024,
+						Value: 55000,
+					},
+					// Invalid records for testing validation
+					{
+						Postalcode: 1234, // Invalid: too short
+						'Sales Rep Name': 'Alice Cooper',
+						Year: 2024,
+						Value: 30000,
+					},
+					{
+						Postalcode: 123456, // Invalid: too long
+						'Sales Rep Name': 'Bob Builder',
+						Year: 2024,
+						Value: 25000,
+					},
+					{
+						Postalcode: 23456,
+						'Sales Rep Name': '', // Invalid: empty name
+						Year: 2024,
+						Value: 15000,
+					},
+					{
+						Postalcode: 34567,
+						'Sales Rep Name': 'Charlie Day',
+						Year: 1999, // Invalid: too old
+						Value: 20000,
+					},
+					{
+						Postalcode: 45678,
+						'Sales Rep Name': 'Diana Prince',
+						Year: 2024,
+						Value: -5000, // Invalid: negative value
+					},
+				];
+
+				return sampleData;
+			}
+
+			// Collect all sales data
+			function collectSalesData() {
+				const rows = document.querySelectorAll('.sales-row');
+				const data = [];
+
+				rows.forEach(row => {
+					const rowId = row.id.split('-')[1];
+					const postalcode = document.getElementById(
+						`postalcode-${rowId}`
+					).value;
+					const salesrep = document.getElementById(
+						`salesrep-${rowId}`
+					).value;
+					const year = document.getElementById(`year-${rowId}`).value;
+					const value = document.getElementById(
+						`value-${rowId}`
+					).value;
+
+					if (postalcode && salesrep && year && value) {
+						data.push({
+							Postalcode: parseInt(postalcode),
+							'Sales Rep Name': salesrep,
+							Year: parseInt(year),
+							Value: parseFloat(value),
+						});
+					}
+				});
+
+				console.log('data: ', data);
+				return data;
+			}
+
+			// Generate Excel file via API
+			async function generateExcel() {
+				// Validate all rows first
+				const salesData = loadSampleData();
+				console.log('sales data: ', salesData);
+
+				if (salesData.length === 0) {
+					alert('Please add at least one sales record.');
+					return;
+				}
+
+				// Show loading
+				document.getElementById('loading').style.display = 'block';
+				document.getElementById('generateBtn').disabled = true;
+				document.getElementById('successMessage').style.display =
+					'none';
+
+				try {
+					// Prepare the request payload according to your API structure
+					const requestPayload = {
+						type: 'xlsx',
+						filename: `sales-data-${new Date()
+							.toISOString()
+							.slice(0, 19)
+							.replace(/:/g, '-')}.xlsx`,
+						sheetData: [
+							{
+								sheetName: 'Sales Data',
+								columnsHeader: [
+									{ header: 'Postalcode', key: 'Postalcode' },
+									{
+										header: 'Sales Rep Name',
+										key: 'Sales Rep Name',
+									},
+									{ header: 'Year', key: 'Year' },
+									{ header: 'Value', key: 'Value' },
+								],
+								data: salesData,
+							},
+						],
+						options: {
+							// Add any additional options if needed
+						},
+					};
+
+					console.log('request payload: ', requestPayload);
+					// Make the API call
+					const response = await fetch(
+						`${getApiBaseUrl()}${API_ENDPOINT}`,
+						{
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify(requestPayload),
+						}
+					);
+
+					if (!response.ok) {
+						throw new Error(
+							`HTTP error! status: ${response.status}`
+						);
+					}
+
+					const result = await response.json();
+
+					if (result.status) {
+						// Success - download the file
+						if (result.data && result.data.data) {
+							// Convert base64 string back to binary data for main file
+							const base64Data = result.data.data;
+							const binaryString = atob(base64Data);
+							const bytes = new Uint8Array(binaryString.length);
+
+							for (let i = 0; i < binaryString.length; i++) {
+								bytes[i] = binaryString.charCodeAt(i);
+							}
+
+							// Create blob from binary data
+							const blob = new Blob([bytes], {
+								type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+							});
+
+							// Create download link for main file
+							const url = window.URL.createObjectURL(blob);
+							const a = document.createElement('a');
+							a.href = url;
+							a.download = requestPayload.filename;
+							document.body.appendChild(a);
+							a.click();
+							window.URL.revokeObjectURL(url);
+							document.body.removeChild(a);
+
+							// Check if there's an invalid report to download
+							if (
+								result.data.invalid &&
+								result.data.invalid.report &&
+								result.data.invalid.items &&
+								result.data.invalid.items.length > 0
+							) {
+								// Convert invalid report base64 to binary
+								const invalidBase64Data =
+									result.data.invalid.report;
+								const invalidBinaryString =
+									atob(invalidBase64Data);
+								const invalidBytes = new Uint8Array(
+									invalidBinaryString.length
+								);
+
+								for (
+									let i = 0;
+									i < invalidBinaryString.length;
+									i++
+								) {
+									invalidBytes[i] =
+										invalidBinaryString.charCodeAt(i);
+								}
+
+								// Create blob for invalid report
+								const invalidBlob = new Blob([invalidBytes], {
+									type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+								});
+
+								// Create download link for invalid report
+								const invalidUrl =
+									window.URL.createObjectURL(invalidBlob);
+								const invalidA = document.createElement('a');
+								invalidA.href = invalidUrl;
+								invalidA.download = `invalid-${requestPayload.filename}`;
+								document.body.appendChild(invalidA);
+								invalidA.click();
+								window.URL.revokeObjectURL(invalidUrl);
+								document.body.removeChild(invalidA);
+
+								// Show warning about invalid data
+								alert(
+									`Excel file generated successfully!\n\nNote: ${result.data.invalid.items.length} invalid records were found and saved to a separate file: invalid-${requestPayload.filename}`
+								);
+							}
+
+							// Show success message
+							document.getElementById(
+								'successMessage'
+							).style.display = 'block';
+						} else {
+							throw new Error(
+								'No file data received from server'
+							);
+						}
+					} else {
+						// Handle API errors
+						const errorMessage = Array.isArray(result.error)
+							? result.error.join(', ')
+							: result.error || 'Unknown error occurred';
+						throw new Error(`API Error: ${errorMessage}`);
+					}
+				} catch (error) {
+					console.error('Error generating Excel file:', error);
+					alert(`Error generating Excel file: ${error.message}`);
+				} finally {
+					// Hide loading and re-enable button
+					document.getElementById('loading').style.display = 'none';
+					document.getElementById('generateBtn').disabled = false;
+				}
+			}
+
+			// Add event listeners for real-time validation
+			document.addEventListener('DOMContentLoaded', function () {
+				// Add initial row
+				addSalesRow();
+
+				// Add event listeners for input validation
+				document.addEventListener('input', function (e) {
+					if (
+						e.target.matches(
+							'input[type="number"], input[type="text"]'
+						)
+					) {
+						const rowId = e.target.id.split('-')[1];
+						if (rowId) {
+							validateRow(rowId);
+						}
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
