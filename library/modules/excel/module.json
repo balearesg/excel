@@ -1,8 +1,8 @@
 {
 	"name": "excel",
 	"ts": {
-		"path": "ts",
+		"path": "./",
 		"files": ["*"]
 	},
-	"platforms": ["node", "backend"]
+	"platforms": ["node"]
 }
