@@ -4,5 +4,5 @@
 		"path": "ts",
 		"files": ["*"]
 	},
-	"platforms": ["node", "web", "backend", "ios", "android"]
+	"platforms": ["node", "backend"]
 }

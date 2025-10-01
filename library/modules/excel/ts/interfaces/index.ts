@@ -55,7 +55,7 @@ type TCellsValidations = {
 	}>;
 };
 
-export interface IParamsExcel {
+export /*bundle*/ interface IParamsExcel {
 	pathname: string;
 	options: object;
 	filename: string;
@@ -63,27 +63,29 @@ export interface IParamsExcel {
 	type: 'csv' | 'xlsx';
 }
 
-export interface ISheet {
+export /*bundle*/ interface ISheet {
 	[sheetName: string]: any[];
 }
 
-export interface IValidateCells {
+export /*bundle*/ interface IValidateCells {
 	validations: TCellsValidations;
 	sheetData: ISheet | object[];
 	workbook: ExcelJS.Workbook;
 	isSheet: boolean;
 }
 
-export interface IInvalidRowDetail {
+export /*bundle*/ interface IInvalidRowDetail {
 	item: object;
 	error: string;
 }
 
-export interface IReturnRead {
+export /*bundle*/ interface IReturnRead {
 	status: boolean;
 	data?: ISheet | undefined | object[];
 	invalidRows?: IInvalidRowDetail[] | Record<string, IInvalidRowDetail[]>;
 	error?: string | undefined | any[];
+	success?: number;
+	failure?: number;
 }
 
 export interface IParamsRead {

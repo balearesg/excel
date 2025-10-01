@@ -35,7 +35,12 @@ export async function read(
 
 		// If no schema provided, return raw data without validation
 		if (!schema) {
-			return { status: true, data: rawData };
+			return {
+				status: true,
+				data: rawData,
+				success: Object.values(rawData).flat().length,
+				failure: 0,
+			};
 		}
 
 		// Process data with Zod schema validation
@@ -50,6 +55,8 @@ export async function read(
 				status: true,
 				data: validData,
 				invalidRows: invalidRows.length > 0 ? invalidRows : [],
+				success: validData.length,
+				failure: invalidRows.length,
 			};
 		} else if (!isSheet && typeof rawData === 'object') {
 			// Multiple sheets processing
@@ -60,11 +67,18 @@ export async function read(
 				status: true,
 				data: processedSheets,
 				invalidRows: invalidRowsBySheet,
+				success: Object.values(processedSheets).flat().length,
+				failure: Object.keys(invalidRowsBySheet).length,
 			};
 		}
 
 		// Fallback return
-		return { status: true, data: rawData };
+		return {
+			status: true,
+			data: rawData,
+			success: Object.values(rawData).flat().length,
+			failure: 0,
+		};
 	} catch (error) {
 		return { status: false, error };
 	}
